@@ -1,0 +1,44 @@
+<section class="sivuhero" data-parallaksi>
+  <div class="sivuhero__media">
+    <picture>
+      <source media="(max-width: 700px)" srcset="{{up}}assets/img/burgeri-chimichurri-sm.webp">
+      <img src="{{up}}assets/img/burgeri-chimichurri.webp" alt="" aria-hidden="true"
+           fetchpriority="high" decoding="async">
+    </picture>
+  </div>
+  <div class="sivuhero__peite"></div>
+  <div class="kuori">
+    <p class="etiketti">Virhe 404</p>
+    <h1 data-sanat>Sivua ei löytynyt</h1>
+    <p class="ingressi">Etsimääsi sivua ei ole olemassa tai se on siirtynyt.
+      Hiillos palaa silti — tästä pääset takaisin.</p>
+    <div class="napit" style="margin-top:2rem">
+      <a class="nappi" href="{{linkki:}}"><span>Etusivulle</span></a>
+      <a class="nappi nappi--ääriviiva" href="{{linkki:menu}}"><span>À la Carte</span></a>
+      <a class="nappi nappi--ääriviiva" href="{{linkki:lounas}}"><span>Lounas</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="osio osio--char viiva-ylä">
+  <div class="kuori split split--laaja-teksti">
+    <div data-esiin>
+      <p class="etiketti">Suoraan asiaan</p>
+      <h2 class="otsikko-m">Mitä olit etsimässä?</h2>
+      <p class="leipa" style="margin-top:1rem">Yleisimmät sivut löytyvät alta.
+        Jos etsit jotain muuta, soita meille — vastaamme mielellämme.</p>
+      <div class="napit" style="margin-top:1.6rem">
+        <a class="nappi nappi--hiljainen" data-href="puhelin" href="#">
+          {{ikoni:soita}}<span data-teksti="puhelin"></span></a>
+      </div>
+    </div>
+
+    <ul class="tietolista" data-esiin style="--viive:1">
+      <li><span class="avain">Varaus</span><span class="arvo"><a data-linkki="varaus" data-tyhjana="Varaa puhelimitse" data-vara-href="varaus-puhelin" href="#"><span>Varaa pöytä</span></a></span></li>
+      <li><span class="avain">Ruokalista</span><span class="arvo"><a href="{{linkki:menu}}">À la Carte</a></span></li>
+      <li><span class="avain">Lounas</span><span class="arvo"><a href="{{linkki:lounas}}">Lounas arkisin</a></span></li>
+      <li><span class="avain">Galleria</span><span class="arvo"><a href="{{linkki:galleria}}">Kuvat</a></span></li>
+      <li><span class="avain">Yhteystiedot</span><span class="arvo"><a href="{{linkki:yhteystiedot}}">Löydä meidät</a></span></li>
+    </ul>
+  </div>
+</section>

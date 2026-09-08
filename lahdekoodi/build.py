@@ -403,6 +403,53 @@ def build():
             f.write(html)
         print(f"  ✓ /{slug + '/' if slug else ''}".ljust(34), f"{len(html)/1024:6.1f} kB")
 
+
+    # ------------------------------------------------ 404-sivu palvelimen juureen
+    # Vercel, Netlify ja GitHub Pages näyttävät tämän, kun osoitetta ei löydy.
+    with open(os.path.join(SRC, "404.html"), encoding="utf-8") as f:
+        body404 = f.read()
+    for k, v in ICONS.items():
+        body404 = body404.replace("{{ikoni:%s}}" % k, v)
+    body404 = body404.replace("{{up}}", "/")
+    body404 = re.sub(r"\{\{linkki:([a-z\-]*)\}\}",
+                     lambda m: "/" + (m.group(1) + "/" if m.group(1) else ""), body404)
+    html404 = SHELL.format(
+        title="Sivua ei löytynyt — Bistro Liekki",
+        desc="Etsimääsi sivua ei löytynyt. Bistro Liekki, puuhiiligrilli Tikkurilan "
+             "sydämessä. Talvikkitie 30, Vantaa. Katso ruokalista, lounas ja yhteystiedot.",
+        canonical=DOMAIN + "/404.html",
+        robots='<meta name="robots" content="noindex, follow">',
+        ogtype="website",
+        ogimage=DOMAIN + "/assets/img/hero.webp",
+        up="/",
+        preload="",
+        jsonld="",
+        header=build_header("404", 0).replace('href="./"', 'href="/"')
+                                     .replace('href="meista/"', 'href="/meista/"')
+                                     .replace('href="menu/"', 'href="/menu/"')
+                                     .replace('href="lounas/"', 'href="/lounas/"')
+                                     .replace('href="catering/"', 'href="/catering/"')
+                                     .replace('href="galleria/"', 'href="/galleria/"')
+                                     .replace('href="lahjakortti/"', 'href="/lahjakortti/"')
+                                     .replace('href="yhteystiedot/"', 'href="/yhteystiedot/"')
+                                     .replace('href="palaute/"', 'href="/palaute/"'),
+        body=body404,
+        footer=build_footer(0).replace('href="./"', 'href="/"')
+                              .replace('href="meista/"', 'href="/meista/"')
+                              .replace('href="menu/"', 'href="/menu/"')
+                              .replace('href="lounas/"', 'href="/lounas/"')
+                              .replace('href="catering/"', 'href="/catering/"')
+                              .replace('href="galleria/"', 'href="/galleria/"')
+                              .replace('href="lahjakortti/"', 'href="/lahjakortti/"')
+                              .replace('href="yhteystiedot/"', 'href="/yhteystiedot/"')
+                              .replace('href="palaute/"', 'href="/palaute/"'),
+    ).replace('src="assets/', 'src="/assets/').replace('href="assets/', 'href="/assets/') \
+     .replace('href="favicon', 'href="/favicon').replace('href="apple-touch', 'href="/apple-touch') \
+     .replace('href="site.webmanifest', 'href="/site.webmanifest')
+    with open(os.path.join(OUT, "404.html"), "w", encoding="utf-8") as f:
+        f.write(html404)
+    print("  ✓ 404.html".ljust(34), f"{len(html404)/1024:6.1f} kB")
+
     # ------------------------------------------------------------ sitemap
     today = datetime.date.today().isoformat()
     urls = "\n".join(

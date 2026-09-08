@@ -22,6 +22,7 @@ sivusto/                    ← tämä viedään palvelimelle
 ├── yhteystiedot/           Yhteystiedot
 ├── palaute/                Palaute
 ├── vahvista-poytavaraus/   Varausjärjestelmän paluusivu
+├── 404.html                Virhesivu (Vercel, Netlify, GitHub Pages)
 ├── assets/
 │   ├── css/style.css       Kaikki tyylit
 │   ├── js/content.js       ★ SISÄLLÖN HALLINTA — muokkaa tätä
@@ -39,6 +40,7 @@ lahdekoodi/                 Työkalut, jos rakennetta muokataan
 ├── gen_textures.py         Luo hiili- ja liekkitekstuurit
 └── sisalto/                Sivujen sisältö ilman headeria/footeria
 
+vercel.json                 Vercel-asetukset (sivusto/ + välimuisti)
 esikatselu.html             Koko sivusto yhtenä tiedostona (esittelyyn)
 LUE-MINUT.md                Täydellinen ylläpito-ohje
 ```
@@ -48,9 +50,13 @@ LUE-MINUT.md                Täydellinen ylläpito-ohje
 Kopioi `sivusto/`-kansion **sisältö** palvelimen juureen. Siinä kaikki.
 Toimii sellaisenaan tavallisella web-hotellilla, Netlifyssä tai Vercelissä.
 
-Repossa on myös valmis GitHub Actions -työnkulku
-(`.github/workflows/pages.yml`), joka julkaisee `sivusto/`-kansion
-GitHub Pagesiin. Ota se käyttöön: **Settings → Pages → Source: GitHub Actions**.
+**Vercel:** repon juuressa on `vercel.json`, joka kertoo Vercelille että
+sivusto on `sivusto/`-kansiossa. Deploy toimii sellaisenaan — älä aseta
+projektin Root Directorya, jätä se repon juureen.
+
+**GitHub Pages:** repossa on valmis työnkulku (`.github/workflows/pages.yml`),
+joka julkaisee `sivusto/`-kansion. Ota se käyttöön:
+**Settings → Pages → Source: GitHub Actions**.
 
 ## Paikallinen esikatselu
 
