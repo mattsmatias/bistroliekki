@@ -240,32 +240,45 @@
       </div>
     </div>
 
-    <!-- TikTokin oma upotus: näyttää profiilin uusimmat videot automaattisesti -->
-    <div class="tiktok-syote" data-tiktok data-esiin></div>
+    <!-- Selattava karuselli: pyyhkäise puhelimella, nuolet työpöydällä.
+         Videot tulevat content.js:n tiktokVideot-listasta. Jos lista on
+         tyhjä, tähän tulee TikTokin oma profiiliupotus. -->
+    <div class="karuselli" data-esiin hidden>
+      <button class="karuselli__nappi karuselli__nappi--edell" type="button"
+              aria-label="Edellinen video">{{ikoni:vasen}}</button>
+      <div class="karuselli__rata" data-tiktok aria-label="Bistro Liekin TikTok-videot"></div>
+      <button class="karuselli__nappi karuselli__nappi--seur" type="button"
+              aria-label="Seuraava video">{{ikoni:oikea}}</button>
+      <div class="karuselli__pisteet" aria-hidden="true"></div>
+    </div>
 
     <!-- Varanäkymä, jos upotus estyy (mainostenesto tai evästekielto) -->
     <div data-tiktok-vara hidden>
-    <div class="tiktok-ruudukko">
-      <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-        <img src="{{up}}assets/img/pysty-burgeri.webp" alt="" aria-hidden="true"
-             loading="lazy" decoding="async">
-        <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
-        <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Puuhiiligrilli</span></span>
-      </a>
-      <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-        <img src="{{up}}assets/img/pysty-buffet.webp" alt="" aria-hidden="true"
-             loading="lazy" decoding="async">
-        <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
-        <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Lounasbuffet</span></span>
-      </a>
-      <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-        <img src="{{up}}assets/img/pysty-pekoni.webp" alt="" aria-hidden="true"
-             loading="lazy" decoding="async">
-        <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
-        <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Grillin klassikot</span></span>
-      </a>
-    </div>
-    <p class="tiktok-vara-teksti">Videot aukeavat TikTokissa.</p>
+      <div class="karuselli">
+        <button class="karuselli__nappi karuselli__nappi--edell" type="button"
+                aria-label="Edellinen">{{ikoni:vasen}}</button>
+        <div class="karuselli__rata">
+          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+            <img src="{{up}}assets/img/pysty-burgeri.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
+            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Puuhiiligrilli</span></span>
+          </a>
+          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+            <img src="{{up}}assets/img/pysty-buffet.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
+            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Lounasbuffet</span></span>
+          </a>
+          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+            <img src="{{up}}assets/img/pysty-pekoni.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
+            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Grillin klassikot</span></span>
+          </a>
+        </div>
+        <button class="karuselli__nappi karuselli__nappi--seur" type="button"
+                aria-label="Seuraava">{{ikoni:oikea}}</button>
+        <div class="karuselli__pisteet" aria-hidden="true"></div>
+      </div>
+      <p class="tiktok-vara-teksti">Videot aukeavat TikTokissa.</p>
     </div>
   </div>
 </section>

@@ -32,13 +32,15 @@
   --display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-  --step--1: clamp(.78rem, .76rem + .12vw, .86rem);
-  --step-0:  clamp(.98rem, .94rem + .2vw, 1.075rem);
-  --step-1:  clamp(1.1rem, 1.02rem + .38vw, 1.32rem);
-  --step-2:  clamp(1.36rem, 1.18rem + .82vw, 1.9rem);
-  --step-3:  clamp(1.8rem, 1.42rem + 1.7vw, 2.9rem);
-  --step-4:  clamp(2.3rem, 1.6rem + 3.1vw, 4.4rem);
-  --step-5:  clamp(2.9rem, 1.7rem + 5.4vw, 6.6rem);
+  /* Maltillinen asteikko: otsikot erottuvat, mutta eivät huuda.
+     Ylin porras on nyt 62 px aiemman 105 px sijaan. */
+  --step--1: clamp(.79rem, .77rem + .1vw,  .85rem);   /* 12.6 – 13.6 px */
+  --step-0:  clamp(1rem,   .97rem + .14vw, 1.06rem);  /*   16 – 17   px */
+  --step-1:  clamp(1.1rem, 1.05rem + .24vw, 1.24rem); /* 17.6 – 19.8 px */
+  --step-2:  clamp(1.3rem, 1.19rem + .5vw,  1.62rem); /* 20.8 – 26   px */
+  --step-3:  clamp(1.58rem, 1.38rem + .9vw, 2.15rem); /* 25.3 – 34.4 px */
+  --step-4:  clamp(1.92rem, 1.6rem + 1.5vw, 2.9rem);  /* 30.7 – 46.4 px */
+  --step-5:  clamp(2.25rem, 1.8rem + 2.2vw, 3.85rem); /*   36 – 61.6 px */
 
   /* Rytmi */
   --gutter: clamp(1.25rem, 4vw, 3rem);
@@ -68,7 +70,7 @@ body {
   color: var(--bone-2);
   font-family: var(--sans);
   font-size: var(--step-0);
-  line-height: 1.68;
+  line-height: 1.62;
   font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -100,11 +102,13 @@ h1, h2, h3, h4 {
   font-family: var(--display);
   font-weight: 500;
   color: var(--bone);
-  line-height: 1.06;
-  letter-spacing: -.015em;
+  line-height: 1.14;
+  letter-spacing: -.008em;
   margin: 0;
   text-wrap: balance;
-  font-variation-settings: 'SOFT' 24, 'WONK' 1, 'opsz' 48;
+  /* WONK 0 = suorat, rauhalliset kirjainmuodot. WONK 1 antaa Frauncesille
+     tarkoituksellisen vinon g:n ja y:n, joka isossa koossa erottui liikaa. */
+  font-variation-settings: 'SOFT' 16, 'WONK' 0, 'opsz' 40;
 }
 
 p { margin: 0 0 1.1em; }
@@ -158,7 +162,7 @@ a { color: inherit; }
   font-family: var(--sans);
   font-size: var(--step--1);
   font-weight: 500;
-  letter-spacing: .22em;
+  letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--ember-lit);
   margin: 0 0 1.4rem;
@@ -173,8 +177,8 @@ a { color: inherit; }
 .etiketti--keskellä { justify-content: center; }
 .etiketti--vaalea { color: var(--copper); }
 
-.otsikko-xl { font-size: var(--step-5); }
-.otsikko-l  { font-size: var(--step-4); }
+.otsikko-xl { font-size: var(--step-5); line-height: 1.04; }
+.otsikko-l  { font-size: var(--step-4); line-height: 1.08; }
 .otsikko-m  { font-size: var(--step-3); }
 .otsikko-s  { font-size: var(--step-2); }
 
@@ -185,7 +189,7 @@ a { color: inherit; }
   max-width: 46ch;
 }
 
-.leipa { color: var(--bone-3); max-width: 58ch; }
+.leipa { color: var(--bone-3); max-width: 56ch; }
 .leipa--leveä { max-width: 68ch; }
 
 .korostus { color: var(--bone); }
@@ -197,8 +201,8 @@ a { color: inherit; }
   bottom: -.22em;
   font-family: var(--display);
   font-weight: 600;
-  font-size: clamp(3.4rem, 13vw, 13rem);
-  letter-spacing: -.04em;
+  font-size: clamp(2.8rem, 8.5vw, 7.5rem);
+  letter-spacing: -.03em;
   line-height: .8;
   white-space: nowrap;
   color: transparent;
@@ -524,13 +528,13 @@ a { color: inherit; }
 }
 
 .hero h1 {
-  font-size: clamp(2.9rem, 10.5vw, 7.6rem);
+  font-size: clamp(2.5rem, 8.2vw, 4.9rem);
   font-weight: 600;
-  letter-spacing: -.035em;
-  line-height: .88;
+  letter-spacing: -.022em;
+  line-height: .96;
   text-transform: uppercase;
-  margin: 0 0 1.2rem;
-  font-variation-settings: 'SOFT' 40, 'WONK' 1, 'opsz' 144;
+  margin: 0 0 1.1rem;
+  font-variation-settings: 'SOFT' 26, 'WONK' 0, 'opsz' 120;
 }
 .hero h1 span { display: block; }
 
@@ -947,20 +951,132 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   color: var(--bone-4);
 }
 
-/* TikTokin upotus */
+/* ------------------------------------------------ TIKTOK-KARUSELLI */
+/* Vaakasuuntainen selattava rata: pyyhkäisy puhelimella, nuolet
+   työpöydällä. Kortit napsahtavat paikalleen (scroll-snap). */
+.karuselli { position: relative; }
+
+.karuselli__rata {
+  display: flex;
+  gap: clamp(.7rem, 1.6vw, 1.1rem);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  padding-block: .2rem;
+  /* Reunoilla hieman ilmaa, jotta ensimmäinen ja viimeinen kortti
+     eivät liimaudu kiinni kuoren reunaan */
+  padding-inline: 1px;
+}
+.karuselli__rata::-webkit-scrollbar { display: none; }
+
+.karuselli__rata > * {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  width: clamp(268px, 76vw, 324px);
+}
+@media (min-width: 720px) { .karuselli__rata > * { scroll-snap-align: start; } }
+
+/* Häivytys reunoissa kertoo, että rataa voi vierittää */
+.karuselli::before, .karuselli::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: clamp(24px, 6vw, 64px);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity .35s var(--ease);
+}
+.karuselli::before { left: -1px;  background: linear-gradient(90deg, var(--char-2), transparent); }
+.karuselli::after  { right: -1px; background: linear-gradient(270deg, var(--char-2), transparent); }
+.karuselli.on-alkua-ennen::before { opacity: 1; }
+.karuselli.on-loppua-jaljella::after { opacity: 1; }
+
+.karuselli__nappi {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 48px; height: 48px;
+  display: none;
+  place-items: center;
+  transform: translateY(-50%);
+  background: rgba(12,10,9,.82);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--bone);
+  cursor: pointer;
+  transition: background-color .3s var(--ease), border-color .3s var(--ease),
+              opacity .3s var(--ease), transform .3s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) { .karuselli__nappi { display: grid; } }
+.karuselli__nappi:hover { background: var(--ember); border-color: transparent; }
+.karuselli__nappi:disabled { opacity: 0; pointer-events: none; }
+.karuselli__nappi--edell { left: clamp(-22px, -1.4vw, -8px); }
+.karuselli__nappi--seur  { right: clamp(-22px, -1.4vw, -8px); }
+/* Kaikki kortit näkyvissä kerralla: ei pisteitä eikä nuolia */
+.karuselli.on-mahtuu .karuselli__pisteet,
+.karuselli.on-mahtuu .karuselli__nappi { display: none; }
+
+.karuselli__pisteet {
+  display: flex;
+  justify-content: center;
+  gap: .4rem;
+  margin-top: 1.3rem;
+}
+.karuselli__piste {
+  width: 7px; height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 99px;
+  background: var(--line-strong);
+  cursor: pointer;
+  transition: width .35s var(--ease-out), background-color .35s var(--ease);
+}
+.karuselli__piste.on { width: 22px; background: var(--ember-lit); }
+/* Kosketuksella pisteet saavat ison osumapinnan, mutta näkyvä piste pysyy
+   pienenä: tausta piirretään vain sisältölaatikkoon. */
+@media (hover: none) and (pointer: coarse) {
+  .karuselli__pisteet { gap: 0; margin-top: .7rem; }
+  .karuselli__piste {
+    height: 44px;
+    width: 19px;
+    padding: 18.5px 6px;
+    background-clip: content-box;
+  }
+  .karuselli__piste.on { width: 34px; }
+}
+
+/* Yksittäinen TikTok-video kortissa */
+.tiktok-kortti-video {
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--char);
+  border: 1px solid var(--line-soft);
+  min-height: 480px;
+}
+.tiktok-kortti-video blockquote { margin: 0 !important; max-width: none !important; min-width: 0 !important; }
+.tiktok-kortti-video iframe { width: 100% !important; border-radius: 3px; }
+
+/* TikTokin profiiliupotus, kun yksittäisiä videoita ei ole määritelty */
 .tiktok-syote { min-height: 200px; }
 .tiktok-syote--profiili { display: flex; justify-content: center; }
 .tiktok-syote--profiili > * { width: 100%; max-width: 780px; }
-.tiktok-syote--ruudukko {
-  display: grid;
-  gap: clamp(.9rem, 2vw, 1.4rem);
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  justify-items: center;
-}
-.tiktok-syote iframe { border-radius: 4px; }
+.tiktok-syote iframe { border-radius: 3px; }
 .tiktok-syote blockquote.tiktok-embed { margin: 0 auto; }
-/* Kunnes upotus latautuu, laatikko pysyy hillittynä eikä välähdä valkoisena */
+/* Latautuessa upotuksen tilalla on rauhallinen hiillos-pinta, ei tyhjä laatikko */
 .tiktok-syote:not(.on-ladattu) blockquote {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(280px, 52vw, 420px);
+  display: grid;
+  place-items: center;
   background: var(--char);
   border: 1px solid var(--line-soft);
   border-radius: 3px;
@@ -969,19 +1085,30 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   font-size: var(--step--1);
   text-align: center;
 }
+.tiktok-syote:not(.on-ladattu) blockquote::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 32%,
+              rgba(214, 106, 56, .09) 50%, transparent 68%);
+  background-size: 260% 100%;
+  animation: hiilloshohde 2.6s var(--ease) infinite;
+}
+@keyframes hiilloshohde {
+  from { background-position: 130% 0; }
+  to   { background-position: -30% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tiktok-syote:not(.on-ladattu) blockquote::before { animation: none; }
+}
 
 /* Varanäkymä, jos upotus estyy */
-.tiktok-ruudukko {
-  display: grid;
-  gap: clamp(.9rem, 2vw, 1.5rem);
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
 .tiktok-kortti {
   position: relative;
   display: block;
   aspect-ratio: 9/16;
   overflow: hidden;
-  border-radius: 2px;
+  border-radius: 3px;
   background: var(--char-2);
   text-decoration: none;
   border: 1px solid var(--line-soft);
@@ -991,19 +1118,13 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .tiktok-kortti__paalle {
   position: absolute; inset: 0;
   display: flex; flex-direction: column; justify-content: flex-end;
-  padding: 1.2rem;
-  background: linear-gradient(180deg, transparent 40%, rgba(8,7,7,.9));
+  padding: 1.1rem;
+  background: linear-gradient(180deg, transparent 45%, rgba(8,7,7,.9));
 }
 .tiktok-kortti__teksti { font-size: var(--step--1); color: var(--bone); line-height: 1.4; }
-.tiktok-vara-teksti {
-  margin: 1.1rem 0 0;
-  font-size: .78rem;
-  letter-spacing: .06em;
-  color: var(--bone-4);
-}
 .tiktok-kortti__soita {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-  width: 58px; height: 58px; border-radius: 50%;
+  width: 54px; height: 54px; border-radius: 50%;
   display: grid; place-items: center;
   background: rgba(244,239,230,.12);
   border: 1px solid var(--line-strong);
@@ -1012,6 +1133,13 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   transition: background-color .35s var(--ease), transform .35s var(--ease-out);
 }
 .tiktok-kortti:hover .tiktok-kortti__soita { background: var(--ember); transform: translate(-50%,-50%) scale(1.08); }
+.tiktok-vara-teksti {
+  margin: 1.1rem 0 0;
+  font-size: .78rem;
+  letter-spacing: .06em;
+  color: var(--bone-4);
+  text-align: center;
+}
 
 /* ------------------------------------------------------------ 16 LOMAKKEET */
 .lomake { display: grid; gap: 1.3rem; }
@@ -1356,7 +1484,7 @@ html { -webkit-tap-highlight-color: transparent; }
   }
   .tietolista li { padding-block: .55rem; }
   .footeri ul a,
-  .footeri__iskulause a { display: inline-flex; align-items: center; min-height: 42px; }
+  .footeri__iskulause a { display: inline-flex; align-items: center; min-height: 44px; }
   .footeri ul { gap: .1rem; }
   .tiktok-syote blockquote a { display: inline-flex; min-height: 44px; align-items: center; }
 }
@@ -1411,8 +1539,8 @@ html { -webkit-tap-highlight-color: transparent; }
   overflow: hidden;
   font-family: var(--display);
   font-weight: 600;
-  font-size: clamp(1.6rem, 6vw, 3.2rem);
-  letter-spacing: .16em;
+  font-size: clamp(1.35rem, 4.4vw, 2.3rem);
+  letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--bone);
   line-height: 1.2;
@@ -1527,9 +1655,9 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   align-items: center;
   gap: clamp(1.6rem, 4vw, 3.2rem);
   font-family: var(--display);
-  font-size: clamp(1.05rem, 2.4vw, 1.9rem);
+  font-size: clamp(.92rem, 1.5vw, 1.28rem);
   font-weight: 500;
-  letter-spacing: .14em;
+  letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--bone-3);
   white-space: nowrap;

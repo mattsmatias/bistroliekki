@@ -36,13 +36,15 @@
   --display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-  --step--1: clamp(.78rem, .76rem + .12vw, .86rem);
-  --step-0:  clamp(.98rem, .94rem + .2vw, 1.075rem);
-  --step-1:  clamp(1.1rem, 1.02rem + .38vw, 1.32rem);
-  --step-2:  clamp(1.36rem, 1.18rem + .82vw, 1.9rem);
-  --step-3:  clamp(1.8rem, 1.42rem + 1.7vw, 2.9rem);
-  --step-4:  clamp(2.3rem, 1.6rem + 3.1vw, 4.4rem);
-  --step-5:  clamp(2.9rem, 1.7rem + 5.4vw, 6.6rem);
+  /* Maltillinen asteikko: otsikot erottuvat, mutta eivät huuda.
+     Ylin porras on nyt 62 px aiemman 105 px sijaan. */
+  --step--1: clamp(.79rem, .77rem + .1vw,  .85rem);   /* 12.6 – 13.6 px */
+  --step-0:  clamp(1rem,   .97rem + .14vw, 1.06rem);  /*   16 – 17   px */
+  --step-1:  clamp(1.1rem, 1.05rem + .24vw, 1.24rem); /* 17.6 – 19.8 px */
+  --step-2:  clamp(1.3rem, 1.19rem + .5vw,  1.62rem); /* 20.8 – 26   px */
+  --step-3:  clamp(1.58rem, 1.38rem + .9vw, 2.15rem); /* 25.3 – 34.4 px */
+  --step-4:  clamp(1.92rem, 1.6rem + 1.5vw, 2.9rem);  /* 30.7 – 46.4 px */
+  --step-5:  clamp(2.25rem, 1.8rem + 2.2vw, 3.85rem); /*   36 – 61.6 px */
 
   /* Rytmi */
   --gutter: clamp(1.25rem, 4vw, 3rem);
@@ -72,7 +74,7 @@ body {
   color: var(--bone-2);
   font-family: var(--sans);
   font-size: var(--step-0);
-  line-height: 1.68;
+  line-height: 1.62;
   font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -104,11 +106,13 @@ h1, h2, h3, h4 {
   font-family: var(--display);
   font-weight: 500;
   color: var(--bone);
-  line-height: 1.06;
-  letter-spacing: -.015em;
+  line-height: 1.14;
+  letter-spacing: -.008em;
   margin: 0;
   text-wrap: balance;
-  font-variation-settings: 'SOFT' 24, 'WONK' 1, 'opsz' 48;
+  /* WONK 0 = suorat, rauhalliset kirjainmuodot. WONK 1 antaa Frauncesille
+     tarkoituksellisen vinon g:n ja y:n, joka isossa koossa erottui liikaa. */
+  font-variation-settings: 'SOFT' 16, 'WONK' 0, 'opsz' 40;
 }
 
 p { margin: 0 0 1.1em; }
@@ -162,7 +166,7 @@ a { color: inherit; }
   font-family: var(--sans);
   font-size: var(--step--1);
   font-weight: 500;
-  letter-spacing: .22em;
+  letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--ember-lit);
   margin: 0 0 1.4rem;
@@ -177,8 +181,8 @@ a { color: inherit; }
 .etiketti--keskellä { justify-content: center; }
 .etiketti--vaalea { color: var(--copper); }
 
-.otsikko-xl { font-size: var(--step-5); }
-.otsikko-l  { font-size: var(--step-4); }
+.otsikko-xl { font-size: var(--step-5); line-height: 1.04; }
+.otsikko-l  { font-size: var(--step-4); line-height: 1.08; }
 .otsikko-m  { font-size: var(--step-3); }
 .otsikko-s  { font-size: var(--step-2); }
 
@@ -189,7 +193,7 @@ a { color: inherit; }
   max-width: 46ch;
 }
 
-.leipa { color: var(--bone-3); max-width: 58ch; }
+.leipa { color: var(--bone-3); max-width: 56ch; }
 .leipa--leveä { max-width: 68ch; }
 
 .korostus { color: var(--bone); }
@@ -201,8 +205,8 @@ a { color: inherit; }
   bottom: -.22em;
   font-family: var(--display);
   font-weight: 600;
-  font-size: clamp(3.4rem, 13vw, 13rem);
-  letter-spacing: -.04em;
+  font-size: clamp(2.8rem, 8.5vw, 7.5rem);
+  letter-spacing: -.03em;
   line-height: .8;
   white-space: nowrap;
   color: transparent;
@@ -528,13 +532,13 @@ a { color: inherit; }
 }
 
 .hero h1 {
-  font-size: clamp(2.9rem, 10.5vw, 7.6rem);
+  font-size: clamp(2.5rem, 8.2vw, 4.9rem);
   font-weight: 600;
-  letter-spacing: -.035em;
-  line-height: .88;
+  letter-spacing: -.022em;
+  line-height: .96;
   text-transform: uppercase;
-  margin: 0 0 1.2rem;
-  font-variation-settings: 'SOFT' 40, 'WONK' 1, 'opsz' 144;
+  margin: 0 0 1.1rem;
+  font-variation-settings: 'SOFT' 26, 'WONK' 0, 'opsz' 120;
 }
 .hero h1 span { display: block; }
 
@@ -951,20 +955,132 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   color: var(--bone-4);
 }
 
-/* TikTokin upotus */
+/* ------------------------------------------------ TIKTOK-KARUSELLI */
+/* Vaakasuuntainen selattava rata: pyyhkäisy puhelimella, nuolet
+   työpöydällä. Kortit napsahtavat paikalleen (scroll-snap). */
+.karuselli { position: relative; }
+
+.karuselli__rata {
+  display: flex;
+  gap: clamp(.7rem, 1.6vw, 1.1rem);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  padding-block: .2rem;
+  /* Reunoilla hieman ilmaa, jotta ensimmäinen ja viimeinen kortti
+     eivät liimaudu kiinni kuoren reunaan */
+  padding-inline: 1px;
+}
+.karuselli__rata::-webkit-scrollbar { display: none; }
+
+.karuselli__rata > * {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  width: clamp(268px, 76vw, 324px);
+}
+@media (min-width: 720px) { .karuselli__rata > * { scroll-snap-align: start; } }
+
+/* Häivytys reunoissa kertoo, että rataa voi vierittää */
+.karuselli::before, .karuselli::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: clamp(24px, 6vw, 64px);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity .35s var(--ease);
+}
+.karuselli::before { left: -1px;  background: linear-gradient(90deg, var(--char-2), transparent); }
+.karuselli::after  { right: -1px; background: linear-gradient(270deg, var(--char-2), transparent); }
+.karuselli.on-alkua-ennen::before { opacity: 1; }
+.karuselli.on-loppua-jaljella::after { opacity: 1; }
+
+.karuselli__nappi {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 48px; height: 48px;
+  display: none;
+  place-items: center;
+  transform: translateY(-50%);
+  background: rgba(12,10,9,.82);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--bone);
+  cursor: pointer;
+  transition: background-color .3s var(--ease), border-color .3s var(--ease),
+              opacity .3s var(--ease), transform .3s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) { .karuselli__nappi { display: grid; } }
+.karuselli__nappi:hover { background: var(--ember); border-color: transparent; }
+.karuselli__nappi:disabled { opacity: 0; pointer-events: none; }
+.karuselli__nappi--edell { left: clamp(-22px, -1.4vw, -8px); }
+.karuselli__nappi--seur  { right: clamp(-22px, -1.4vw, -8px); }
+/* Kaikki kortit näkyvissä kerralla: ei pisteitä eikä nuolia */
+.karuselli.on-mahtuu .karuselli__pisteet,
+.karuselli.on-mahtuu .karuselli__nappi { display: none; }
+
+.karuselli__pisteet {
+  display: flex;
+  justify-content: center;
+  gap: .4rem;
+  margin-top: 1.3rem;
+}
+.karuselli__piste {
+  width: 7px; height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 99px;
+  background: var(--line-strong);
+  cursor: pointer;
+  transition: width .35s var(--ease-out), background-color .35s var(--ease);
+}
+.karuselli__piste.on { width: 22px; background: var(--ember-lit); }
+/* Kosketuksella pisteet saavat ison osumapinnan, mutta näkyvä piste pysyy
+   pienenä: tausta piirretään vain sisältölaatikkoon. */
+@media (hover: none) and (pointer: coarse) {
+  .karuselli__pisteet { gap: 0; margin-top: .7rem; }
+  .karuselli__piste {
+    height: 44px;
+    width: 19px;
+    padding: 18.5px 6px;
+    background-clip: content-box;
+  }
+  .karuselli__piste.on { width: 34px; }
+}
+
+/* Yksittäinen TikTok-video kortissa */
+.tiktok-kortti-video {
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--char);
+  border: 1px solid var(--line-soft);
+  min-height: 480px;
+}
+.tiktok-kortti-video blockquote { margin: 0 !important; max-width: none !important; min-width: 0 !important; }
+.tiktok-kortti-video iframe { width: 100% !important; border-radius: 3px; }
+
+/* TikTokin profiiliupotus, kun yksittäisiä videoita ei ole määritelty */
 .tiktok-syote { min-height: 200px; }
 .tiktok-syote--profiili { display: flex; justify-content: center; }
 .tiktok-syote--profiili > * { width: 100%; max-width: 780px; }
-.tiktok-syote--ruudukko {
-  display: grid;
-  gap: clamp(.9rem, 2vw, 1.4rem);
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  justify-items: center;
-}
-.tiktok-syote iframe { border-radius: 4px; }
+.tiktok-syote iframe { border-radius: 3px; }
 .tiktok-syote blockquote.tiktok-embed { margin: 0 auto; }
-/* Kunnes upotus latautuu, laatikko pysyy hillittynä eikä välähdä valkoisena */
+/* Latautuessa upotuksen tilalla on rauhallinen hiillos-pinta, ei tyhjä laatikko */
 .tiktok-syote:not(.on-ladattu) blockquote {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(280px, 52vw, 420px);
+  display: grid;
+  place-items: center;
   background: var(--char);
   border: 1px solid var(--line-soft);
   border-radius: 3px;
@@ -973,19 +1089,30 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   font-size: var(--step--1);
   text-align: center;
 }
+.tiktok-syote:not(.on-ladattu) blockquote::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 32%,
+              rgba(214, 106, 56, .09) 50%, transparent 68%);
+  background-size: 260% 100%;
+  animation: hiilloshohde 2.6s var(--ease) infinite;
+}
+@keyframes hiilloshohde {
+  from { background-position: 130% 0; }
+  to   { background-position: -30% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tiktok-syote:not(.on-ladattu) blockquote::before { animation: none; }
+}
 
 /* Varanäkymä, jos upotus estyy */
-.tiktok-ruudukko {
-  display: grid;
-  gap: clamp(.9rem, 2vw, 1.5rem);
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
 .tiktok-kortti {
   position: relative;
   display: block;
   aspect-ratio: 9/16;
   overflow: hidden;
-  border-radius: 2px;
+  border-radius: 3px;
   background: var(--char-2);
   text-decoration: none;
   border: 1px solid var(--line-soft);
@@ -995,19 +1122,13 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .tiktok-kortti__paalle {
   position: absolute; inset: 0;
   display: flex; flex-direction: column; justify-content: flex-end;
-  padding: 1.2rem;
-  background: linear-gradient(180deg, transparent 40%, rgba(8,7,7,.9));
+  padding: 1.1rem;
+  background: linear-gradient(180deg, transparent 45%, rgba(8,7,7,.9));
 }
 .tiktok-kortti__teksti { font-size: var(--step--1); color: var(--bone); line-height: 1.4; }
-.tiktok-vara-teksti {
-  margin: 1.1rem 0 0;
-  font-size: .78rem;
-  letter-spacing: .06em;
-  color: var(--bone-4);
-}
 .tiktok-kortti__soita {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-  width: 58px; height: 58px; border-radius: 50%;
+  width: 54px; height: 54px; border-radius: 50%;
   display: grid; place-items: center;
   background: rgba(244,239,230,.12);
   border: 1px solid var(--line-strong);
@@ -1016,6 +1137,13 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   transition: background-color .35s var(--ease), transform .35s var(--ease-out);
 }
 .tiktok-kortti:hover .tiktok-kortti__soita { background: var(--ember); transform: translate(-50%,-50%) scale(1.08); }
+.tiktok-vara-teksti {
+  margin: 1.1rem 0 0;
+  font-size: .78rem;
+  letter-spacing: .06em;
+  color: var(--bone-4);
+  text-align: center;
+}
 
 /* ------------------------------------------------------------ 16 LOMAKKEET */
 .lomake { display: grid; gap: 1.3rem; }
@@ -1343,7 +1471,9 @@ html { -webkit-tap-highlight-color: transparent; }
 /* Kosketuskohteiden vähimmäiskoko: puhelin- ja sähköpostilinkit ovat
    toimintoja, ei koristeita — niihin pitää osua kerralla. */
 @media (hover: none) and (pointer: coarse) {
-  .logo { padding-block: .5rem; }
+  .logo { min-height: 46px; justify-content: center; padding-block: .35rem; }
+  /* Tabletti vaaka-asennossa nayttaa työpöytävalikon — kosketuskoko myös siihen */
+  .navi a { padding-block: .78rem; }
   .mobiilivalikko__yhteys {
     display: flex;
     align-items: center;
@@ -1358,7 +1488,7 @@ html { -webkit-tap-highlight-color: transparent; }
   }
   .tietolista li { padding-block: .55rem; }
   .footeri ul a,
-  .footeri__iskulause a { display: inline-flex; align-items: center; min-height: 42px; }
+  .footeri__iskulause a { display: inline-flex; align-items: center; min-height: 44px; }
   .footeri ul { gap: .1rem; }
   .tiktok-syote blockquote a { display: inline-flex; min-height: 44px; align-items: center; }
 }
@@ -1413,8 +1543,8 @@ html { -webkit-tap-highlight-color: transparent; }
   overflow: hidden;
   font-family: var(--display);
   font-weight: 600;
-  font-size: clamp(1.6rem, 6vw, 3.2rem);
-  letter-spacing: .16em;
+  font-size: clamp(1.35rem, 4.4vw, 2.3rem);
+  letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--bone);
   line-height: 1.2;
@@ -1529,9 +1659,9 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   align-items: center;
   gap: clamp(1.6rem, 4vw, 3.2rem);
   font-family: var(--display);
-  font-size: clamp(1.05rem, 2.4vw, 1.9rem);
+  font-size: clamp(.92rem, 1.5vw, 1.28rem);
   font-weight: 500;
-  letter-spacing: .14em;
+  letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--bone-3);
   white-space: nowrap;
@@ -1704,10 +1834,8 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       <h2 class="otsikko-l" id="tervetuloa" data-sanat>Tervetuloa<br>Bistro Liekkiin</h2>
       <p class="ingressi">Vuodesta 2016 lähtien Bistro Liekki Puuhiiligrilli on tarjonnut
         kodikkaan ja rennon ruokailuhetken Tikkurilan keskustassa.</p>
-      <p class="leipa">Ravintolan ylpeys on puuhiiligrilli, joka huokuu aitoa savun makua
-        jokaiseen annokseen. Arkisin klo 10:30–15 palvelee suosittu lounasbuffet. Muina
-        aikoina voit nauttia laajasta à la carte -listastamme, jonka inspiraation lähteenä
-        toimii puuhiiligrilli.</p>
+      <p class="leipa">Ravintolan ylpeys on puuhiiligrilli, joka huokuu aitoa savun
+        makua jokaiseen annokseen.</p>
       <div class="napit">
         <a class="nappi nappi--hiljainen" href="#/meista"><span>Tutustu meihin</span></a>
       </div>
@@ -1729,9 +1857,8 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     <div class="band__sisus" data-esiin>
       <p class="etiketti">Brändimme ydin</p>
       <h2 class="otsikko-xl" id="grilli" data-sanat>Aito<br>puuhiiligrilli</h2>
-      <p class="ingressi" style="margin-top:1.6rem">Aitoa savun makua jokaiseen annokseen.</p>
-      <p class="leipa">Hiillos on ravintolamme sydän. Se antaa lihalle rapean pinnan, syvän
-        aromin ja sen maun, jota kaasugrilli ei osaa jäljitellä.</p>
+      <p class="ingressi" style="margin-top:1.6rem">Hiillos antaa lihalle rapean pinnan
+        ja sen maun, jota kaasugrilli ei osaa jäljitellä.</p>
     </div>
   </div>
 </section>
@@ -1786,13 +1913,9 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     <div class="lounas-kortti" data-esiin style="--viive:1">
       <p class="lounas-aika"><span data-teksti="lounas-aika">10:30–15:00</span>
         <small data-teksti="lounas-paivat">Arkisin ma–pe</small></p>
-      <p class="leipa" style="font-size:var(--step--1)">Lounasbuffet katetaan joka arkipäivä.
-        Viimeinen annos tarjoillaan klo 15.</p>
-      <ul class="tietolista" style="margin-top:1.4rem">
-        <li><span class="avain">Lounas</span><span class="arvo"><strong data-teksti="lounas-aika"></strong></span></li>
+      <ul class="tietolista" style="margin-top:1.2rem">
         <li><span class="avain">Päivät</span><span class="arvo" data-teksti="lounas-paivat"></span></li>
         <li><span class="avain">Hinta</span><span class="arvo"><strong data-teksti="lounas-hinta" data-piilota-tyhjana></strong></span></li>
-        <li><span class="avain">Osoite</span><span class="arvo"><span data-teksti="katu"></span>, <span data-teksti="postitoimi"></span></span></li>
       </ul>
     </div>
   </div>
@@ -1868,8 +1991,8 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       <div>
         <p class="etiketti">TikTok · @bistroliekki</p>
         <h2 class="otsikko-m" id="tiktok">Katso, mitä<br>grillissä tapahtuu</h2>
-        <p class="leipa">Kuvaamme keittiöstä, hiilloksesta ja annoksista TikTokissa.
-          Uusimmat videot näkyvät tässä — ruoka sellaisena kuin se syntyy.</p>
+        <p class="leipa">Kuvaamme keittiöstä ja hiilloksesta TikTokissa — ruoka
+          sellaisena kuin se syntyy.</p>
       </div>
 
       <div class="tiktok-sivu">
@@ -1882,49 +2005,58 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       </div>
     </div>
 
-    <!-- TikTokin oma upotus: näyttää profiilin uusimmat videot automaattisesti -->
-    <div class="tiktok-syote" data-tiktok data-esiin></div>
+    <!-- Selattava karuselli: pyyhkäise puhelimella, nuolet työpöydällä.
+         Videot tulevat content.js:n tiktokVideot-listasta. Jos lista on
+         tyhjä, tähän tulee TikTokin oma profiiliupotus. -->
+    <div class="karuselli" data-esiin hidden>
+      <button class="karuselli__nappi karuselli__nappi--edell" type="button"
+              aria-label="Edellinen video"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M10 1L2 9l8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
+      <div class="karuselli__rata" data-tiktok aria-label="Bistro Liekin TikTok-videot"></div>
+      <button class="karuselli__nappi karuselli__nappi--seur" type="button"
+              aria-label="Seuraava video"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M2 1l8 8-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
+      <div class="karuselli__pisteet" aria-hidden="true"></div>
+    </div>
 
     <!-- Varanäkymä, jos upotus estyy (mainostenesto tai evästekielto) -->
     <div data-tiktok-vara hidden>
-    <div class="tiktok-ruudukko">
-      <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-        <img data-img="pysty-burgeri.webp" alt="" aria-hidden="true"
-             loading="lazy" decoding="async">
-        <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
-        <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Puuhiiligrilli</span></span>
-      </a>
-      <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-        <img data-img="pysty-buffet.webp" alt="" aria-hidden="true"
-             loading="lazy" decoding="async">
-        <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
-        <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Lounasbuffet</span></span>
-      </a>
-      <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-        <img data-img="pysty-pekoni.webp" alt="" aria-hidden="true"
-             loading="lazy" decoding="async">
-        <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
-        <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Grillin klassikot</span></span>
-      </a>
-    </div>
-    <p class="tiktok-vara-teksti">Videot aukeavat TikTokissa.</p>
+      <div class="karuselli">
+        <button class="karuselli__nappi karuselli__nappi--edell" type="button"
+                aria-label="Edellinen"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M10 1L2 9l8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
+        <div class="karuselli__rata">
+          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+            <img data-img="pysty-burgeri.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
+            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Puuhiiligrilli</span></span>
+          </a>
+          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+            <img data-img="pysty-buffet.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
+            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Lounasbuffet</span></span>
+          </a>
+          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+            <img data-img="pysty-pekoni.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
+            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Grillin klassikot</span></span>
+          </a>
+        </div>
+        <button class="karuselli__nappi karuselli__nappi--seur" type="button"
+                aria-label="Seuraava"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M2 1l8 8-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
+        <div class="karuselli__pisteet" aria-hidden="true"></div>
+      </div>
+      <p class="tiktok-vara-teksti">Videot aukeavat TikTokissa.</p>
     </div>
   </div>
 </section>
 
 <!-- ====================================================== AJANKOHTAISTA -->
-<section class="osio osio--tiivis" aria-labelledby="ajankohtaista">
+<!-- Näkyy vain kun content.js:ssä on ilmoituksia. Muuten koko osio jää pois. -->
+<section class="osio osio--tiivis" aria-labelledby="ajankohtaista" data-uutisosio hidden>
   <div class="kuori" style="margin-bottom:2rem">
-    <p class="etiketti" data-esiin>Ajankohtaista</p>
-    <h2 class="otsikko-m" id="ajankohtaista" data-esiin>Uutiset ja poikkeukset</h2>
+    <p class="etiketti">Ajankohtaista</p>
+    <h2 class="otsikko-m" id="ajankohtaista">Uutiset ja poikkeukset</h2>
   </div>
   <div class="kuori">
-    <div class="uutiset" data-uutiset hidden></div>
-    <div class="tyhja-tila" data-uutiset-tyhja data-esiin>
-      <strong>Ei ilmoituksia juuri nyt</strong>
-      Tässä näkyvät poikkeavat aukioloajat, tapahtumat ja kampanjat heti kun niitä on.
-      Aukioloajat löydät alta.
-    </div>
+    <div class="uutiset" data-uutiset></div>
   </div>
 </section>
 
@@ -1945,7 +2077,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
         <li><span class="avain">Osoite</span><span class="arvo"><strong data-teksti="katu"></strong>, <span data-teksti="postitoimi"></span></span></li>
         <li><span class="avain">Ravintola</span><span class="arvo"><a data-href="puhelin" href="#" data-teksti="puhelin"></a></span></li>
         <li><span class="avain">Varaukset</span><span class="arvo"><a data-href="varaus-puhelin" href="#" data-teksti="varaus-puhelin"></a></span></li>
-        <li><span class="avain">Sähköposti</span><span class="arvo"><a data-href="sahkoposti" href="#" data-teksti="sahkoposti"></a></span></li>
       </ul>
 
       <ul class="aukiolot" data-aukiolot style="margin-top:1.8rem"></ul>
@@ -2050,10 +2181,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       <div class="luku">
         <span class="luku__arvo">10:30–15</span>
         <span class="luku__nimi">Lounasbuffet arkisin</span>
-      </div>
-      <div class="luku">
-        <span class="luku__arvo">100 %</span>
-        <span class="luku__nimi">Puuhiililiekkiä</span>
       </div>
     </div>
   </div>
@@ -2170,8 +2297,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     <div class="split__teksti" data-esiin style="--viive:1">
       <p class="etiketti">Juhliin</p>
       <h2 class="otsikko-m">Isommalle porukalle?</h2>
-      <p class="leipa">Puuhiiligrillin maut taipuvat myös juhliin ja tapahtumiin.
-        Kerro tilaisuudestasi, niin suunnitellaan sopiva kokonaisuus.</p>
+      <p class="leipa">Puuhiiligrillin maut taipuvat myös juhliin ja tapahtumiin.</p>
       <div class="napit">
         <a class="nappi nappi--hiljainen" href="#/catering"><span>Catering</span></a>
       </div>
@@ -2266,9 +2392,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       <p class="etiketti">Lounasbuffet</p>
       <h2 class="otsikko-l">Sama grilli,<br>keskellä työpäivää</h2 data-sanat>
       <p class="leipa">Lounas on Bistro Liekin arjen ydin: sama puuhiiligrilli, sama
-        savun maku, nopeammassa tahdissa. Lounas tarjoillaan
-        <span data-teksti="lounas-paivat-pieni">arkisin ma–pe</span> klo
-        <span data-teksti="lounas-aika">10:30–15:00</span>.</p>
+        savun maku, nopeammassa tahdissa.</p>
       <p class="leipa">Kerrothan allergioista ja erikoisruokavalioista henkilökunnalle.</p>
       <div class="napit">
         <a class="nappi" data-linkki="lounaslista" data-tyhjana="Soita ja kysy"
@@ -2282,8 +2406,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       <p class="lounas-aika"><span data-teksti="lounas-aika">10:30–15:00</span>
         <small data-teksti="lounas-paivat">Arkisin ma–pe</small></p>
       <ul class="tietolista" style="margin-top:1.2rem">
-        <li><span class="avain">Lounas alkaa</span><span class="arvo"><strong>klo 10:30</strong></span></li>
-        <li><span class="avain">Lounas päättyy</span><span class="arvo"><strong>klo 15:00</strong></span></li>
         <li><span class="avain">Päivät</span><span class="arvo" data-teksti="lounas-paivat"></span></li>
         <li><span class="avain">Hinta</span><span class="arvo"><strong data-teksti="lounas-hinta" data-piilota-tyhjana></strong></span></li>
         <li><span class="avain">Osoite</span><span class="arvo"><span data-teksti="katu"></span>, <span data-teksti="postitoimi"></span></span></li>
@@ -3330,10 +3452,10 @@ window.LIEKKI = {
 
     var kehys = $('[data-uutiset]');
     if (!kehys) return;
-    if (!lista.length) return;                       // jättää tyylikkään tyhjän tilan
-    var tyhja = $('[data-uutiset-tyhja]');
-    if (tyhja) tyhja.hidden = true;
-    kehys.hidden = false;
+    // Ei ilmoituksia -> koko osio jää pois. Sivulla ei näy tyhjää laatikkoa.
+    if (!lista.length) return;
+    var osio = kehys.closest('[data-uutisosio]');
+    if (osio) osio.hidden = false;
     kehys.innerHTML = lista.map(function (i) {
       var pvm = '';
       if (i.alkaa) {
@@ -3440,42 +3562,131 @@ window.LIEKKI = {
   }
 
   /* ----------------------------------------------------------- 7. TIKTOK */
-  /* Näyttää ravintolan TikTok-videot suoraan sivulla. Oletuksena TikTokin
-     virallinen profiiliupotus, joka päivittyy itsestään uusimpiin videoihin.
-     Jos content.js:ssä on videoiden tunnukset, näytetään ne sen sijaan.
-     Jos upotus estyy (mainostenesto, evästekielto), näkyviin tulee siisti
-     kuvanosto, joka vie profiiliin — koskaan ei jää tyhjää laatikkoa. */
+  /* Yleiskäyttöinen karuselli: pyyhkäisy puhelimella, nuolet työpöydällä,
+     pisteet kertovat missä kohtaa ollaan. Kortit napsahtavat paikalleen. */
+  function karuselli(kehys) {
+    var rata = $('.karuselli__rata', kehys);
+    if (!rata) return;
+    var kortit = Array.prototype.slice.call(rata.children);
+    if (kortit.length < 2) return;
+
+    var edell = $('.karuselli__nappi--edell', kehys);
+    var seur  = $('.karuselli__nappi--seur', kehys);
+    var pisteet = $('.karuselli__pisteet', kehys);
+
+    if (pisteet) {
+      pisteet.innerHTML = kortit.map(function (_, i) {
+        return '<button type="button" class="karuselli__piste' + (i ? '' : ' on') +
+               '" aria-label="Siirry kohtaan ' + (i + 1) + '"></button>';
+      }).join('');
+      $$('.karuselli__piste', pisteet).forEach(function (nappi, i) {
+        nappi.addEventListener('click', function () {
+          rata.scrollTo({ left: kortit[i].offsetLeft - rata.offsetLeft, behavior: kevyt ? 'auto' : 'smooth' });
+        });
+      });
+    }
+
+    function askel() {
+      var r = kortit[0].getBoundingClientRect();
+      var vali = parseFloat(getComputedStyle(rata).columnGap || '12') || 12;
+      return r.width + vali;
+    }
+    function siirra(suunta) {
+      rata.scrollBy({ left: suunta * askel(), behavior: kevyt ? 'auto' : 'smooth' });
+    }
+    if (edell) edell.addEventListener('click', function () { siirra(-1); });
+    if (seur)  seur.addEventListener('click', function () { siirra(1); });
+
+    var tikittaa = false;
+    function paivita() {
+      tikittaa = false;
+      var x = rata.scrollLeft;
+      var maks = rata.scrollWidth - rata.clientWidth;
+      // Jos kaikki kortit mahtuvat kerralla näkyviin, pisteet ja reunahäivyt
+      // ovat turhia — piilotetaan ne, ettei näytä rikkinäiseltä.
+      kehys.classList.toggle('on-mahtuu', maks <= 8);
+      kehys.classList.toggle('on-alkua-ennen', x > 8);
+      kehys.classList.toggle('on-loppua-jaljella', x < maks - 8);
+      if (edell) edell.disabled = x <= 8;
+      if (seur)  seur.disabled  = x >= maks - 8;
+
+      if (pisteet) {
+        var lahin = 0, ero = Infinity;
+        kortit.forEach(function (k, i) {
+          var d = Math.abs((k.offsetLeft - rata.offsetLeft) - x);
+          if (d < ero) { ero = d; lahin = i; }
+        });
+        $$('.karuselli__piste', pisteet).forEach(function (n, i) {
+          n.classList.toggle('on', i === lahin);
+        });
+      }
+    }
+    rata.addEventListener('scroll', function () {
+      if (!tikittaa) { tikittaa = true; requestAnimationFrame(paivita); }
+    }, { passive: true });
+    window.addEventListener('resize', paivita, { passive: true });
+
+    // Nuolinäppäimet, kun rata on kohdistettuna
+    rata.setAttribute('tabindex', '0');
+    rata.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); siirra(1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); siirra(-1); }
+    });
+
+    paivita();
+    setTimeout(paivita, 1200);
+    return paivita;
+  }
+
+  /* Näyttää ravintolan TikTok-videot sivulla.
+     - content.js:ssä videoiden tunnukset -> selattava karuselli, yksi video per kortti
+     - tyhjä lista -> TikTokin oma profiiliupotus, joka päivittyy itsestään
+     - upotus estetty -> ravintolan omat kuvat samassa karusellissa */
   function tiktok() {
     var kehys = $('[data-tiktok]');
     if (!kehys) return;
 
     var profiili = ((D.some || {}).tiktok || '').replace(/\/+$/, '');
-    if (!profiili) { kehys.remove(); return; }
+    if (!profiili) { var os = kehys.closest('section'); if (os) os.remove(); return; }
 
     var tunnus = (profiili.match(/@([\w.\-]+)/) || [])[1] || '';
-    var videot = D.tiktokVideot || [];
+    var videot = (D.tiktokVideot || []).slice(0, 8);
     var vara = $('[data-tiktok-vara]');
+    var karuselliKehys = kehys.closest('.karuselli');
 
     if (videot.length) {
-      kehys.className = 'tiktok-syote tiktok-syote--ruudukko';
-      kehys.innerHTML = videot.slice(0, 3).map(function (v) {
+      kehys.className = 'karuselli__rata';
+      kehys.innerHTML = videot.map(function (v) {
         var url = profiili + '/video/' + v.id;
-        return '<blockquote class="tiktok-embed" cite="' + url + '" data-video-id="' + v.id +
-          '" style="max-width:340px;min-width:280px"><section><a target="_blank" rel="noopener" href="' +
-          url + '">' + (v.teksti || 'Katso TikTokissa') + '</a></section></blockquote>';
+        return '<div class="tiktok-kortti-video">' +
+          '<blockquote class="tiktok-embed" cite="' + url + '" data-video-id="' + v.id + '">' +
+          '<section><a target="_blank" rel="noopener" href="' + url + '">' +
+          (v.teksti || 'Katso TikTokissa') + '</a></section></blockquote></div>';
       }).join('');
+      if (karuselliKehys) karuselliKehys.hidden = false;
     } else {
-      kehys.className = 'tiktok-syote tiktok-syote--profiili';
-      kehys.innerHTML = '<blockquote class="tiktok-embed" cite="' + profiili +
+      // Ei erikseen valittuja videoita: TikTokin oma profiilinäkymä
+      if (karuselliKehys) karuselliKehys.remove();
+      var syote = document.createElement('div');
+      syote.className = 'tiktok-syote tiktok-syote--profiili';
+      syote.setAttribute('data-tiktok-syote', '');
+      syote.innerHTML = '<blockquote class="tiktok-embed" cite="' + profiili +
         '" data-unique-id="' + tunnus + '" data-embed-type="creator"' +
         ' style="max-width:780px;min-width:288px"><section><a target="_blank" rel="noopener" href="' +
         profiili + '">@' + tunnus + '</a></section></blockquote>';
+      if (vara && vara.parentNode) vara.parentNode.insertBefore(syote, vara);
+      kehys = syote;
     }
+
+    var paivitaKaruselli = karuselliKehys && videot.length ? karuselli(karuselliKehys) : null;
 
     function naytaVara() {
       if (!vara) return;
-      kehys.hidden = true;
+      var poistettava = karuselliKehys && videot.length ? karuselliKehys : kehys;
+      if (poistettava) poistettava.hidden = true;
       vara.hidden = false;
+      var vk = vara.querySelector('.karuselli');
+      if (vk) karuselli(vk);
     }
 
     function lataa() {
@@ -3487,11 +3698,17 @@ window.LIEKKI = {
         sk.onerror = naytaVara;
         document.body.appendChild(sk);
       }
-      // Upotus korvaa blockquoten iframella. Jos sitä ei kuulu, näytetään vara.
       var alku = Date.now();
       var vahti = setInterval(function () {
-        if (kehys.querySelector('iframe')) { clearInterval(vahti); kehys.classList.add('on-ladattu'); }
-        else if (Date.now() - alku > 6000) { clearInterval(vahti); naytaVara(); }
+        var kohde = karuselliKehys && videot.length ? karuselliKehys : kehys;
+        if (kohde && kohde.querySelector('iframe')) {
+          clearInterval(vahti);
+          kohde.classList.add('on-ladattu');
+          if (paivitaKaruselli) setTimeout(paivitaKaruselli, 400);
+        } else if (Date.now() - alku > 6000) {
+          clearInterval(vahti);
+          naytaVara();
+        }
       }, 400);
     }
 
@@ -3519,7 +3736,6 @@ window.LIEKKI = {
     if (!v) return;
     var juuri = document.documentElement;
 
-    // Vain kerran istunnossa, eikä lainkaan jos liike on estetty
     var nahty = false;
     try { nahty = sessionStorage.getItem('liekki-esirippu') === '1'; } catch (e) {}
     if (kevyt || nahty) { v.remove(); return; }
@@ -3603,10 +3819,10 @@ window.LIEKKI = {
           var kesto = 1100, t0 = null;
           function askel(t) {
             if (!t0) t0 = t;
-            var p = Math.min((t - t0) / kesto, 1);
-            var e = 1 - Math.pow(1 - p, 3);
+            var pr = Math.min((t - t0) / kesto, 1);
+            var e = 1 - Math.pow(1 - pr, 3);
             el.textContent = muoto(Math.round(alku + (kohde - alku) * e));
-            if (p < 1) requestAnimationFrame(askel);
+            if (pr < 1) requestAnimationFrame(askel);
             else el.textContent = kohdeTeksti;
           }
           requestAnimationFrame(askel);

@@ -411,42 +411,131 @@
   }
 
   /* ----------------------------------------------------------- 7. TIKTOK */
-  /* Näyttää ravintolan TikTok-videot suoraan sivulla. Oletuksena TikTokin
-     virallinen profiiliupotus, joka päivittyy itsestään uusimpiin videoihin.
-     Jos content.js:ssä on videoiden tunnukset, näytetään ne sen sijaan.
-     Jos upotus estyy (mainostenesto, evästekielto), näkyviin tulee siisti
-     kuvanosto, joka vie profiiliin — koskaan ei jää tyhjää laatikkoa. */
+  /* Yleiskäyttöinen karuselli: pyyhkäisy puhelimella, nuolet työpöydällä,
+     pisteet kertovat missä kohtaa ollaan. Kortit napsahtavat paikalleen. */
+  function karuselli(kehys) {
+    var rata = $('.karuselli__rata', kehys);
+    if (!rata) return;
+    var kortit = Array.prototype.slice.call(rata.children);
+    if (kortit.length < 2) return;
+
+    var edell = $('.karuselli__nappi--edell', kehys);
+    var seur  = $('.karuselli__nappi--seur', kehys);
+    var pisteet = $('.karuselli__pisteet', kehys);
+
+    if (pisteet) {
+      pisteet.innerHTML = kortit.map(function (_, i) {
+        return '<button type="button" class="karuselli__piste' + (i ? '' : ' on') +
+               '" aria-label="Siirry kohtaan ' + (i + 1) + '"></button>';
+      }).join('');
+      $$('.karuselli__piste', pisteet).forEach(function (nappi, i) {
+        nappi.addEventListener('click', function () {
+          rata.scrollTo({ left: kortit[i].offsetLeft - rata.offsetLeft, behavior: kevyt ? 'auto' : 'smooth' });
+        });
+      });
+    }
+
+    function askel() {
+      var r = kortit[0].getBoundingClientRect();
+      var vali = parseFloat(getComputedStyle(rata).columnGap || '12') || 12;
+      return r.width + vali;
+    }
+    function siirra(suunta) {
+      rata.scrollBy({ left: suunta * askel(), behavior: kevyt ? 'auto' : 'smooth' });
+    }
+    if (edell) edell.addEventListener('click', function () { siirra(-1); });
+    if (seur)  seur.addEventListener('click', function () { siirra(1); });
+
+    var tikittaa = false;
+    function paivita() {
+      tikittaa = false;
+      var x = rata.scrollLeft;
+      var maks = rata.scrollWidth - rata.clientWidth;
+      // Jos kaikki kortit mahtuvat kerralla näkyviin, pisteet ja reunahäivyt
+      // ovat turhia — piilotetaan ne, ettei näytä rikkinäiseltä.
+      kehys.classList.toggle('on-mahtuu', maks <= 8);
+      kehys.classList.toggle('on-alkua-ennen', x > 8);
+      kehys.classList.toggle('on-loppua-jaljella', x < maks - 8);
+      if (edell) edell.disabled = x <= 8;
+      if (seur)  seur.disabled  = x >= maks - 8;
+
+      if (pisteet) {
+        var lahin = 0, ero = Infinity;
+        kortit.forEach(function (k, i) {
+          var d = Math.abs((k.offsetLeft - rata.offsetLeft) - x);
+          if (d < ero) { ero = d; lahin = i; }
+        });
+        $$('.karuselli__piste', pisteet).forEach(function (n, i) {
+          n.classList.toggle('on', i === lahin);
+        });
+      }
+    }
+    rata.addEventListener('scroll', function () {
+      if (!tikittaa) { tikittaa = true; requestAnimationFrame(paivita); }
+    }, { passive: true });
+    window.addEventListener('resize', paivita, { passive: true });
+
+    // Nuolinäppäimet, kun rata on kohdistettuna
+    rata.setAttribute('tabindex', '0');
+    rata.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); siirra(1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); siirra(-1); }
+    });
+
+    paivita();
+    setTimeout(paivita, 1200);
+    return paivita;
+  }
+
+  /* Näyttää ravintolan TikTok-videot sivulla.
+     - content.js:ssä videoiden tunnukset -> selattava karuselli, yksi video per kortti
+     - tyhjä lista -> TikTokin oma profiiliupotus, joka päivittyy itsestään
+     - upotus estetty -> ravintolan omat kuvat samassa karusellissa */
   function tiktok() {
     var kehys = $('[data-tiktok]');
     if (!kehys) return;
 
     var profiili = ((D.some || {}).tiktok || '').replace(/\/+$/, '');
-    if (!profiili) { kehys.remove(); return; }
+    if (!profiili) { var os = kehys.closest('section'); if (os) os.remove(); return; }
 
     var tunnus = (profiili.match(/@([\w.\-]+)/) || [])[1] || '';
-    var videot = D.tiktokVideot || [];
+    var videot = (D.tiktokVideot || []).slice(0, 8);
     var vara = $('[data-tiktok-vara]');
+    var karuselliKehys = kehys.closest('.karuselli');
 
     if (videot.length) {
-      kehys.className = 'tiktok-syote tiktok-syote--ruudukko';
-      kehys.innerHTML = videot.slice(0, 3).map(function (v) {
+      kehys.className = 'karuselli__rata';
+      kehys.innerHTML = videot.map(function (v) {
         var url = profiili + '/video/' + v.id;
-        return '<blockquote class="tiktok-embed" cite="' + url + '" data-video-id="' + v.id +
-          '" style="max-width:340px;min-width:280px"><section><a target="_blank" rel="noopener" href="' +
-          url + '">' + (v.teksti || 'Katso TikTokissa') + '</a></section></blockquote>';
+        return '<div class="tiktok-kortti-video">' +
+          '<blockquote class="tiktok-embed" cite="' + url + '" data-video-id="' + v.id + '">' +
+          '<section><a target="_blank" rel="noopener" href="' + url + '">' +
+          (v.teksti || 'Katso TikTokissa') + '</a></section></blockquote></div>';
       }).join('');
+      if (karuselliKehys) karuselliKehys.hidden = false;
     } else {
-      kehys.className = 'tiktok-syote tiktok-syote--profiili';
-      kehys.innerHTML = '<blockquote class="tiktok-embed" cite="' + profiili +
+      // Ei erikseen valittuja videoita: TikTokin oma profiilinäkymä
+      if (karuselliKehys) karuselliKehys.remove();
+      var syote = document.createElement('div');
+      syote.className = 'tiktok-syote tiktok-syote--profiili';
+      syote.setAttribute('data-tiktok-syote', '');
+      syote.innerHTML = '<blockquote class="tiktok-embed" cite="' + profiili +
         '" data-unique-id="' + tunnus + '" data-embed-type="creator"' +
         ' style="max-width:780px;min-width:288px"><section><a target="_blank" rel="noopener" href="' +
         profiili + '">@' + tunnus + '</a></section></blockquote>';
+      if (vara && vara.parentNode) vara.parentNode.insertBefore(syote, vara);
+      kehys = syote;
     }
+
+    var paivitaKaruselli = karuselliKehys && videot.length ? karuselli(karuselliKehys) : null;
 
     function naytaVara() {
       if (!vara) return;
-      kehys.hidden = true;
+      var poistettava = karuselliKehys && videot.length ? karuselliKehys : kehys;
+      if (poistettava) poistettava.hidden = true;
       vara.hidden = false;
+      var vk = vara.querySelector('.karuselli');
+      if (vk) karuselli(vk);
     }
 
     function lataa() {
@@ -458,11 +547,17 @@
         sk.onerror = naytaVara;
         document.body.appendChild(sk);
       }
-      // Upotus korvaa blockquoten iframella. Jos sitä ei kuulu, näytetään vara.
       var alku = Date.now();
       var vahti = setInterval(function () {
-        if (kehys.querySelector('iframe')) { clearInterval(vahti); kehys.classList.add('on-ladattu'); }
-        else if (Date.now() - alku > 6000) { clearInterval(vahti); naytaVara(); }
+        var kohde = karuselliKehys && videot.length ? karuselliKehys : kehys;
+        if (kohde && kohde.querySelector('iframe')) {
+          clearInterval(vahti);
+          kohde.classList.add('on-ladattu');
+          if (paivitaKaruselli) setTimeout(paivitaKaruselli, 400);
+        } else if (Date.now() - alku > 6000) {
+          clearInterval(vahti);
+          naytaVara();
+        }
       }, 400);
     }
 
@@ -490,7 +585,6 @@
     if (!v) return;
     var juuri = document.documentElement;
 
-    // Vain kerran istunnossa, eikä lainkaan jos liike on estetty
     var nahty = false;
     try { nahty = sessionStorage.getItem('liekki-esirippu') === '1'; } catch (e) {}
     if (kevyt || nahty) { v.remove(); return; }
@@ -574,10 +668,10 @@
           var kesto = 1100, t0 = null;
           function askel(t) {
             if (!t0) t0 = t;
-            var p = Math.min((t - t0) / kesto, 1);
-            var e = 1 - Math.pow(1 - p, 3);
+            var pr = Math.min((t - t0) / kesto, 1);
+            var e = 1 - Math.pow(1 - pr, 3);
             el.textContent = muoto(Math.round(alku + (kohde - alku) * e));
-            if (p < 1) requestAnimationFrame(askel);
+            if (pr < 1) requestAnimationFrame(askel);
             else el.textContent = kohdeTeksti;
           }
           requestAnimationFrame(askel);
