@@ -1,0 +1,108 @@
+<section class="sivuhero" data-parallaksi>
+  <div class="sivuhero__media">
+    <picture>
+      <source media="(max-width: 700px)" srcset="{{up}}assets/img/burgeri-pekoni-sm.webp">
+      <img src="{{up}}assets/img/burgeri-pekoni.webp" alt="" aria-hidden="true"
+           fetchpriority="high" decoding="async">
+    </picture>
+  </div>
+  <div class="sivuhero__peite"></div>
+  <div class="kuori">
+    <ol class="murupolku">
+      <li><a href="{{linkki:}}">Etusivu</a></li>
+      <li>À la Carte</li>
+    </ol>
+    <p class="etiketti">Ruokalista</p>
+    <h1 data-sanat>À la Carte</h1>
+    <p class="ingressi">Laajalta à la carte -listaltamme löydät puuhiiligrillin inspiroimia
+      annoksia, burgereita, pihvejä ja muita Bistro Liekin suosikkeja.</p>
+    <div class="napit" style="margin-top:2rem">
+      <a class="nappi" data-linkki="menuTilaus" data-tyhjana="Soita ja kysy listasta"
+         data-vara-href="puhelin" href="#"><span>Avaa ruokalista</span></a>
+      <a class="nappi nappi--ääriviiva" data-linkki="varaus" data-tyhjana="Varaa puhelimitse"
+         data-vara-href="varaus-puhelin" href="#"><span>Varaa pöytä</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="osio">
+  <div class="kuori">
+
+    <!-- ===================================================================
+         RUOKALISTAN RAKENNE
+
+         Ruokalista on tarkoituksella jätetty tähän tyhjäksi, koska annoksia
+         ja hintoja ei ole vielä toimitettu. Lisää annokset alle näin — kopioi
+         yksi <div class="menu-osio"> jokaista listan osiota kohden ja yksi
+         <div class="menu-rivi"> jokaista annosta kohden:
+
+         <div class="menu-osio">
+           <div class="menu-osio__otsikko">
+             <h3>Puuhiiligrillistä</h3>
+           </div>
+
+           <div class="menu-rivi">
+             <div class="menu-rivi__ylä">
+               <span class="menu-rivi__nimi">Annoksen nimi</span>
+               <span class="menu-rivi__pisteet"></span>
+               <span class="menu-rivi__hinta">00,00 €</span>
+             </div>
+             <p class="menu-rivi__kuvaus">Lyhyt kuvaus annoksesta ja lisukkeista.</p>
+           </div>
+
+         </div>
+
+         Kun annokset on lisätty, poista alla oleva "listaus-tulossa" -osio.
+         =================================================================== -->
+
+    <div class="split split--laaja-teksti" data-esiin>
+      <div class="split__teksti">
+        <p class="etiketti">Grillin äärellä</p>
+        <h2 class="otsikko-m">Ruoka syntyy hiilloksen päällä</h2>
+        <p class="leipa">Puuhiili palaa kuumana, ja siitä syntyy pinta, joka rapsahtaa.
+          Sama grilli antaa luonteen niin pihveille, burgereille kuin illan muillekin
+          annoksille.</p>
+        <p class="leipa">Ajantasainen à la carte -lista hintoineen aukeaa alla olevasta
+          painikkeesta. Kerrothan allergioista ja erikoisruokavalioista henkilökunnalle,
+          niin katsotaan yhdessä sopiva vaihtoehto.</p>
+        <div class="napit">
+          <a class="nappi" data-linkki="menuTilaus" data-tyhjana="Soita ja kysy listasta"
+             data-vara-href="puhelin" href="#"><span>Avaa ajantasainen lista</span></a>
+        </div>
+      </div>
+
+      <div class="split__media">
+        <div class="media media--3-2 media--zoom" data-verho>
+      <picture>
+      <source media="(max-width: 700px)" srcset="{{up}}assets/img/burgeri-chimichurri-sm.webp">
+        <img src="{{up}}assets/img/burgeri-chimichurri.webp" alt="Tuplaburgeri puuhiiligrillistä, cheddaria ja punaista kastiketta, vieressä ranskalaiset"
+             loading="lazy" decoding="async">
+      </picture>
+      <span class="media__merkinta">Grillin klassikot</span>
+    </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="osio osio--char viiva-ylä">
+  <div class="kuori split">
+    <div class="split__teksti" data-esiin>
+      <p class="etiketti">Arkisin</p>
+      <h2 class="otsikko-m">Etsitkö lounasta?</h2>
+      <p class="leipa" data-lounastila></p>
+      <div class="napit">
+        <a class="nappi nappi--hiljainen" href="{{linkki:lounas}}"><span>Lounas</span></a>
+      </div>
+    </div>
+    <div class="split__teksti" data-esiin style="--viive:1">
+      <p class="etiketti">Juhliin</p>
+      <h2 class="otsikko-m">Isommalle porukalle?</h2>
+      <p class="leipa">Puuhiiligrillin maut taipuvat myös juhliin ja tapahtumiin.
+        Kerro tilaisuudestasi, niin suunnitellaan sopiva kokonaisuus.</p>
+      <div class="napit">
+        <a class="nappi nappi--hiljainen" href="{{linkki:catering}}"><span>Catering</span></a>
+      </div>
+    </div>
+  </div>
+</section>

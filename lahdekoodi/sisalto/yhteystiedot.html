@@ -1,0 +1,120 @@
+<section class="sivuhero" data-parallaksi>
+  <div class="sivuhero__media">
+    <picture>
+      <source media="(max-width: 700px)" srcset="{{up}}assets/img/lounasbuffet-sm.webp">
+      <img src="{{up}}assets/img/lounasbuffet.webp" alt="" aria-hidden="true"
+           fetchpriority="high" decoding="async">
+    </picture>
+  </div>
+  <div class="sivuhero__peite"></div>
+  <div class="kuori">
+    <ol class="murupolku">
+      <li><a href="{{linkki:}}">Etusivu</a></li>
+      <li>Yhteystiedot</li>
+    </ol>
+    <p class="etiketti">Tikkurila, Vantaa</p>
+    <h1 data-sanat>Löydä meidät</h1>
+    <p class="ingressi"><span data-teksti="katu">Talvikkitie 30</span>,
+      <span data-teksti="postitoimi">01300 Vantaa</span></p>
+    <div class="napit" style="margin-top:2rem">
+      <a class="nappi" data-href="puhelin" href="#">{{ikoni:soita}}<span>Soita meille</span></a>
+      <a class="nappi nappi--ääriviiva" data-linkki="varaus" data-tyhjana="Varaa puhelimitse"
+         data-vara-href="varaus-puhelin" href="#"><span>Varaa pöytä</span></a>
+      <a class="nappi nappi--ääriviiva" data-linkki="reittiohjeet" href="#">
+        {{ikoni:sijainti}}<span>Reittiohjeet</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="osio osio--tiivis">
+  <div class="kuori">
+    <div class="tila" data-tila style="border-radius:2px;border:1px solid var(--line-soft);background:var(--char-2)">
+      <div class="kuori tila__rivi">
+        <span class="tila__nyt"><span class="tila__piste" aria-hidden="true"></span><span data-tila-otsikko></span></span>
+        <span class="tila__erotin" aria-hidden="true"></span>
+        <span class="tila__aika" data-tila-aika></span>
+        <span class="tila__huomio" data-teksti="keittio"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="osio" style="padding-top:0">
+  <div class="kuori split split--laaja-kuva split--ylos">
+    <div class="kartta-pilari" data-esiin>
+      <div class="kartta" data-kartta>
+        <div class="tyhja-tila" style="border:0;min-height:440px;display:grid;place-content:center">Kartta latautuu…</div>
+      </div>
+    </div>
+
+    <div class="split__teksti" data-esiin style="--viive:1">
+      <p class="etiketti">Yhteystiedot</p>
+      <h2 class="otsikko-m">Bistro Liekki<br>Talvikkitie</h2>
+
+      <ul class="tietolista" style="margin-top:1.4rem">
+        <li><span class="avain">Osoite</span><span class="arvo"><strong data-teksti="katu"></strong>, <span data-teksti="postitoimi"></span></span></li>
+        <li><span class="avain">Ravintola</span><span class="arvo"><a data-href="puhelin" href="#" data-teksti="puhelin"></a></span></li>
+        <li><span class="avain">Pöytävaraukset</span><span class="arvo"><a data-href="varaus-puhelin" href="#" data-teksti="varaus-puhelin"></a></span></li>
+        <li><span class="avain">Sähköposti</span><span class="arvo"><a data-href="sahkoposti" href="#" data-teksti="sahkoposti"></a></span></li>
+      </ul>
+
+      <h3 class="otsikko-s" style="margin-top:2.4rem">Aukioloajat</h3>
+      <ul class="aukiolot" data-aukiolot style="margin-top:1rem"></ul>
+      <p class="leipa" style="font-size:.82rem;color:var(--bone-4);margin-top:1rem"
+         data-teksti="keittio"></p>
+
+      <h3 class="otsikko-s" style="margin-top:2.4rem">Lounas</h3>
+      <ul class="tietolista">
+        <li><span class="avain">Lounasbuffet</span><span class="arvo"><strong data-teksti="lounas-paivat"></strong> klo <strong data-teksti="lounas-aika"></strong></span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="osio osio--char viiva-ylä">
+  <div class="kuori split split--laaja-teksti">
+    <div data-esiin>
+      <p class="etiketti">Ota yhteyttä</p>
+      <h2 class="otsikko-m">Lähetä viesti</h2>
+      <p class="leipa" style="margin-top:1rem">Kysyttävää varauksesta, ruokalistasta tai
+        cateringista? Jätä viesti, niin vastaamme mahdollisimman pian. Kiireellisissä
+        asioissa soita suoraan.</p>
+      <div class="napit" style="margin-top:1.6rem">
+        <a class="nappi nappi--hiljainen" data-href="puhelin" href="#">
+          {{ikoni:soita}}<span data-teksti="puhelin"></span></a>
+      </div>
+    </div>
+
+    <form class="lomake lomake--kaksi" data-lomake data-aihe="Yhteydenotto — bistroliekki.fi"
+          data-kiitos="Kiitos viestistäsi! Olemme yhteydessä pian." novalidate data-esiin style="--viive:1">
+      <div class="kentta">
+        <label for="y-nimi">Koko nimi <span class="pakollinen">*</span></label>
+        <input id="y-nimi" name="nimi" type="text" autocomplete="name" required placeholder="Etunimi Sukunimi">
+      </div>
+      <div class="kentta">
+        <label for="y-sposti">Sähköposti <span class="pakollinen">*</span></label>
+        <input id="y-sposti" name="sahkoposti" type="email" autocomplete="email" required placeholder="nimi@esimerkki.fi">
+      </div>
+      <div class="kentta kentta--koko">
+        <label for="y-puh">Puhelin</label>
+        <input id="y-puh" name="puhelin" type="tel" autocomplete="tel" placeholder="040 123 4567">
+      </div>
+      <div class="kentta kentta--koko">
+        <label for="y-viesti">Viesti <span class="pakollinen">*</span></label>
+        <textarea id="y-viesti" name="viesti" required placeholder="Kerro, miten voimme auttaa."></textarea>
+      </div>
+
+      <div class="hunaja" aria-hidden="true">
+        <label for="y-yritys">Jätä tämä kenttä tyhjäksi</label>
+        <input id="y-yritys" name="yritys" type="text" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="kentta--koko">
+        <button class="nappi" type="submit"><span>Lähetä viesti</span></button>
+      </div>
+      <p class="lomake-tietosuoja kentta--koko">Käsittelemme yhteystietosi vain viestiisi
+        vastaamiseen.</p>
+      <div class="lomake__viesti kentta--koko" data-lomake-viesti hidden></div>
+    </form>
+  </div>
+</section>

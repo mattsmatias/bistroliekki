@@ -1,0 +1,77 @@
+<section class="sivuhero" data-parallaksi>
+  <div class="sivuhero__media">
+    <img src="{{up}}assets/img/band-embers.webp" alt="" aria-hidden="true"
+         fetchpriority="high" decoding="async" width="1800" height="900">
+  </div>
+  <div class="sivuhero__peite"></div>
+  <div class="kuori">
+    <ol class="murupolku">
+      <li><a href="{{linkki:}}">Etusivu</a></li>
+      <li>Pöytävaraus</li>
+    </ol>
+    <p class="etiketti">Pöytävaraus</p>
+    <h1>Varauksen<br>vahvistus</h1>
+    <p class="ingressi">Tämä sivu on varausjärjestelmän paluuosoite: varausjärjestelmä ohjaa
+      asiakkaan tänne, kun varaus on tehty tai vahvistettu.</p>
+  </div>
+</section>
+
+<section class="osio">
+  <div class="kuori rajaa-leveys" style="margin-inline:auto">
+
+    <!-- ===================================================================
+         VARAUSINTEGRAATION LIITYNTÄPISTE
+
+         Kun varausjärjestelmä (esim. Operox) ohjaa asiakkaan tälle sivulle,
+         se välittää yleensä tiedot osoiteriville, esimerkiksi:
+             /vahvista-poytavaraus/?status=ok&id=12345
+
+         Sivu näyttää alla olevan viestin sen mukaan, mitä osoiterivillä on.
+         Jos parametreja ei ole, näytetään neutraali ohje.
+         =================================================================== -->
+
+    <div class="lounas-kortti" data-esiin>
+      <p class="etiketti" id="vahvistus-tila">Varaustiedot</p>
+      <h2 class="otsikko-m" id="vahvistus-otsikko">Kiitos varauksestasi</h2>
+      <p class="leipa" id="vahvistus-teksti" style="margin-top:1rem">
+        Nähdään pian Bistro Liekissä. Jos haluat muuttaa tai peruuttaa varauksen,
+        soita meille — hoidamme sen nopeasti.</p>
+
+      <ul class="tietolista" style="margin-top:1.6rem">
+        <li><span class="avain">Pöytävaraukset</span><span class="arvo"><a data-href="varaus-puhelin" href="#" data-teksti="varaus-puhelin"></a></span></li>
+        <li><span class="avain">Ravintola</span><span class="arvo"><a data-href="puhelin" href="#" data-teksti="puhelin"></a></span></li>
+        <li><span class="avain">Osoite</span><span class="arvo"><span data-teksti="katu"></span>, <span data-teksti="postitoimi"></span></span></li>
+      </ul>
+
+      <div class="napit" style="margin-top:2rem">
+        <a class="nappi" href="{{linkki:}}"><span>Etusivulle</span></a>
+        <a class="nappi nappi--ääriviiva" href="{{linkki:menu}}"><span>Katso ruokalista</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var p = new URLSearchParams(location.search);
+  var tila = (p.get('status') || p.get('tila') || '').toLowerCase();
+  var otsikko = document.getElementById('vahvistus-otsikko');
+  var teksti = document.getElementById('vahvistus-teksti');
+  var merkki = document.getElementById('vahvistus-tila');
+  if (!otsikko) return;
+
+  if (tila === 'ok' || tila === 'success' || tila === 'confirmed') {
+    merkki.textContent = 'Vahvistettu';
+    otsikko.textContent = 'Varauksesi on vahvistettu';
+    teksti.textContent = 'Kiitos! Nähdään Bistro Liekissä. Saat vahvistuksen myös sähköpostiisi.';
+  } else if (tila === 'cancelled' || tila === 'peruttu') {
+    merkki.textContent = 'Peruttu';
+    otsikko.textContent = 'Varauksesi on peruttu';
+    teksti.textContent = 'Varaus on peruttu. Tervetuloa toiste — voit tehdä uuden varauksen milloin tahansa.';
+  } else if (tila === 'error' || tila === 'virhe') {
+    merkki.textContent = 'Huomio';
+    otsikko.textContent = 'Varausta ei voitu käsitellä';
+    teksti.textContent = 'Jokin meni pieleen. Soita meille, niin hoidamme varauksen puhelimitse.';
+  }
+})();
+</script>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /vahvista-poytavaraus/
+
+Sitemap: https://bistroliekki.fi/sitemap.xml

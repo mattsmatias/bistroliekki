@@ -1,0 +1,39 @@
+# Julkaisee sivusto/-kansion GitHub Pagesiin jokaisen main-haaran päivityksen
+# jälkeen. Ota käyttöön: Settings -> Pages -> Source: GitHub Actions.
+name: Julkaise sivusto
+
+on:
+  push:
+    branches: [main]
+    paths: ['sivusto/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  julkaise:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.julkaisu.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Valmistele Pages
+        uses: actions/configure-pages@v5
+
+      - name: Pakkaa sivusto
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: sivusto
+
+      - name: Julkaise
+        id: julkaisu
+        uses: actions/deploy-pages@v4

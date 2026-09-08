@@ -1,0 +1,17 @@
+# Käyttöjärjestelmien roskatiedostot
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editorit
+.vscode/
+.idea/
+*.swp
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Kuvien alkuperäiset (isot) — pidetään repon ulkopuolella
+lahdekoodi/kuvat_raaka/

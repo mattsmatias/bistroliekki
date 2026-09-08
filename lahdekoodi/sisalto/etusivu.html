@@ -1,0 +1,325 @@
+<!-- ============================================================== HERO -->
+<section class="hero">
+  <div class="hero__media">
+    <picture>
+      <source media="(max-width: 700px)" srcset="{{up}}assets/img/hero-sm.webp">
+      <img src="{{up}}assets/img/hero.webp"
+           alt="Bistro Liekin burgeri puuhiiligrillistä: kaksi pihviä, sulanutta juustoa ja punaista kastiketta, vieressä ranskalaiset"
+           width="2000" height="1125" fetchpriority="high" decoding="async">
+    </picture>
+  </div>
+  <div class="hero__peite"></div>
+  <div class="hero__hiukkaset" data-kipinat aria-hidden="true"></div>
+
+  <div class="kuori hero__sisus">
+    <p class="hero__ylanimi">Vuodesta 2016 · <span class="vain-leveä">Talvikkitie 30, </span>Vantaa</p>
+    <h1 data-sanat><span>Bistro</span><span>Liekki</span></h1>
+
+    <div class="hero__ala">
+      <p class="hero__iskulause">Puuhiiligrilli<br>Tikkurilan sydämessä.</p>
+      <div class="napit">
+        <a class="nappi" data-linkki="varaus" data-tyhjana="Varaa puhelimitse"
+           data-vara-href="varaus-puhelin" href="#"><span>Varaa pöytä</span></a>
+        <a class="nappi nappi--ääriviiva" href="{{linkki:menu}}"><span>Katso ruokalista</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__vieritys" aria-hidden="true">Selaa</div>
+</section>
+
+<!-- ====================================================== AUKIOLOSTATUS -->
+<div class="tila" data-tila>
+  <div class="kuori tila__rivi">
+    <span class="tila__nyt"><span class="tila__piste" aria-hidden="true"></span><span data-tila-otsikko>Aukiolotieto</span></span>
+    <span class="tila__erotin" aria-hidden="true"></span>
+    <span class="tila__aika" data-tila-aika></span>
+    <span class="tila__huomio" data-teksti="keittio"></span>
+  </div>
+</div>
+
+<!-- ======================================================= ILMOITUSPALKKI -->
+<div class="ilmoituspalkki" data-ilmoituspalkki hidden>
+  <div class="kuori ilmoituspalkki__rivi">
+    <strong data-ilmoitus-otsikko></strong>
+    <span data-ilmoitus-teksti></span>
+  </div>
+</div>
+
+<!-- ============================================================ ESITTELY -->
+<section class="osio" aria-labelledby="tervetuloa">
+  <div class="kuori split split--laaja-teksti">
+    <div class="split__media" data-esiin>
+      <div class="media media--3-2 media--zoom" data-verho>
+      <picture>
+      <source media="(max-width: 700px)" srcset="{{up}}assets/img/lounasbuffet-sm.webp">
+        <img src="{{up}}assets/img/lounasbuffet.webp" alt="Bistro Liekin lounasbuffet katettuna ravintolasalissa Talvikkitiellä"
+             loading="lazy" decoding="async">
+      </picture>
+      <span class="media__merkinta">Talvikkitie 30 · Tikkurila</span>
+    </div>
+    </div>
+
+    <div class="split__teksti" data-esiin style="--viive:1">
+      <p class="etiketti">Tervetuloa</p>
+      <h2 class="otsikko-l" id="tervetuloa" data-sanat>Tervetuloa<br>Bistro Liekkiin</h2>
+      <p class="ingressi">Vuodesta 2016 lähtien Bistro Liekki Puuhiiligrilli on tarjonnut
+        kodikkaan ja rennon ruokailuhetken Tikkurilan keskustassa.</p>
+      <p class="leipa">Ravintolan ylpeys on puuhiiligrilli, joka huokuu aitoa savun makua
+        jokaiseen annokseen. Arkisin klo 10:30–15 palvelee suosittu lounasbuffet. Muina
+        aikoina voit nauttia laajasta à la carte -listastamme, jonka inspiraation lähteenä
+        toimii puuhiiligrilli.</p>
+      <div class="napit">
+        <a class="nappi nappi--hiljainen" href="{{linkki:meista}}"><span>Tutustu meihin</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================== PUUHIILIGRILLI -->
+<section class="band" data-parallaksi aria-labelledby="grilli">
+  <div class="band__media">
+    <picture>
+      <source media="(max-width: 700px)" srcset="{{up}}assets/img/grill-flame-sm.webp">
+      <img src="{{up}}assets/img/grill-flame.webp" alt="Liekit nousevat puuhiilestä"
+           loading="lazy" decoding="async" width="2000" height="1400">
+    </picture>
+  </div>
+  <div class="band__peite"></div>
+  <span class="taustateksti" aria-hidden="true">PUUHIILI</span>
+
+  <div class="kuori">
+    <div class="band__sisus" data-esiin>
+      <p class="etiketti">Brändimme ydin</p>
+      <h2 class="otsikko-xl" id="grilli" data-sanat>Aito<br>puuhiiligrilli</h2>
+      <p class="ingressi" style="margin-top:1.6rem">Aitoa savun makua jokaiseen annokseen.</p>
+      <p class="leipa">Hiillos on ravintolamme sydän. Se antaa lihalle rapean pinnan, syvän
+        aromin ja sen maun, jota kaasugrilli ei osaa jäljitellä.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================== NAUHA -->
+<div class="nauha" aria-hidden="true">
+  <div class="nauha__rata">
+    <span>Puuhiiligrilli <b>&bull;</b> Tikkurila <b>&bull;</b> Vuodesta 2016 <b>&bull;</b> À la carte <b>&bull;</b> Lounas arkisin <b>&bull;</b> Catering <b>&bull;</b></span>
+    <span>Puuhiiligrilli <b>&bull;</b> Tikkurila <b>&bull;</b> Vuodesta 2016 <b>&bull;</b> À la carte <b>&bull;</b> Lounas arkisin <b>&bull;</b> Catering <b>&bull;</b></span>
+  </div>
+</div>
+
+<!-- ========================================================= À LA CARTE -->
+<section class="osio osio--char" aria-labelledby="alacarte">
+  <div class="kuori split split--kaanteinen">
+    <div class="split__media" data-esiin>
+      <div class="media media--leveä media--zoom" data-verho>
+      <picture>
+      <source media="(max-width: 700px)" srcset="{{up}}assets/img/burgeri-chimichurri-sm.webp">
+        <img src="{{up}}assets/img/burgeri-chimichurri.webp" alt="Tuplaburgeri puuhiiligrillistä, cheddaria ja punaista kastiketta, vieressä ranskalaiset"
+             loading="lazy" decoding="async">
+      </picture>
+    </div>
+    </div>
+    <div class="split__teksti" data-esiin style="--viive:1">
+      <p class="etiketti">Ruokalista</p>
+      <h2 class="otsikko-l" id="alacarte" data-sanat>À la Carte</h2>
+      <p class="leipa">Laajalta à la carte -listaltamme löydät puuhiiligrillin inspiroimia
+        annoksia, burgereita, pihvejä ja muita Bistro Liekin suosikkeja.</p>
+      <div class="napit">
+        <a class="nappi" href="{{linkki:menu}}"><span>Katso à la carte</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================== LOUNAS -->
+<section class="osio hiili-tausta" aria-labelledby="lounas">
+  <div class="kuori split">
+    <div class="split__teksti" data-esiin>
+      <p class="etiketti">Arkisin</p>
+      <h2 class="otsikko-l" id="lounas" data-sanat>Lounas<br>Bistro Liekissä</h2>
+      <p class="ingressi">Arkisin klo 10:30–15 tarjoilemme suosittua lounasbuffetia.</p>
+      <p class="leipa" data-lounastila></p>
+      <div class="napit">
+        <a class="nappi" href="{{linkki:lounas}}"><span>Katso lounas</span></a>
+        <a class="nappi nappi--ääriviiva" data-linkki="lounaslista"
+           data-tyhjana="Soita ja kysy" data-vara-href="puhelin" href="#">
+          <span>Päivän lounaslista</span></a>
+      </div>
+    </div>
+
+    <div class="lounas-kortti" data-esiin style="--viive:1">
+      <p class="lounas-aika"><span data-teksti="lounas-aika">10:30–15:00</span>
+        <small data-teksti="lounas-paivat">Arkisin ma–pe</small></p>
+      <p class="leipa" style="font-size:var(--step--1)">Lounasbuffet katetaan joka arkipäivä.
+        Viimeinen annos tarjoillaan klo 15.</p>
+      <ul class="tietolista" style="margin-top:1.4rem">
+        <li><span class="avain">Lounas</span><span class="arvo"><strong data-teksti="lounas-aika"></strong></span></li>
+        <li><span class="avain">Päivät</span><span class="arvo" data-teksti="lounas-paivat"></span></li>
+        <li><span class="avain">Hinta</span><span class="arvo"><strong data-teksti="lounas-hinta" data-piilota-tyhjana></strong></span></li>
+        <li><span class="avain">Osoite</span><span class="arvo"><span data-teksti="katu"></span>, <span data-teksti="postitoimi"></span></span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= VARAA PÖYTÄ -->
+<section class="band band--keskellä" data-parallaksi aria-labelledby="varaus">
+  <div class="band__media">
+    <img src="{{up}}assets/img/band-embers.webp" alt="" aria-hidden="true"
+         loading="lazy" decoding="async" width="1800" height="900">
+  </div>
+  <div class="band__peite"></div>
+
+  <div class="kuori">
+    <div class="band__sisus" data-esiin>
+      <p class="etiketti etiketti--keskellä">Pöytävaraus</p>
+      <h2 class="otsikko-l" id="varaus" data-sanat>Varaa pöytä</h2>
+      <p class="ingressi" style="margin-top:1.4rem">Tervetuloa viettämään aikaa Bistro Liekkiin.
+        Varaukset onnistuvat helposti verkossa tai puhelimitse.</p>
+      <div class="napit" style="margin-top:2rem">
+        <a class="nappi" data-linkki="varaus" data-tyhjana="Varaa puhelimitse"
+           data-vara-href="varaus-puhelin" href="#"><span>Varaa verkossa</span></a>
+        <a class="nappi nappi--ääriviiva" data-href="varaus-puhelin" href="#">
+          {{ikoni:soita}}<span data-teksti="varaus-puhelin"></span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ CATERING JA LAHJAKORTTI -->
+<section class="osio osio--char" aria-label="Catering ja lahjakortti">
+  <div class="kuori">
+    <div class="kortit kortit--2" data-esiin>
+      <article class="kortti">
+        <p class="kortti__nro">01 — Catering</p>
+        <h3>Puuhiilen maut<br>juhliin</h3>
+        <p>Bistro Liekki tuo puuhiiligrillin maut myös juhliin ja tapahtumiin. Kerro
+          tilaisuudestasi, niin suunnitellaan sopiva kokonaisuus yhdessä.</p>
+        <a class="linkki" href="{{linkki:catering}}">Kysy cateringista {{ikoni:nuoli}}</a>
+      </article>
+
+      <article class="kortti">
+        <p class="kortti__nro">02 — Lahjakortti</p>
+        <h3>Anna lahjaksi<br>maut ja tunnelma</h3>
+        <p>Bistro Liekin lahjakortti sopii lahjaksi, joka jää mieleen — illallinen
+          puuhiiligrillin äärellä tai lounas keskellä viikkoa.</p>
+        <a class="linkki" href="{{linkki:lahjakortti}}">Lahjakortti {{ikoni:nuoli}}</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== GALLERIA -->
+<section class="osio" aria-labelledby="galleria">
+  <div class="kuori" style="margin-bottom:clamp(2rem,4vw,3.4rem)">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1.5rem">
+      <div data-esiin>
+        <p class="etiketti">Galleria</p>
+        <h2 class="otsikko-l" id="galleria" data-sanat>Tunnelmaa Liekistä</h2>
+      </div>
+      <a class="linkki" href="{{linkki:galleria}}" data-esiin>Koko galleria {{ikoni:nuoli}}</a>
+    </div>
+  </div>
+  <div class="kuori">
+    <div class="galleria" data-galleria="6" data-esiin></div>
+  </div>
+</section>
+
+<!-- ============================================================= TIKTOK -->
+<section class="osio osio--char2" aria-labelledby="tiktok">
+  <div class="kuori">
+    <div class="tiktok-ylä" data-esiin>
+      <div>
+        <p class="etiketti">TikTok · @bistroliekki</p>
+        <h2 class="otsikko-m" id="tiktok">Katso, mitä<br>grillissä tapahtuu</h2>
+        <p class="leipa">Kuvaamme keittiöstä, hiilloksesta ja annoksista TikTokissa.
+          Uusimmat videot näkyvät tässä — ruoka sellaisena kuin se syntyy.</p>
+      </div>
+
+      <div class="tiktok-sivu">
+        <p class="tiktok-luku" data-piilota-ryhma>
+          <strong data-teksti="tiktok-seuraajat" data-piilota-tyhjana data-laskuri="0"></strong>
+          <span>seuraajaa TikTokissa</span>
+        </p>
+        <a class="nappi nappi--ääriviiva" data-some="tiktok" href="#">
+          {{ikoni:tiktok}}<span>Seuraa meitä</span></a>
+      </div>
+    </div>
+
+    <!-- TikTokin oma upotus: näyttää profiilin uusimmat videot automaattisesti -->
+    <div class="tiktok-syote" data-tiktok data-esiin></div>
+
+    <!-- Varanäkymä, jos upotus estyy (mainostenesto tai evästekielto) -->
+    <div data-tiktok-vara hidden>
+    <div class="tiktok-ruudukko">
+      <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+        <img src="{{up}}assets/img/pysty-burgeri.webp" alt="" aria-hidden="true"
+             loading="lazy" decoding="async">
+        <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
+        <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Puuhiiligrilli</span></span>
+      </a>
+      <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+        <img src="{{up}}assets/img/pysty-buffet.webp" alt="" aria-hidden="true"
+             loading="lazy" decoding="async">
+        <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
+        <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Lounasbuffet</span></span>
+      </a>
+      <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+        <img src="{{up}}assets/img/pysty-pekoni.webp" alt="" aria-hidden="true"
+             loading="lazy" decoding="async">
+        <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
+        <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Grillin klassikot</span></span>
+      </a>
+    </div>
+    <p class="tiktok-vara-teksti">Videot aukeavat TikTokissa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== AJANKOHTAISTA -->
+<section class="osio osio--tiivis" aria-labelledby="ajankohtaista">
+  <div class="kuori" style="margin-bottom:2rem">
+    <p class="etiketti" data-esiin>Ajankohtaista</p>
+    <h2 class="otsikko-m" id="ajankohtaista" data-esiin>Uutiset ja poikkeukset</h2>
+  </div>
+  <div class="kuori">
+    <div class="uutiset" data-uutiset hidden></div>
+    <div class="tyhja-tila" data-uutiset-tyhja data-esiin>
+      <strong>Ei ilmoituksia juuri nyt</strong>
+      Tässä näkyvät poikkeavat aukioloajat, tapahtumat ja kampanjat heti kun niitä on.
+      Aukioloajat löydät alta.
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= LÖYDÄ MEIDÄT -->
+<section class="osio osio--char viiva-ylä" aria-labelledby="loyda">
+  <div class="kuori split split--laaja-kuva split--ylos">
+    <div class="kartta-pilari" data-esiin>
+      <div class="kartta" data-kartta>
+        <div class="tyhja-tila" style="border:0;min-height:340px;display:grid;place-content:center">Kartta latautuu…</div>
+      </div>
+    </div>
+
+    <div class="split__teksti" data-esiin style="--viive:1">
+      <p class="etiketti">Yhteystiedot</p>
+      <h2 class="otsikko-m" id="loyda">Löydä meidät</h2>
+
+      <ul class="tietolista" style="margin-top:1.6rem">
+        <li><span class="avain">Osoite</span><span class="arvo"><strong data-teksti="katu"></strong>, <span data-teksti="postitoimi"></span></span></li>
+        <li><span class="avain">Ravintola</span><span class="arvo"><a data-href="puhelin" href="#" data-teksti="puhelin"></a></span></li>
+        <li><span class="avain">Varaukset</span><span class="arvo"><a data-href="varaus-puhelin" href="#" data-teksti="varaus-puhelin"></a></span></li>
+        <li><span class="avain">Sähköposti</span><span class="arvo"><a data-href="sahkoposti" href="#" data-teksti="sahkoposti"></a></span></li>
+      </ul>
+
+      <ul class="aukiolot" data-aukiolot style="margin-top:1.8rem"></ul>
+      <p class="leipa" style="font-size:.82rem;color:var(--bone-4)" data-teksti="keittio"></p>
+
+      <div class="napit" style="margin-top:1.8rem">
+        <a class="nappi nappi--hiljainen" data-href="puhelin" href="#">{{ikoni:soita}}<span>Soita meille</span></a>
+        <a class="nappi nappi--hiljainen" data-linkki="reittiohjeet" href="#">{{ikoni:sijainti}}<span>Reittiohjeet</span></a>
+      </div>
+    </div>
+  </div>
+</section>
