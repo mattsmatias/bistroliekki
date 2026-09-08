@@ -471,8 +471,6 @@ a { color: inherit; }
 .mobiilivalikko a.mob-linkki {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
   font-family: var(--display);
   font-size: clamp(1.22rem, 5.4vw, 1.58rem);
   font-variation-settings: 'opsz' 24, 'SOFT' 14, 'WONK' 0;
@@ -488,21 +486,7 @@ a { color: inherit; }
   transform: translateY(18px);
   transition: opacity .5s var(--ease-out), transform .5s var(--ease-out), color .3s var(--ease);
 }
-/* Hillitty järjestysnumero antaa listalle ryhtiä ilman koristelua */
-.mobiilivalikko a.mob-linkki::after {
-  content: counter(mob-nro, decimal-leading-zero);
-  font-family: var(--teksti);
-  font-size: .62rem;
-  font-variation-settings: normal;
-  letter-spacing: .14em;
-  color: var(--bone-4);
-  opacity: .5;
-  transition: color .3s var(--ease), opacity .3s var(--ease);
-}
-.mobiilivalikko__sisus nav { counter-reset: mob-nro; }
-.mobiilivalikko a.mob-linkki { counter-increment: mob-nro; }
 .mobiilivalikko a.mob-linkki[aria-current='page'] { color: var(--ember-lit); }
-.mobiilivalikko a.mob-linkki[aria-current='page']::after { color: var(--ember-lit); opacity: 1; }
 .mobiilivalikko.on-auki a.mob-linkki { opacity: 1; transform: none; transition-delay: calc(60ms * var(--i, 0) + 120ms); }
 .mobiilivalikko a.mob-linkki:hover { color: var(--ember-lit); }
 .mobiilivalikko__jalki {
@@ -706,7 +690,8 @@ a { color: inherit; }
 .mobiilipalkki .nappi { flex: 1; padding-inline: 1rem; }
 .mobiilipalkki .nappi--ikoni { flex: 0 0 auto; width: 52px; padding-inline: 0; }
 @media (min-width: 720px) { .mobiilipalkki { display: none; } }
-@media (max-width: 719px) { .footeri { padding-bottom: 6rem; } }
+/* Huom: footerin alatila kiinteälle toimintopalkille asetetaan tiedoston
+   lopussa (osio 23), koska .footeri-perussääntö tulee tämän jälkeen. */
 body.is-locked .mobiilipalkki { transform: translateY(115%); }
 
 /* ------------------------------------------------------- 09 AJANKOHTAISTA */
@@ -1277,8 +1262,8 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   display: grid;
   gap: clamp(2.2rem, 4vw, 3.5rem);
 }
-@media (min-width: 720px) { .footeri__ruudukko { grid-template-columns: 1.4fr 1fr 1fr; } }
-@media (min-width: 1040px) { .footeri__ruudukko { grid-template-columns: 1.6fr 1fr 1fr 1.2fr; } }
+@media (min-width: 720px) { .footeri__ruudukko { grid-template-columns: 1.3fr 1fr 1fr; align-items: start; } }
+@media (min-width: 1040px) { .footeri__ruudukko { grid-template-columns: 1.5fr 1fr 1fr; } }
 
 .footeri h2 {
   font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem);
@@ -1479,8 +1464,10 @@ html { -webkit-tap-highlight-color: transparent; }
   /* Kuvaparit allekkain */
   .kuvapari { gap: .7rem; }
 
-  /* Footer: hengittävämpi, ja tilaa alapalkille */
+  /* Footer: hengittävämpi, ja tilaa alapalkille — kiinteä "Varaa pöytä"
+     -palkki ei saa peittää tekijänoikeusriviä. */
   .footeri__ala { flex-direction: column; align-items: flex-start; gap: .5rem; }
+  .footeri { padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px)); }
 }
 
 @media (max-width: 479px) {
@@ -1531,11 +1518,17 @@ html { -webkit-tap-highlight-color: transparent; }
     min-height: 46px;
   }
   .tietolista .arvo a,
-  .tietolista a,
-  .footeri address a {
+  .tietolista a {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
+  }
+  /* Osoitelinkki EI saa olla flex: silloin selain pudottaa välilyönnin
+     pilkun jälkeen ja tulee "Talvikkitie 30,01300 Vantaa". */
+  .footeri address a {
+    display: inline-block;
+    min-height: 44px;
+    padding-block: .6rem;
   }
   .tietolista li { padding-block: .55rem; }
   .footeri ul a,

@@ -183,10 +183,6 @@ def build_header(current, depth):
 
 def build_footer(depth):
     up = "../" * depth
-    cols = ""
-    half = 5
-    a = "".join(f'<li><a href="{nav_href(s, depth)}">{t}</a></li>' for s, t in FOOTER_NAV[:half])
-    b = "".join(f'<li><a href="{nav_href(s, depth)}">{t}</a></li>' for s, t in FOOTER_NAV[half:])
     some = "".join(
         f'<a data-some="{k}" href="#" aria-label="{label}">{ICONS[k]}</a>'
         for k, label in [("facebook", "Facebook"), ("instagram", "Instagram"),
@@ -198,6 +194,10 @@ def build_footer(depth):
     <div>
       <h2>Bistro Liekki</h2>
       <p class="footeri__iskulause">Puuhiiligrilli Tikkurilan sydämessä vuodesta 2016.</p>
+    </div>
+
+    <div>
+      <p class="footeri__otsikko">Ravintola</p>
       <address>
         <a data-href="sijainti" href="{nav_href('yhteystiedot', depth)}">
           <span data-teksti="katu"></span>, <span data-teksti="postitoimi"></span>
@@ -206,16 +206,6 @@ def build_footer(depth):
         <a data-href="sahkoposti" href="#"><span data-teksti="sahkoposti"></span></a>
       </address>
     </div>
-
-    <nav aria-label="Sivukartta">
-      <p class="footeri__otsikko">Sivusto</p>
-      <ul>{a}</ul>
-    </nav>
-
-    <nav aria-label="Sivukartta, jatkuu">
-      <p class="footeri__otsikko">&nbsp;</p>
-      <ul>{b}<li><a data-linkki="varaus" data-tyhjana="Varaa puhelimitse" href="#"><span>Varaa pöytä</span></a></li></ul>
-    </nav>
 
     <div>
       <p class="footeri__otsikko">Seuraa meitä</p>

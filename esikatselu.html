@@ -475,8 +475,6 @@ a { color: inherit; }
 .mobiilivalikko a.mob-linkki {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
   font-family: var(--display);
   font-size: clamp(1.22rem, 5.4vw, 1.58rem);
   font-variation-settings: 'opsz' 24, 'SOFT' 14, 'WONK' 0;
@@ -492,21 +490,7 @@ a { color: inherit; }
   transform: translateY(18px);
   transition: opacity .5s var(--ease-out), transform .5s var(--ease-out), color .3s var(--ease);
 }
-/* Hillitty järjestysnumero antaa listalle ryhtiä ilman koristelua */
-.mobiilivalikko a.mob-linkki::after {
-  content: counter(mob-nro, decimal-leading-zero);
-  font-family: var(--teksti);
-  font-size: .62rem;
-  font-variation-settings: normal;
-  letter-spacing: .14em;
-  color: var(--bone-4);
-  opacity: .5;
-  transition: color .3s var(--ease), opacity .3s var(--ease);
-}
-.mobiilivalikko__sisus nav { counter-reset: mob-nro; }
-.mobiilivalikko a.mob-linkki { counter-increment: mob-nro; }
 .mobiilivalikko a.mob-linkki[aria-current='page'] { color: var(--ember-lit); }
-.mobiilivalikko a.mob-linkki[aria-current='page']::after { color: var(--ember-lit); opacity: 1; }
 .mobiilivalikko.on-auki a.mob-linkki { opacity: 1; transform: none; transition-delay: calc(60ms * var(--i, 0) + 120ms); }
 .mobiilivalikko a.mob-linkki:hover { color: var(--ember-lit); }
 .mobiilivalikko__jalki {
@@ -710,7 +694,8 @@ a { color: inherit; }
 .mobiilipalkki .nappi { flex: 1; padding-inline: 1rem; }
 .mobiilipalkki .nappi--ikoni { flex: 0 0 auto; width: 52px; padding-inline: 0; }
 @media (min-width: 720px) { .mobiilipalkki { display: none; } }
-@media (max-width: 719px) { .footeri { padding-bottom: 6rem; } }
+/* Huom: footerin alatila kiinteälle toimintopalkille asetetaan tiedoston
+   lopussa (osio 23), koska .footeri-perussääntö tulee tämän jälkeen. */
 body.is-locked .mobiilipalkki { transform: translateY(115%); }
 
 /* ------------------------------------------------------- 09 AJANKOHTAISTA */
@@ -1281,8 +1266,8 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   display: grid;
   gap: clamp(2.2rem, 4vw, 3.5rem);
 }
-@media (min-width: 720px) { .footeri__ruudukko { grid-template-columns: 1.4fr 1fr 1fr; } }
-@media (min-width: 1040px) { .footeri__ruudukko { grid-template-columns: 1.6fr 1fr 1fr 1.2fr; } }
+@media (min-width: 720px) { .footeri__ruudukko { grid-template-columns: 1.3fr 1fr 1fr; align-items: start; } }
+@media (min-width: 1040px) { .footeri__ruudukko { grid-template-columns: 1.5fr 1fr 1fr; } }
 
 .footeri h2 {
   font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem);
@@ -1483,8 +1468,10 @@ html { -webkit-tap-highlight-color: transparent; }
   /* Kuvaparit allekkain */
   .kuvapari { gap: .7rem; }
 
-  /* Footer: hengittävämpi, ja tilaa alapalkille */
+  /* Footer: hengittävämpi, ja tilaa alapalkille — kiinteä "Varaa pöytä"
+     -palkki ei saa peittää tekijänoikeusriviä. */
   .footeri__ala { flex-direction: column; align-items: flex-start; gap: .5rem; }
+  .footeri { padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px)); }
 }
 
 @media (max-width: 479px) {
@@ -1535,11 +1522,17 @@ html { -webkit-tap-highlight-color: transparent; }
     min-height: 46px;
   }
   .tietolista .arvo a,
-  .tietolista a,
-  .footeri address a {
+  .tietolista a {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
+  }
+  /* Osoitelinkki EI saa olla flex: silloin selain pudottaa välilyönnin
+     pilkun jälkeen ja tulee "Talvikkitie 30,01300 Vantaa". */
+  .footeri address a {
+    display: inline-block;
+    min-height: 44px;
+    padding-block: .6rem;
   }
   .tietolista li { padding-block: .55rem; }
   .footeri ul a,
@@ -1885,7 +1878,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     </div>
 
     <div class="split__teksti" data-esiin style="--viive:1">
-      <p class="etiketti">Tervetuloa</p>
       <h2 class="otsikko-l" id="tervetuloa" data-sanat>Tervetuloa<br>Bistro Liekkiin</h2>
       <p class="ingressi">Vuodesta 2016 lähtien Bistro Liekki Puuhiiligrilli on tarjonnut
         kodikkaan ja rennon ruokailuhetken Tikkurilan keskustassa.</p>
@@ -1910,7 +1902,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 
   <div class="kuori">
     <div class="band__sisus" data-esiin>
-      <p class="etiketti">Brändimme ydin</p>
       <h2 class="otsikko-xl" id="grilli" data-sanat>Aito<br>puuhiiligrilli</h2>
       <p class="ingressi" style="margin-top:1.6rem">Hiillos antaa lihalle rapean pinnan
         ja sen maun, jota kaasugrilli ei osaa jäljitellä.</p>
@@ -1938,7 +1929,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     </div>
     </div>
     <div class="split__teksti" data-esiin style="--viive:1">
-      <p class="etiketti">Ruokalista</p>
       <h2 class="otsikko-l" id="alacarte" data-sanat>À la Carte</h2>
       <p class="leipa">Laajalta à la carte -listaltamme löydät puuhiiligrillin inspiroimia
         annoksia, burgereita, pihvejä ja muita Bistro Liekin suosikkeja.</p>
@@ -1953,7 +1943,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 <section class="osio hiili-tausta" aria-labelledby="lounas">
   <div class="kuori split">
     <div class="split__teksti" data-esiin>
-      <p class="etiketti">Arkisin</p>
       <h2 class="otsikko-l" id="lounas" data-sanat>Lounas<br>Bistro Liekissä</h2>
       <p class="ingressi">Arkisin klo 10:30–15 tarjoilemme suosittua lounasbuffetia.</p>
       <p class="leipa" data-lounastila></p>
@@ -1986,7 +1975,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 
   <div class="kuori">
     <div class="band__sisus" data-esiin>
-      <p class="etiketti etiketti--keskellä">Pöytävaraus</p>
       <h2 class="otsikko-l" id="varaus" data-sanat>Varaa pöytä</h2>
       <p class="ingressi" style="margin-top:1.4rem">Tervetuloa viettämään aikaa Bistro Liekkiin.
         Varaukset onnistuvat helposti verkossa tai puhelimitse.</p>
@@ -2005,7 +1993,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   <div class="kuori">
     <div class="kortit kortit--2" data-esiin>
       <article class="kortti">
-        <p class="kortti__nro">01 — Catering</p>
         <h3>Puuhiilen maut<br>juhliin</h3>
         <p>Bistro Liekki tuo puuhiiligrillin maut myös juhliin ja tapahtumiin. Kerro
           tilaisuudestasi, niin suunnitellaan sopiva kokonaisuus yhdessä.</p>
@@ -2013,7 +2000,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       </article>
 
       <article class="kortti">
-        <p class="kortti__nro">02 — Lahjakortti</p>
         <h3>Anna lahjaksi<br>maut ja tunnelma</h3>
         <p>Bistro Liekin lahjakortti sopii lahjaksi, joka jää mieleen — illallinen
           puuhiiligrillin äärellä tai lounas keskellä viikkoa.</p>
@@ -2028,7 +2014,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   <div class="kuori" style="margin-bottom:clamp(2rem,4vw,3.4rem)">
     <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1.5rem">
       <div data-esiin>
-        <p class="etiketti">Galleria</p>
         <h2 class="otsikko-l" id="galleria" data-sanat>Tunnelmaa Liekistä</h2>
       </div>
       <a class="linkki" href="#/galleria" data-esiin>Koko galleria <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true"><path d="M9 1l4 4-4 4M13 5H0" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg></a>
@@ -2107,7 +2092,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 <!-- Näkyy vain kun content.js:ssä on ilmoituksia. Muuten koko osio jää pois. -->
 <section class="osio osio--tiivis" aria-labelledby="ajankohtaista" data-uutisosio hidden>
   <div class="kuori" style="margin-bottom:2rem">
-    <p class="etiketti">Ajankohtaista</p>
     <h2 class="otsikko-m" id="ajankohtaista">Uutiset ja poikkeukset</h2>
   </div>
   <div class="kuori">
@@ -2125,7 +2109,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     </div>
 
     <div class="split__teksti" data-esiin style="--viive:1">
-      <p class="etiketti">Yhteystiedot</p>
       <h2 class="otsikko-m" id="loyda">Löydä meidät</h2>
 
       <ul class="tietolista" style="margin-top:1.6rem">
@@ -2168,7 +2151,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   <div class="kuori split split--laaja-teksti">
     <div class="split__teksti" data-esiin>
       <p class="etiketti">Tarinamme</p>
-      <h2 class="otsikko-l">Kodikas ja rento<br>ruokailuhetki</h2 data-sanat>
+      <h2 class="otsikko-l">Kodikas ja rento<br>ruokailuhetki</h2>
       <p class="ingressi">Vuodesta 2016 lähtien Bistro Liekki Puuhiiligrilli on tarjonnut
         kodikkaan ja rennon ruokailuhetken Tikkurilan keskustassa.</p>
       <p class="leipa">Ravintolan ylpeys on puuhiiligrilli, joka huokuu aitoa savun makua
@@ -2213,7 +2196,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     </div>
     </div>
     <div class="split__teksti" data-esiin style="--viive:1">
-      <p class="etiketti">Arki ja ilta</p>
       <h2 class="otsikko-m">Lounas keskellä viikkoa,<br>à la carte iltaisin</h2>
       <p class="leipa">Arkisin klo 10:30–15 palvelee erittäin suosittu lounasbuffet.
         Muina aikoina voit nauttia laajasta à la carte -listastamme, jonka inspiraation
@@ -2268,7 +2250,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       <li><a href="#/">Etusivu</a></li>
       <li>À la Carte</li>
     </ol>
-    <p class="etiketti">Ruokalista</p>
     <h1 data-sanat>À la Carte</h1>
     <p class="ingressi">Laajalta à la carte -listaltamme löydät puuhiiligrillin inspiroimia
       annoksia, burgereita, pihvejä ja muita Bistro Liekin suosikkeja.</p>
@@ -2313,7 +2294,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 
     <div class="split split--laaja-teksti" data-esiin>
       <div class="split__teksti">
-        <p class="etiketti">Grillin äärellä</p>
         <h2 class="otsikko-m">Ruoka syntyy hiilloksen päällä</h2>
         <p class="leipa">Puuhiili palaa kuumana, ja siitä syntyy pinta, joka rapsahtaa.
           Sama grilli antaa luonteen niin pihveille, burgereille kuin illan muillekin
@@ -2398,14 +2378,14 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   <div class="kuori">
     <div class="kortit kortit--3" data-esiin>
       <article class="kortti">
-        <p class="kortti__nro">01 — Milloin</p>
+        <p class="kortti__nro">Milloin</p>
         <h3><span data-teksti="lounas-aika">10:30–15:00</span></h3>
         <p>Lounasbuffet katetaan <span data-teksti="lounas-paivat-pieni">arkisin ma–pe</span>.
           Viimeinen annos tarjoillaan klo <span>15</span>, joten tule ajoissa.</p>
       </article>
 
       <article class="kortti">
-        <p class="kortti__nro">02 — Miten tilaat</p>
+        <p class="kortti__nro">Miten tilaat</p>
         <h3>Tule paikalle</h3>
         <p>Lounas on buffet — pöytävarausta ei tarvita. Isommalle porukalle kannattaa
           soittaa etukäteen, niin varaamme teille pöydän.</p>
@@ -2413,7 +2393,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       </article>
 
       <article class="kortti">
-        <p class="kortti__nro">03 — Päivän lista</p>
+        <p class="kortti__nro">Päivän lista</p>
         <h3>Katso lounaslista</h3>
         <p>Päivän ja viikon lounaslista päivittyy erikseen. Katso ajantasainen lista
           ennen kuin lähdet liikkeelle.</p>
@@ -2445,7 +2425,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   <div class="kuori split">
     <div class="split__teksti" data-esiin>
       <p class="etiketti">Lounasbuffet</p>
-      <h2 class="otsikko-l">Sama grilli,<br>keskellä työpäivää</h2 data-sanat>
+      <h2 class="otsikko-l">Sama grilli,<br>keskellä työpäivää</h2>
       <p class="leipa">Lounas on Bistro Liekin arjen ydin: sama puuhiiligrilli, sama
         savun maku, nopeammassa tahdissa.</p>
       <p class="leipa">Kerrothan allergioista ja erikoisruokavalioista henkilökunnalle.</p>
@@ -2478,8 +2458,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem"
          data-esiin>
       <div>
-        <p class="etiketti">Paras lounas -äänestys</p>
-        <h2 class="otsikko-s">Äänestä Bistro Liekkiä</h2>
+          <h2 class="otsikko-s">Äänestä Bistro Liekkiä</h2>
       </div>
       <a class="nappi nappi--ääriviiva nappi--pieni" data-linkki="edenred"
          data-piilota-tyhjana href="#"><span>Äänestä</span></a>
@@ -2549,7 +2528,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 <section class="osio osio--char viiva-ylä" id="kysy">
   <div class="kuori split split--laaja-teksti">
     <div data-esiin>
-      <p class="etiketti">Yhteydenotto</p>
       <h2 class="otsikko-m">Kysy cateringista</h2>
       <p class="leipa" style="margin-top:1rem">Täytä lomake, niin otamme yhteyttä.
         Kiireellisissä asioissa soita suoraan.</p>
@@ -2617,7 +2595,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       <li><a href="#/">Etusivu</a></li>
       <li>Galleria</li>
     </ol>
-    <p class="etiketti">Galleria</p>
     <h1 data-sanat>Tunnelmaa Liekistä</h1>
     <p class="ingressi">Hiillosta, annoksia ja ravintolan arkea Talvikkitiellä.</p>
   </div>
@@ -2657,7 +2634,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       <li><a href="#/">Etusivu</a></li>
       <li>Lahjakortti</li>
     </ol>
-    <p class="etiketti">Lahjaksi</p>
     <h1 data-sanat>Lahjakortti</h1>
     <p class="ingressi">Anna lahjaksi Bistro Liekin maut ja tunnelma.</p>
     <div class="napit" style="margin-top:2rem">
@@ -2670,7 +2646,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 <section class="osio">
   <div class="kuori split split--laaja-teksti">
     <div class="split__teksti" data-esiin>
-      <p class="etiketti">Lahja, joka maistuu</p>
       <h2 class="otsikko-m">Illallinen hiilloksen äärellä</h2>
       <p class="leipa">Lahjakortti käy koko taloon: lounaaseen keskellä viikkoa tai
         illalliseen à la carte -listalta. Vastaanottaja valitsee itse, milloin tulee.</p>
@@ -2756,7 +2731,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     </div>
 
     <div class="split__teksti" data-esiin style="--viive:1">
-      <p class="etiketti">Yhteystiedot</p>
       <h2 class="otsikko-m">Bistro Liekki<br>Talvikkitie</h2>
 
       <ul class="tietolista" style="margin-top:1.4rem">
@@ -2782,7 +2756,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 <section class="osio osio--char viiva-ylä">
   <div class="kuori split split--laaja-teksti">
     <div data-esiin>
-      <p class="etiketti">Ota yhteyttä</p>
       <h2 class="otsikko-m">Lähetä viesti</h2>
       <p class="leipa" style="margin-top:1rem">Kysyttävää varauksesta, ruokalistasta tai
         cateringista? Jätä viesti, niin vastaamme mahdollisimman pian. Kiireellisissä
@@ -2839,7 +2812,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       <li><a href="#/">Etusivu</a></li>
       <li>Palaute</li>
     </ol>
-    <p class="etiketti">Asiakkaiden kokemuksia</p>
     <h1 data-sanat>Kuinka palvelimme<br>tänään?</h1>
     <p class="ingressi">Palautteesi menee suoraan meille ja auttaa kehittämään ravintolaa.
       Luemme jokaisen viestin.</p>
@@ -2978,6 +2950,10 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     <div>
       <h2>Bistro Liekki</h2>
       <p class="footeri__iskulause">Puuhiiligrilli Tikkurilan sydämessä vuodesta 2016.</p>
+    </div>
+
+    <div>
+      <p class="footeri__otsikko">Ravintola</p>
       <address>
         <a data-href="sijainti" href="#/yhteystiedot">
           <span data-teksti="katu"></span>, <span data-teksti="postitoimi"></span>
@@ -2986,16 +2962,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
         <a data-href="sahkoposti" href="#"><span data-teksti="sahkoposti"></span></a>
       </address>
     </div>
-
-    <nav aria-label="Sivukartta">
-      <p class="footeri__otsikko">Sivusto</p>
-      <ul><li><a href="#/">Etusivu</a></li><li><a href="#/meista">Meistä</a></li><li><a href="#/menu">À la Carte</a></li><li><a href="#/lounas">Lounas</a></li><li><a href="#/catering">Catering</a></li></ul>
-    </nav>
-
-    <nav aria-label="Sivukartta, jatkuu">
-      <p class="footeri__otsikko">&nbsp;</p>
-      <ul><li><a href="#/galleria">Galleria</a></li><li><a href="#/lahjakortti">Lahjakortti</a></li><li><a href="#/yhteystiedot">Yhteystiedot</a></li><li><a href="#/palaute">Palaute</a></li><li><a data-linkki="varaus" data-tyhjana="Varaa puhelimitse" href="#"><span>Varaa pöytä</span></a></li></ul>
-    </nav>
 
     <div>
       <p class="footeri__otsikko">Seuraa meitä</p>
