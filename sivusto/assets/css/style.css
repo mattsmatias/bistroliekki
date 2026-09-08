@@ -1339,7 +1339,9 @@ html { -webkit-tap-highlight-color: transparent; }
 /* Kosketuskohteiden vähimmäiskoko: puhelin- ja sähköpostilinkit ovat
    toimintoja, ei koristeita — niihin pitää osua kerralla. */
 @media (hover: none) and (pointer: coarse) {
-  .logo { padding-block: .5rem; }
+  .logo { min-height: 46px; justify-content: center; padding-block: .35rem; }
+  /* Tabletti vaaka-asennossa nayttaa työpöytävalikon — kosketuskoko myös siihen */
+  .navi a { padding-block: .78rem; }
   .mobiilivalikko__yhteys {
     display: flex;
     align-items: center;
