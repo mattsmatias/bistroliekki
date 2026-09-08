@@ -1,0 +1,58 @@
+BISTRO LIEKKI — SIVUSTON VIENTI GITHUBIIN
+=========================================
+
+Tässä paketissa on valmis git-repo: tiedostot on jo lisätty ja commit tehty.
+Sinun tarvitsee vain työntää se GitHubiin.
+
+
+VAIHTOEHTO 1 — komentorivi (nopein)
+-----------------------------------
+1. Pura tämä zip haluamaasi kansioon.
+2. Avaa pääte (Terminal / Komentokehote) puretussa kansiossa.
+3. Aja:
+
+       git push -u origin main
+
+   Remote osoittaa jo valmiiksi osoitteeseen
+   https://github.com/mattsmatias/bistroliekki.git
+
+   Jos git kysyy tunnuksia, käytä GitHub-käyttäjänimeäsi ja
+   henkilökohtaista käyttöoikeustunnusta (Personal Access Token):
+   GitHub -> Settings -> Developer settings -> Personal access tokens.
+
+
+VAIHTOEHTO 2 — GitHub Desktop
+-----------------------------
+1. Pura zip.
+2. GitHub Desktop -> File -> Add local repository -> valitse purettu kansio.
+3. Paina "Publish branch" / "Push origin".
+
+
+VAIHTOEHTO 3 — selaimessa ilman gitiä
+-------------------------------------
+1. Pura zip ja POISTA piilotettu .git-kansio.
+2. Avaa https://github.com/mattsmatias/bistroliekki
+3. "uploading an existing file" -> raahaa kansiot sivulle:
+   sivusto, lahdekoodi, .github
+   sekä tiedostot: README.md, LUE-MINUT.md, esikatselu.html, .gitignore
+4. Commit changes.
+
+
+SIVUSTON JULKAISU GITHUB PAGESISSA
+----------------------------------
+Repossa on valmis työnkulku (.github/workflows/pages.yml), joka julkaisee
+sivusto-kansion automaattisesti.
+
+Ota se käyttöön kertaalleen:
+   GitHub -> Settings -> Pages -> Source: "GitHub Actions"
+
+Sen jälkeen jokainen main-haaran päivitys julkaisee sivuston osoitteeseen
+https://mattsmatias.github.io/bistroliekki/
+
+
+HALUATKO ETTÄ TEEN PUSHIN PUOLESTASI?
+-------------------------------------
+Se onnistuu, kun lisäät repon tämän keskustelun lähteisiin
+(Claude-sovellus -> istunnon lähteet / GitHub -> lisää repo
+mattsmatias/bistroliekki kirjoitusoikeudella). Sano sitten vain,
+niin työnnän muutokset itse.
