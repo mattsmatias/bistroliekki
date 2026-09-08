@@ -301,10 +301,10 @@
 
     var kehys = $('[data-uutiset]');
     if (!kehys) return;
-    if (!lista.length) return;                       // jättää tyylikkään tyhjän tilan
-    var tyhja = $('[data-uutiset-tyhja]');
-    if (tyhja) tyhja.hidden = true;
-    kehys.hidden = false;
+    // Ei ilmoituksia -> koko osio jää pois. Sivulla ei näy tyhjää laatikkoa.
+    if (!lista.length) return;
+    var osio = kehys.closest('[data-uutisosio]');
+    if (osio) osio.hidden = false;
     kehys.innerHTML = lista.map(function (i) {
       var pvm = '';
       if (i.alkaa) {

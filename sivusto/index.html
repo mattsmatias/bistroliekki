@@ -190,10 +190,8 @@
       <h2 class="otsikko-l" id="tervetuloa" data-sanat>Tervetuloa<br>Bistro Liekkiin</h2>
       <p class="ingressi">Vuodesta 2016 lähtien Bistro Liekki Puuhiiligrilli on tarjonnut
         kodikkaan ja rennon ruokailuhetken Tikkurilan keskustassa.</p>
-      <p class="leipa">Ravintolan ylpeys on puuhiiligrilli, joka huokuu aitoa savun makua
-        jokaiseen annokseen. Arkisin klo 10:30–15 palvelee suosittu lounasbuffet. Muina
-        aikoina voit nauttia laajasta à la carte -listastamme, jonka inspiraation lähteenä
-        toimii puuhiiligrilli.</p>
+      <p class="leipa">Ravintolan ylpeys on puuhiiligrilli, joka huokuu aitoa savun
+        makua jokaiseen annokseen.</p>
       <div class="napit">
         <a class="nappi nappi--hiljainen" href="meista/"><span>Tutustu meihin</span></a>
       </div>
@@ -217,9 +215,8 @@
     <div class="band__sisus" data-esiin>
       <p class="etiketti">Brändimme ydin</p>
       <h2 class="otsikko-xl" id="grilli" data-sanat>Aito<br>puuhiiligrilli</h2>
-      <p class="ingressi" style="margin-top:1.6rem">Aitoa savun makua jokaiseen annokseen.</p>
-      <p class="leipa">Hiillos on ravintolamme sydän. Se antaa lihalle rapean pinnan, syvän
-        aromin ja sen maun, jota kaasugrilli ei osaa jäljitellä.</p>
+      <p class="ingressi" style="margin-top:1.6rem">Hiillos antaa lihalle rapean pinnan
+        ja sen maun, jota kaasugrilli ei osaa jäljitellä.</p>
     </div>
   </div>
 </section>
@@ -276,13 +273,9 @@
     <div class="lounas-kortti" data-esiin style="--viive:1">
       <p class="lounas-aika"><span data-teksti="lounas-aika">10:30–15:00</span>
         <small data-teksti="lounas-paivat">Arkisin ma–pe</small></p>
-      <p class="leipa" style="font-size:var(--step--1)">Lounasbuffet katetaan joka arkipäivä.
-        Viimeinen annos tarjoillaan klo 15.</p>
-      <ul class="tietolista" style="margin-top:1.4rem">
-        <li><span class="avain">Lounas</span><span class="arvo"><strong data-teksti="lounas-aika"></strong></span></li>
+      <ul class="tietolista" style="margin-top:1.2rem">
         <li><span class="avain">Päivät</span><span class="arvo" data-teksti="lounas-paivat"></span></li>
         <li><span class="avain">Hinta</span><span class="arvo"><strong data-teksti="lounas-hinta" data-piilota-tyhjana></strong></span></li>
-        <li><span class="avain">Osoite</span><span class="arvo"><span data-teksti="katu"></span>, <span data-teksti="postitoimi"></span></span></li>
       </ul>
     </div>
   </div>
@@ -358,8 +351,8 @@
       <div>
         <p class="etiketti">TikTok · @bistroliekki</p>
         <h2 class="otsikko-m" id="tiktok">Katso, mitä<br>grillissä tapahtuu</h2>
-        <p class="leipa">Kuvaamme keittiöstä, hiilloksesta ja annoksista TikTokissa.
-          Uusimmat videot näkyvät tässä — ruoka sellaisena kuin se syntyy.</p>
+        <p class="leipa">Kuvaamme keittiöstä ja hiilloksesta TikTokissa — ruoka
+          sellaisena kuin se syntyy.</p>
       </div>
 
       <div class="tiktok-sivu">
@@ -403,18 +396,14 @@
 </section>
 
 <!-- ====================================================== AJANKOHTAISTA -->
-<section class="osio osio--tiivis" aria-labelledby="ajankohtaista">
+<!-- Näkyy vain kun content.js:ssä on ilmoituksia. Muuten koko osio jää pois. -->
+<section class="osio osio--tiivis" aria-labelledby="ajankohtaista" data-uutisosio hidden>
   <div class="kuori" style="margin-bottom:2rem">
-    <p class="etiketti" data-esiin>Ajankohtaista</p>
-    <h2 class="otsikko-m" id="ajankohtaista" data-esiin>Uutiset ja poikkeukset</h2>
+    <p class="etiketti">Ajankohtaista</p>
+    <h2 class="otsikko-m" id="ajankohtaista">Uutiset ja poikkeukset</h2>
   </div>
   <div class="kuori">
-    <div class="uutiset" data-uutiset hidden></div>
-    <div class="tyhja-tila" data-uutiset-tyhja data-esiin>
-      <strong>Ei ilmoituksia juuri nyt</strong>
-      Tässä näkyvät poikkeavat aukioloajat, tapahtumat ja kampanjat heti kun niitä on.
-      Aukioloajat löydät alta.
-    </div>
+    <div class="uutiset" data-uutiset></div>
   </div>
 </section>
 
@@ -435,7 +424,6 @@
         <li><span class="avain">Osoite</span><span class="arvo"><strong data-teksti="katu"></strong>, <span data-teksti="postitoimi"></span></span></li>
         <li><span class="avain">Ravintola</span><span class="arvo"><a data-href="puhelin" href="#" data-teksti="puhelin"></a></span></li>
         <li><span class="avain">Varaukset</span><span class="arvo"><a data-href="varaus-puhelin" href="#" data-teksti="varaus-puhelin"></a></span></li>
-        <li><span class="avain">Sähköposti</span><span class="arvo"><a data-href="sahkoposti" href="#" data-teksti="sahkoposti"></a></span></li>
       </ul>
 
       <ul class="aukiolot" data-aukiolot style="margin-top:1.8rem"></ul>
