@@ -1227,27 +1227,12 @@
     var otsikko = [];
     if (lista.viikko) otsikko.push('Viikko ' + turva(lista.viikko));
     if (lista.ajalla) otsikko.push(turva(lista.ajalla));
+    // Vain kevyt otsikko listan päälle — hinnat ja sisältö tulevat listan
+    // jälkeen, jotta annokset näkyvät heti sivulle tultaessa.
     html += '<div class="lounasviikko__ylä">' +
       (otsikko.length ? '<p class="etiketti">' + otsikko.join(' · ') + '</p>' : '') +
-      '<h2 class="otsikko-l" data-sanat>Viikon lounas</h2>';
-
-    var sisaltyy = (lista.sisaltyy || []).filter(Boolean);
-    if (sisaltyy.length) {
-      html += '<div class="lounas-sisaltyy">' +
-        '<p class="lounas-sisaltyy__otsikko">Lounaaseen kuuluu</p>' +
-        '<ul>' + sisaltyy.map(function (s) {
-          return '<li>' + turva(s) + '</li>';
-        }).join('') + '</ul></div>';
-    }
-
-    var hinnat = (lista.hinnat || []).filter(function (h) { return h && h.nimi; });
-    if (hinnat.length) {
-      html += '<ul class="lounas-hinnat">' + hinnat.map(function (h) {
-        return '<li><span class="lounas-hinnat__nimi">' + turva(h.nimi) + '</span>' +
-               '<span class="lounas-hinnat__hinta">' + turva(h.hinta || '') + '</span></li>';
-      }).join('') + '</ul>';
-    }
-    html += '</div>';
+      '<h2 class="otsikko-l" data-sanat>Viikon lounas</h2>' +
+      '</div>';
 
     // Päiväkortit
     html += '<div class="lounaspaivat">';
@@ -1269,6 +1254,27 @@
         '</ul></article>';
     });
     html += '</div>';
+
+    // Mitä lounaaseen kuuluu ja mitä se maksaa — listan jälkeen
+    var sisaltyy = (lista.sisaltyy || []).filter(Boolean);
+    var hinnat = (lista.hinnat || []).filter(function (h) { return h && h.nimi; });
+    if (sisaltyy.length || hinnat.length) {
+      html += '<div class="lounasviikko__ala" data-esiin>';
+      if (sisaltyy.length) {
+        html += '<div class="lounas-sisaltyy">' +
+          '<p class="lounas-sisaltyy__otsikko">Lounaaseen kuuluu</p>' +
+          '<ul>' + sisaltyy.map(function (s) {
+            return '<li>' + turva(s) + '</li>';
+          }).join('') + '</ul></div>';
+      }
+      if (hinnat.length) {
+        html += '<ul class="lounas-hinnat">' + hinnat.map(function (h) {
+          return '<li><span class="lounas-hinnat__nimi">' + turva(h.nimi) + '</span>' +
+                 '<span class="lounas-hinnat__hinta">' + turva(h.hinta || '') + '</span></li>';
+        }).join('') + '</ul>';
+      }
+      html += '</div>';
+    }
 
     // Merkkiselite ja muutosvarauma
     var alaosa = [];

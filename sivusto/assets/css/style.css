@@ -1535,6 +1535,15 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .sivuhero h1 { font-size: var(--step-4); text-transform: uppercase; letter-spacing: -.02em; margin-bottom: 1.1rem; }
 .sivuhero .ingressi { max-width: 52ch; }
 
+/* Tiivis versio sivuille, joilla pääsisältö pitää nähdä heti (lounaslista).
+   Hero jää tunnelmaksi, ei tilanviejäksi. */
+.sivuhero--tiivis {
+  padding-block: calc(var(--header-h) + clamp(1.6rem, 3.5vw, 2.8rem)) clamp(1.6rem, 3vw, 2.6rem);
+}
+.sivuhero--tiivis h1 { font-size: var(--step-3); margin-bottom: .7rem; }
+.sivuhero--tiivis .ingressi { font-size: var(--step-0); }
+.sivuhero--tiivis .murupolku { margin-bottom: 1rem; }
+
 .murupolku { display: flex; flex-wrap: wrap; gap: .5rem; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--bone-4); margin-bottom: 1.5rem; list-style: none; padding: 0; }
 .murupolku a { text-decoration: none; color: var(--bone-4); transition: color .3s var(--ease); }
 .murupolku a:hover { color: var(--ember-lit); }
@@ -1768,12 +1777,14 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 
 /* ------------------------------------------ VIIKON LOUNAS (Lounas) */
-.lounasviikko__ylä { margin-bottom: clamp(2.2rem, 4.5vw, 3.4rem); }
+.lounasviikko__ylä { margin-bottom: clamp(1.4rem, 3vw, 2.2rem); }
 .lounasviikko__ylä .otsikko-l { margin-top: .4rem; }
+/* Hinnat ja sisältö tulevat päivälistan jälkeen */
+.lounasviikko__ala { margin-top: clamp(2.4rem, 5vw, 3.6rem); }
 
 /* Mitä lounaaseen kuuluu */
 .lounas-sisaltyy {
-  margin-top: clamp(1.6rem, 3vw, 2.2rem);
+  margin-top: 0;
   padding: clamp(1.2rem, 2.5vw, 1.7rem) clamp(1.2rem, 2.5vw, 1.8rem);
   background: var(--char-2);
   border: 1px solid var(--line-soft);

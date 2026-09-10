@@ -104,7 +104,7 @@
   </div>
 </div>
 <main id="sisalto">
-<section class="sivuhero" data-parallaksi>
+<section class="sivuhero sivuhero--tiivis" data-parallaksi>
   <div class="sivuhero__media">
     <picture>
       <source media="(max-width: 700px)" srcset="../assets/img/lounas-burgerit-sm.webp">
@@ -118,10 +118,21 @@
       <li><a href="../">Etusivu</a></li>
       <li>Lounas</li>
     </ol>
-    <p class="etiketti">Arkisin ma–pe</p>
-    <h1 data-sanat>Lounas<br>Bistro Liekissä</h1>
-    <p class="ingressi">Arkisin klo 10:30–15 tarjoilemme suosittua lounasbuffetia
-      Tikkurilan keskustassa.</p>
+    <p class="etiketti">Arkisin ma–pe klo 10:30–15</p>
+    <h1 data-sanat>Lounas</h1>
+  </div>
+</section>
+
+<!-- ===================================================================
+     VIIKON LOUNASLISTA
+
+     Sisältö tulee tiedostosta assets/js/content.js kohdasta "lounaslista".
+     Kuluva päivä korostuu automaattisesti, ja puhelimessa se nostetaan
+     listan ensimmäiseksi. Päivitä lista kerran viikossa content.js:ään.
+     =================================================================== -->
+<section class="osio" style="padding-top:0" id="sisalto">
+  <div class="kuori">
+    <div class="lounasviikko" data-lounaslista></div>
   </div>
 </section>
 
@@ -139,18 +150,6 @@
   </div>
 </section>
 
-<!-- ===================================================================
-     VIIKON LOUNASLISTA
-
-     Sisältö tulee tiedostosta assets/js/content.js kohdasta "lounaslista".
-     Kuluva päivä korostuu automaattisesti, ja puhelimessa se nostetaan
-     listan ensimmäiseksi. Päivitä lista kerran viikossa content.js:ään.
-     =================================================================== -->
-<section class="osio" style="padding-top:0" id="sisalto">
-  <div class="kuori">
-    <div class="lounasviikko" data-lounaslista></div>
-  </div>
-</section>
 
 <section class="osio osio--char viiva-ylä">
   <div class="kuori">

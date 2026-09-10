@@ -1539,6 +1539,15 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .sivuhero h1 { font-size: var(--step-4); text-transform: uppercase; letter-spacing: -.02em; margin-bottom: 1.1rem; }
 .sivuhero .ingressi { max-width: 52ch; }
 
+/* Tiivis versio sivuille, joilla pääsisältö pitää nähdä heti (lounaslista).
+   Hero jää tunnelmaksi, ei tilanviejäksi. */
+.sivuhero--tiivis {
+  padding-block: calc(var(--header-h) + clamp(1.6rem, 3.5vw, 2.8rem)) clamp(1.6rem, 3vw, 2.6rem);
+}
+.sivuhero--tiivis h1 { font-size: var(--step-3); margin-bottom: .7rem; }
+.sivuhero--tiivis .ingressi { font-size: var(--step-0); }
+.sivuhero--tiivis .murupolku { margin-bottom: 1rem; }
+
 .murupolku { display: flex; flex-wrap: wrap; gap: .5rem; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--bone-4); margin-bottom: 1.5rem; list-style: none; padding: 0; }
 .murupolku a { text-decoration: none; color: var(--bone-4); transition: color .3s var(--ease); }
 .murupolku a:hover { color: var(--ember-lit); }
@@ -1772,12 +1781,14 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 
 /* ------------------------------------------ VIIKON LOUNAS (Lounas) */
-.lounasviikko__ylä { margin-bottom: clamp(2.2rem, 4.5vw, 3.4rem); }
+.lounasviikko__ylä { margin-bottom: clamp(1.4rem, 3vw, 2.2rem); }
 .lounasviikko__ylä .otsikko-l { margin-top: .4rem; }
+/* Hinnat ja sisältö tulevat päivälistan jälkeen */
+.lounasviikko__ala { margin-top: clamp(2.4rem, 5vw, 3.6rem); }
 
 /* Mitä lounaaseen kuuluu */
 .lounas-sisaltyy {
-  margin-top: clamp(1.6rem, 3vw, 2.2rem);
+  margin-top: 0;
   padding: clamp(1.2rem, 2.5vw, 1.7rem) clamp(1.2rem, 2.5vw, 1.8rem);
   background: var(--char-2);
   border: 1px solid var(--line-soft);
@@ -3080,7 +3091,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 </section>
 
 </div><div class="sivu" data-sivu="lounas" data-otsikko="Lounas Tikkurilassa — Bistro Liekki | Lounasbuffet arkisin 10:30–15" hidden>
-<section class="sivuhero" data-parallaksi>
+<section class="sivuhero sivuhero--tiivis" data-parallaksi>
   <div class="sivuhero__media">
     <picture><img data-img="lounas-burgerit.webp" alt="" aria-hidden="true"
            fetchpriority="high" decoding="async">
@@ -3092,10 +3103,21 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       <li><a href="#/">Etusivu</a></li>
       <li>Lounas</li>
     </ol>
-    <p class="etiketti">Arkisin ma–pe</p>
-    <h1 data-sanat>Lounas<br>Bistro Liekissä</h1>
-    <p class="ingressi">Arkisin klo 10:30–15 tarjoilemme suosittua lounasbuffetia
-      Tikkurilan keskustassa.</p>
+    <p class="etiketti">Arkisin ma–pe klo 10:30–15</p>
+    <h1 data-sanat>Lounas</h1>
+  </div>
+</section>
+
+<!-- ===================================================================
+     VIIKON LOUNASLISTA
+
+     Sisältö tulee tiedostosta assets/js/content.js kohdasta "lounaslista".
+     Kuluva päivä korostuu automaattisesti, ja puhelimessa se nostetaan
+     listan ensimmäiseksi. Päivitä lista kerran viikossa content.js:ään.
+     =================================================================== -->
+<section class="osio" style="padding-top:0" id="sisalto">
+  <div class="kuori">
+    <div class="lounasviikko" data-lounaslista></div>
   </div>
 </section>
 
@@ -3113,18 +3135,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   </div>
 </section>
 
-<!-- ===================================================================
-     VIIKON LOUNASLISTA
-
-     Sisältö tulee tiedostosta assets/js/content.js kohdasta "lounaslista".
-     Kuluva päivä korostuu automaattisesti, ja puhelimessa se nostetaan
-     listan ensimmäiseksi. Päivitä lista kerran viikossa content.js:ään.
-     =================================================================== -->
-<section class="osio" style="padding-top:0" id="sisalto">
-  <div class="kuori">
-    <div class="lounasviikko" data-lounaslista></div>
-  </div>
-</section>
 
 <section class="osio osio--char viiva-ylä">
   <div class="kuori">
@@ -5698,27 +5708,12 @@ window.LIEKKI = {
     var otsikko = [];
     if (lista.viikko) otsikko.push('Viikko ' + turva(lista.viikko));
     if (lista.ajalla) otsikko.push(turva(lista.ajalla));
+    // Vain kevyt otsikko listan päälle — hinnat ja sisältö tulevat listan
+    // jälkeen, jotta annokset näkyvät heti sivulle tultaessa.
     html += '<div class="lounasviikko__ylä">' +
       (otsikko.length ? '<p class="etiketti">' + otsikko.join(' · ') + '</p>' : '') +
-      '<h2 class="otsikko-l" data-sanat>Viikon lounas</h2>';
-
-    var sisaltyy = (lista.sisaltyy || []).filter(Boolean);
-    if (sisaltyy.length) {
-      html += '<div class="lounas-sisaltyy">' +
-        '<p class="lounas-sisaltyy__otsikko">Lounaaseen kuuluu</p>' +
-        '<ul>' + sisaltyy.map(function (s) {
-          return '<li>' + turva(s) + '</li>';
-        }).join('') + '</ul></div>';
-    }
-
-    var hinnat = (lista.hinnat || []).filter(function (h) { return h && h.nimi; });
-    if (hinnat.length) {
-      html += '<ul class="lounas-hinnat">' + hinnat.map(function (h) {
-        return '<li><span class="lounas-hinnat__nimi">' + turva(h.nimi) + '</span>' +
-               '<span class="lounas-hinnat__hinta">' + turva(h.hinta || '') + '</span></li>';
-      }).join('') + '</ul>';
-    }
-    html += '</div>';
+      '<h2 class="otsikko-l" data-sanat>Viikon lounas</h2>' +
+      '</div>';
 
     // Päiväkortit
     html += '<div class="lounaspaivat">';
@@ -5740,6 +5735,27 @@ window.LIEKKI = {
         '</ul></article>';
     });
     html += '</div>';
+
+    // Mitä lounaaseen kuuluu ja mitä se maksaa — listan jälkeen
+    var sisaltyy = (lista.sisaltyy || []).filter(Boolean);
+    var hinnat = (lista.hinnat || []).filter(function (h) { return h && h.nimi; });
+    if (sisaltyy.length || hinnat.length) {
+      html += '<div class="lounasviikko__ala" data-esiin>';
+      if (sisaltyy.length) {
+        html += '<div class="lounas-sisaltyy">' +
+          '<p class="lounas-sisaltyy__otsikko">Lounaaseen kuuluu</p>' +
+          '<ul>' + sisaltyy.map(function (s) {
+            return '<li>' + turva(s) + '</li>';
+          }).join('') + '</ul></div>';
+      }
+      if (hinnat.length) {
+        html += '<ul class="lounas-hinnat">' + hinnat.map(function (h) {
+          return '<li><span class="lounas-hinnat__nimi">' + turva(h.nimi) + '</span>' +
+                 '<span class="lounas-hinnat__hinta">' + turva(h.hinta || '') + '</span></li>';
+        }).join('') + '</ul>';
+      }
+      html += '</div>';
+    }
 
     // Merkkiselite ja muutosvarauma
     var alaosa = [];
