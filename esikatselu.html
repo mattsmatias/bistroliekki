@@ -1554,11 +1554,12 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   .karuselli__pisteet { gap: 0; margin-top: .7rem; }
   .karuselli__piste {
     height: 44px;
-    width: 19px;
-    padding: 18.5px 6px;
+    /* Osumapinta vähintään 26 px leveä, näkyvä piste pysyy 7 px:ssä. */
+    width: 26px;
+    padding: 18.5px 9.5px;
     background-clip: content-box;
   }
-  .karuselli__piste.on { width: 34px; }
+  .karuselli__piste.on { width: 40px; }
 }
 
 /* Yksittäinen TikTok-video kortissa */
@@ -2076,7 +2077,11 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  /* Kapealla ruudulla lisäteksti siirtyy omalle rivilleen otsikon alle
+     eikä työnnä sivua leveämmäksi. */
+  flex-wrap: wrap;
+  column-gap: 1rem;
+  row-gap: .2rem;
   margin: 0 0 .5rem;
   padding-bottom: .85rem;
   border-bottom: 1px solid var(--line);
@@ -2087,6 +2092,8 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 .menu-ryhma__lisa {
   flex: none;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   font-family: var(--sans);
   font-size: .68rem;
   font-weight: 500;
@@ -2643,7 +2650,36 @@ html { -webkit-tap-highlight-color: transparent; }
   .hero__vieritys { display: none; }
   .mobiilivalikko { justify-content: flex-start; padding-top: calc(var(--header-h) + 1.2rem); }
   .mobiilivalikko a.mob-linkki { font-size: 1.05rem; padding: .3em 0; min-height: 44px; }
-  .mobiilivalikko__jalki { margin-top: 1rem; }
+  /* Vaaka-asennossa ruutu on matala mutta leveä: linkit kahteen palstaan,
+     jolloin koko valikko mahtuu näkyviin ilman vieritystä. */
+  .mobiilivalikko__sisus { max-width: 940px; }
+  .mobiilivalikko__sisus > nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: clamp(1.6rem, 5vw, 3rem);
+  }
+  .mobiilivalikko__jalki {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+    column-gap: clamp(1.6rem, 5vw, 3rem);
+    gap: .35rem clamp(1.6rem, 5vw, 3rem);
+  }
+  .mobiilivalikko__yhteys + .mobiilivalikko__yhteys { border-top: 0; }
+  .mobiilivalikko__jalki .nappi { margin-top: 0; }
+}
+
+/* Kaikkein matalimmat vaakaruudut (esim. 740x360): kavennetaan ylätilaa,
+   jotta valikko mahtuu kokonaan ilman vieritystä. Kosketuskohteet
+   pysyvät 44 px:ssä. */
+@media (max-height: 400px) and (orientation: landscape) {
+  .mobiilivalikko {
+    padding-top: calc(var(--header-h-min) + .7rem);
+    padding-bottom: 1.2rem;
+  }
+  .mobiilivalikko a.mob-linkki { font-size: 1rem; padding: .18em 0; }
+  .mobiilivalikko__jalki { margin-top: .6rem; }
 }
 
 /* Lomakekentät vähintään 16 px, muuten iOS zoomaa sivun kenttään napautettaessa */
@@ -2909,6 +2945,70 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   .media[data-verho] { --kuva-zoom: 1; }
   ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 }
+
+/* ------------------------------------- 24.12 MIKROTEKSTIEN LUETTAVUUS */
+/* Harvennetut versaalit ovat osa talon ilmettä, mutta alle 11 px:n teksti
+   on puhelimessa hankala lukea. max() pitää koon vähintään lattiassa ja
+   antaa sen silti kasvaa, jos käyttäjä on suurentanut selaimen fonttia.
+   Tämän lohkon on oltava tiedoston lopussa, jotta se voittaa aiemmat
+   mediakyselyt, jotka pienentävät samoja tekstejä puhelimessa. */
+.aanestyslaatikko__ylatunnus,
+.lounaspaiva__merkki,
+.menu-rivi__merkit,
+.menu-rivi__hintalisa,
+.media__merkinta,
+.some-ikoni span { font-size: max(11px, .66rem); }
+
+.mobiilivalikko__yhteys,
+.tietolista__lisa,
+.menu-ryhma__lisa,
+.lounaspaiva__pvm,
+.some-kortti__linkki,
+.tiktok-vara-teksti,
+.menu-tiedot__avain,
+.lounas-sisaltyy__otsikko { font-size: max(11.5px, .68rem); }
+
+/* .menu-selite on merkitty !importantiksi aiemmin, joten lattia tarvitsee
+   saman painon voittaakseen sen. */
+.menu-selite { font-size: max(11.5px, .68rem) !important; }
+.hero__vieritys { font-size: max(11px, .62rem); }
+
+/* --------------------------------- 24.13 KAIKKEIN KAPEIMMAT RUUDUT */
+/* Taittuvat puhelimet suljettuna ovat vain 280 px leveitä. Ilmoituslaatikon
+   sisennykset ja nappien kiinteät mitat kevennetään, jottei mikään työnnä
+   sivua vaakasuunnassa leveämmäksi kuin ruutu. */
+@media (max-width: 360px) {
+  .aanestyslaatikko {
+    padding: 1rem .9rem;
+    padding-right: 2.5rem;
+  }
+  .aanestyslaatikko__nappi {
+    padding: .6rem .9rem;
+    letter-spacing: .1em;
+    max-width: 100%;
+    white-space: normal;
+    text-align: left;
+  }
+  .tyonalla__rivi { gap: .6rem; }
+  .menu-valilehti { padding: .95rem .8rem; }
+  .nappi, .nappi--pieni { max-width: 100%; }
+  .tyhja-tila { padding: 1.4rem 1rem; }
+}
+
+/* Grid- ja flex-lapset saavat oletuksena vähimmäisleveydekseen sisältönsä
+   min-content-leveyden, mikä työntää kapealla ruudulla koko sivua
+   leveämmäksi. Sallitaan kutistuminen ja rivitetään pitkät parit. */
+.split > *,
+.kuori > * { min-width: 0; }
+
+.aukiolot li {
+  flex-wrap: wrap;
+  column-gap: 1rem;
+  row-gap: 0;
+}
+.tyhja-tila strong { overflow-wrap: anywhere; }
+.tietolista__lisa,
+.lounaspaiva__pvm { overflow-wrap: anywhere; }
 
 .sivu[hidden]{display:none!important}
 .esikatselu-huomio{position:fixed;left:0;right:0;bottom:0;z-index:9600;background:rgba(12,10,9,.94);
@@ -5711,20 +5811,26 @@ window.LIEKKI = {
       kohteet.forEach(nayta);
       return;
     }
+    /* threshold 0: lohko paljastuu heti kun se osuu ruudulle. Osuusrajaa ei
+       voi käyttää, koska pitkä lohko (esim. koko ruokalista) ei mahdu
+       matalalle ruudulle koskaan riittävän suurella osuudella — silloin se
+       jäisi näkymättömiin tabletin vaaka-asennossa. Negatiivinen alamarginaali
+       hoitaa saman "hiukan myöhemmin" -tunnun kuin osuusraja ennen. */
     var io = new IntersectionObserver(function (merkit) {
       merkit.forEach(function (m) {
         if (m.isIntersecting) { nayta(m.target); io.unobserve(m.target); }
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0 });
     kohteet.forEach(function (el) { io.observe(el); });
 
-    // Varmistus: sisältö ei saa koskaan jäädä piiloon, vaikka jokin takkuaisi
+    // Varmistus: mikään ruudulla oleva lohko ei saa jäädä piiloon, vaikka
+    // jokin takkuaisi. Koskee kaikkia paljastettavia, ei vain otsikoita.
     setTimeout(function () {
-      $$('[data-sanat]').forEach(function (el) {
+      kohteet.forEach(function (el) {
         var r = el.getBoundingClientRect();
-        if (r.top < window.innerHeight && r.bottom > 0) nayta(el);
+        if (r.top < window.innerHeight && r.bottom > 0) { nayta(el); io.unobserve(el); }
       });
-    }, 2500);
+    }, 1800);
   }
 
   /* ------------------------------------------------ 9. HERON KIPINÄT */

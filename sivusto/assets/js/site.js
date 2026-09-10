@@ -792,20 +792,26 @@
       kohteet.forEach(nayta);
       return;
     }
+    /* threshold 0: lohko paljastuu heti kun se osuu ruudulle. Osuusrajaa ei
+       voi käyttää, koska pitkä lohko (esim. koko ruokalista) ei mahdu
+       matalalle ruudulle koskaan riittävän suurella osuudella — silloin se
+       jäisi näkymättömiin tabletin vaaka-asennossa. Negatiivinen alamarginaali
+       hoitaa saman "hiukan myöhemmin" -tunnun kuin osuusraja ennen. */
     var io = new IntersectionObserver(function (merkit) {
       merkit.forEach(function (m) {
         if (m.isIntersecting) { nayta(m.target); io.unobserve(m.target); }
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0 });
     kohteet.forEach(function (el) { io.observe(el); });
 
-    // Varmistus: sisältö ei saa koskaan jäädä piiloon, vaikka jokin takkuaisi
+    // Varmistus: mikään ruudulla oleva lohko ei saa jäädä piiloon, vaikka
+    // jokin takkuaisi. Koskee kaikkia paljastettavia, ei vain otsikoita.
     setTimeout(function () {
-      $$('[data-sanat]').forEach(function (el) {
+      kohteet.forEach(function (el) {
         var r = el.getBoundingClientRect();
-        if (r.top < window.innerHeight && r.bottom > 0) nayta(el);
+        if (r.top < window.innerHeight && r.bottom > 0) { nayta(el); io.unobserve(el); }
       });
-    }, 2500);
+    }, 1800);
   }
 
   /* ------------------------------------------------ 9. HERON KIPINÄT */
