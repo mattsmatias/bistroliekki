@@ -140,9 +140,10 @@ def build_header(current, depth):
         f'<a class="mob-linkki" href="{nav_href(s, depth)}" style="--i:{i}">{t}</a>'
         for i, (s, t) in enumerate(FOOTER_NAV)
     )
-    esirippu = """<div class="esirippu" data-esirippu aria-hidden="true">
+    esirippu = f"""<div class="esirippu" data-esirippu aria-hidden="true">
   <div class="esirippu__sisus">
-    <span class="esirippu__nimi"><span>Bistro Liekki</span></span>
+    <img class="esirippu__logo" src="{up}assets/img/logo.webp" alt=""
+         width="538" height="520" fetchpriority="high" decoding="async">
     <span class="esirippu__viiva"></span>
   </div>
 </div>""" if current == "" else ""
@@ -163,8 +164,12 @@ def build_header(current, depth):
 <header class="headeri" id="headeri">
   <div class="headeri__sisus">
     <a class="logo" href="{nav_href('', depth)}" aria-label="Bistro Liekki — etusivulle">
-      <span class="logo__nimi">Bistro Liekki</span>
-      <span class="logo__ala">Puuhiiligrilli · est. 2016</span>
+      <img class="logo__merkki" src="{up}assets/img/logo-merkki.webp" alt=""
+           width="502" height="260" decoding="async" fetchpriority="high">
+      <span class="logo__teksti">
+        <span class="logo__nimi">Bistro Liekki</span>
+        <span class="logo__ala">Puuhiiligrilli · est. 2016</span>
+      </span>
     </a>
 
     <nav class="navi" aria-label="Päävalikko">{links}</nav>
@@ -217,7 +222,10 @@ def build_footer(depth):
     return f"""<footer class="footeri">
   <div class="kuori footeri__ruudukko">
     <div>
-      <h2>Bistro Liekki</h2>
+      <h2 class="footeri__logo">
+        <img src="{up}assets/img/logo.webp" alt="Bistro Liekki"
+             width="538" height="520" loading="lazy" decoding="async">
+      </h2>
       <p class="footeri__iskulause">Puuhiiligrilli Tikkurilan sydämessä vuodesta 2016.</p>
     </div>
 
@@ -343,7 +351,8 @@ SHELL = """<!doctype html>
 <meta name="twitter:description" content="{desc}">
 <meta name="twitter:image" content="{ogimage}">
 
-<link rel="icon" href="{up}favicon.svg" type="image/svg+xml">
+<link rel="icon" href="{up}favicon.ico" sizes="any">
+<link rel="icon" href="{up}favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="{up}apple-touch-icon.png">
 <link rel="manifest" href="{up}site.webmanifest">
 
@@ -378,6 +387,13 @@ def build():
                 continue
             shutil.rmtree(p) if os.path.isdir(p) else os.remove(p)
     os.makedirs(OUT, exist_ok=True)
+
+    # Sivuston juureen kuuluvat tiedostot (ikonit, manifesti) kopioidaan
+    # kansiosta staattiset/ — build tyhjentää juuren, joten lähde on siellä.
+    staattiset = os.path.join(ROOT, "staattiset")
+    if os.path.isdir(staattiset):
+        for name in sorted(os.listdir(staattiset)):
+            shutil.copy2(os.path.join(staattiset, name), os.path.join(OUT, name))
 
     for page in PAGES:
         slug = page["slug"]

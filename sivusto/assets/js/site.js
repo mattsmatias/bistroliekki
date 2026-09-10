@@ -1109,24 +1109,49 @@
       return html;
     }
 
+    // Ryhmitellään annokset otsikoiden alle. Sama ryhmänimi peräkkäin
+    // = yksi otsikko; ryhmaLisa poimitaan ryhmän ensimmäiseltä riviltä.
     var edellinenRyhma = null;
     html += '<div class="menu-lista">';
-    annokset.forEach(function (a) {
+    annokset.forEach(function (a, i) {
       var ryhma = a.ryhma || '';
-      if (ryhma && ryhma !== edellinenRyhma) {
-        html += '<h3 class="menu-ryhma">' + turva(ryhma) + '</h3>';
+      if (ryhma !== edellinenRyhma) {
+        if (edellinenRyhma !== null) html += '</div>';
+        var lisa = a.ryhmaLisa || '';
+        if (!lisa) {
+          // Lisätieto voi olla myös ryhmän myöhemmällä rivillä
+          for (var j = i; j < annokset.length && annokset[j].ryhma === ryhma; j++) {
+            if (annokset[j].ryhmaLisa) { lisa = annokset[j].ryhmaLisa; break; }
+          }
+        }
+        html += '<div class="menu-ryhma">' +
+          '<h3 class="menu-ryhma__otsikko">' + turva(ryhma) +
+          (lisa ? '<span class="menu-ryhma__lisa">' + turva(lisa) + '</span>' : '') +
+          '</h3>';
         edellinenRyhma = ryhma;
       }
       html += '<div class="menu-rivi">' +
         '<div class="menu-rivi__ylä">' +
-        '<span class="menu-rivi__nimi">' + turva(a.nimi) + '</span>' +
+        '<span class="menu-rivi__nimi">' + turva(a.nimi) +
+        (a.merkit ? '<span class="menu-rivi__merkit">' + turva(a.merkit) + '</span>' : '') +
+        '</span>' +
         '<span class="menu-rivi__pisteet" aria-hidden="true"></span>' +
         (a.hinta ? '<span class="menu-rivi__hinta">' + turva(a.hinta) + '</span>' : '') +
         '</div>' +
         (a.kuvaus ? '<p class="menu-rivi__kuvaus">' + turva(a.kuvaus) + '</p>' : '') +
         '</div>';
     });
+    if (edellinenRyhma !== null) html += '</div>';
     html += '</div>';
+
+    var huomiot = (osio.huomiot || []).filter(Boolean);
+    var selite = (D.menu || {}).merkkiselite || '';
+    if (huomiot.length || selite) {
+      html += '<div class="menu-huomiot">';
+      huomiot.forEach(function (h) { html += '<p>' + turva(h) + '</p>'; });
+      if (selite) html += '<p class="menu-selite">' + turva(selite) + '</p>';
+      html += '</div>';
+    }
     return html;
   }
 

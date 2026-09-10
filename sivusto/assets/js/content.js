@@ -122,29 +122,182 @@ window.LIEKKI = {
   },
 
   /* -------------------------------------------------------------- ruokalista */
-  /* Menu-sivun osiot. Annoksia EI ole keksitty — lisää ne tähän kun lista on
-     valmis, niin sivu täyttyy itsestään.
+  /* Menu-sivun osiot. Sisältö on kirjoitettu ravintolan omasta
+     BL MENU 2026 -listasta.
 
-     Lisää annos näin:
-       { ryhma: 'Alkuruoat', nimi: 'Annoksen nimi',
+     Lisää tai muuta annos näin:
+       { ryhma: 'Alkuun', ryhmaLisa: '0,33 l / 0,5 l',
+         nimi: 'Annoksen nimi', merkit: 'L, G',
          kuvaus: 'Lyhyt kuvaus', hinta: '00,00 €' }
 
-     "ryhma" kokoaa annokset otsikoiden alle (esim. Alkuruoat, Pihvit,
-     Burgerit, Jälkiruoat). Sama ryhmä peräkkäisillä riveillä = yksi otsikko.
-     Jätä "kuvaus" tyhjäksi jos sitä ei tarvita.
+     ryhma      kokoaa annokset otsikon alle. Sama ryhmänimi peräkkäisillä
+                riveillä = yksi otsikko. Vaihda ryhmien järjestystä
+                siirtämällä rivejä.
+     ryhmaLisa  pieni lisätieto ryhmän otsikon perässä (koko, yksikköhinta).
+                Riittää kirjoittaa ryhmän ensimmäiselle riville.
+     merkit     ruokavaliomerkinnät, näkyvät nimen perässä pienenä.
+     kuvaus     valinnainen. Jätä pois jos annos ei tarvitse kuvausta.
+     huomiot    osion lopussa näkyvät huomautukset (lista tekstejä).
 
      Jos osion annoslista on tyhjä, sivu näyttää kohteliaan "tulossa"
      -tilan ja ohjaa soittamaan tai avaamaan nykyisen listan. */
   menu: {
+    /* Merkkien selitykset näkyvät ruokalistan alalaidassa. */
+    merkkiselite: 'L = laktoositon · VL = vähälaktoosinen · G = gluteeniton · V = vegaani',
+
     osiot: [
+      /* ============================================================ */
       {
         avain: 'alacarte',
         nimi: 'À la carte',
         kuvaus: 'Puuhiiligrillin inspiroimat annokset, pihvit ja burgerit.',
-        /* Linkki nykyiseen listaan. Näkyy vain jos annokset-lista on tyhjä. */
-        linkki: 'menuTilaus',
-        annokset: []
+        linkki: '',
+        huomiot: [
+          'Kaikki burgerit sisältävät tomaattia, jääsalaattia, pikkelöityä punasipulia, maustekurkkua, talon majoneesia, maalais- tai bataattiranskalaisia ja aiolidippikastikkeen. Pihvit paistetaan puuhiiligrillissä medium-kypsyyteen.',
+          'Kerrothan allergioista ja erikoisruokavalioista henkilökunnalle, niin katsotaan yhdessä sopiva vaihtoehto.'
+        ],
+        annokset: [
+          /* ------------------------------------------------ ALKUUN */
+          { ryhma: 'Alkuun', nimi: 'Etanapannu — valkosipuli / aurajuustovoi', merkit: 'L',
+            kuvaus: '6 kpl. Parmesanjuustolla gratinoidut etanat, valkosipulivoilla tai aurajuustovoilla, sekä grillattua leipää.',
+            hinta: '14,50 €' },
+          { ryhma: 'Alkuun', nimi: 'Jättikatkaravut — valkosipuli / aurajuustovoi', merkit: 'L',
+            kuvaus: '6 kpl. Valkosipulivoissa tai aurajuustovoissa grillattuja jättikatkaravun pyrstöjä, aiolia ja grillattua leipää.',
+            hinta: '14,50 €' },
+          { ryhma: 'Alkuun', nimi: 'Kantarellikeitto', merkit: 'L',
+            kuvaus: 'Kanttarelli, kerma ja grillattua leipää.', hinta: '11,00 €' },
+          { ryhma: 'Alkuun', nimi: 'Caesarsalaatti', merkit: 'VL',
+            kuvaus: 'Romaine-salaattia, valkosipulikrutonkeja, parmesanjuustoa ja Caesar-kastiketta (kastike sis. kalaa).',
+            hinta: '9,50 €' },
+          { ryhma: 'Alkuun', nimi: 'Liekin loaded fries', merkit: 'VL, G',
+            kuvaus: 'Pekoni, parmesan, tuorechili, juustokastike, persilja.', hinta: '9,50 €' },
+          { ryhma: 'Alkuun', nimi: 'Olutpaneroidut mozzarellajuustotikut', merkit: 'VL',
+            kuvaus: '5 kpl, paholaisenhilloa.', hinta: '9,50 €' },
+
+          /* ---------------------------------------- SMASH BURGERIT */
+          { ryhma: 'Smash burgerit', ryhmaLisa: 'Extra smash-pihvi 5 €',
+            nimi: 'Chili smash',
+            kuvaus: 'Briossisämpylä, 2 × 70 g rotukarjan smash-pihviä, talon majoneesi, cheddarjuusto, Sriracha-majoneesi, pikkelöity tuore chili, pikkelöity punasipuli, maustekurkku, maustetut maalaisranskalaiset tai bataattiranskalaiset ja aiolimajoneesi dippi.',
+            hinta: '21,50 €' },
+          { ryhma: 'Smash burgerit', nimi: 'Cheese smash',
+            kuvaus: 'Briossisämpylä, 2 × 70 g rotukarjan smash-pihviä, talon majoneesi, cheddarjuusto, Pepper Jack -sulatejuusto, paholaisenmajoneesi, salaatti, tomaatti, pikkelöity punasipuli, maustetut maalaisranskalaiset tai bataattiranskalaiset ja aiolimajoneesi dippi.',
+            hinta: '21,50 €' },
+          { ryhma: 'Smash burgerit', nimi: 'Bacon smash',
+            kuvaus: 'Briossisämpylä, 2 × 70 g rotukarjan smash-pihviä, talon majoneesi, cheddarjuusto, 2 × paistettu pekoni, itse tehty BBQ-kastike, pikkelöity punasipuli, maustekurkku, maustetut maalaisranskalaiset tai bataattiranskalaiset ja aiolimajoneesi dippi.',
+            hinta: '21,50 €' },
+          { ryhma: 'Smash burgerit', nimi: 'Smoky jalopeno bacon smash',
+            kuvaus: 'Briossisämpylä, 2 × 70 g rotukarjan smash-pihviä, 2 × savujuusto, 2 × karamellisoitu pekoni, jalopeno-relish, maustekurkku, savuketsuppi, pikkelöity sipuli, talon majoneesi, maustetut maalaisranskalaiset tai bataattiranskalaiset ja aiolimajoneesi dippi.',
+            hinta: '21,50 €' },
+          { ryhma: 'Smash burgerit', nimi: 'Blue cheese smash',
+            kuvaus: 'Briossisämpylä, 2 × 70 g rotukarjan smash-pihviä, aurajuusto, talon majoneesi, rucola, maustekurkku, paistettu tuore ananas, paholaisenmajoneesi, maustetut maalaisranskalaiset tai bataattiranskalaiset ja aioli majoneesi dippi.',
+            hinta: '21,50 €' },
+          { ryhma: 'Smash burgerit', nimi: "Nduja pineapple smash",
+            kuvaus: "Briossisämpylä, 2 × 70 g rotukarjan smash-pihviä, 2 × savujuusto, paistettu mausteinen 'nduja, talon majoneesi, paistettu tuore ananas, chimichurri-kastike, paahdettu sipuli, maustetut maalaisranskalaiset tai bataattiranskalaiset ja aiolimajoneesi dippi.",
+            hinta: '21,50 €' },
+          { ryhma: 'Smash burgerit', nimi: 'Threesome smash vati',
+            kuvaus: '3 kpl valitsemaanne smash-burgeria ja loaded fries (aioli, parmesanjuusto, persilja, pikkelöity tuore chili).',
+            hinta: '60,00 €' },
+
+          /* ------------------------------------- PUUHIILIGRILLISTÄ */
+          { ryhma: 'Puuhiiligrillistä', nimi: 'Naudansisäfilepihvi', merkit: 'L, G, FI',
+            kuvaus: 'Medium. 150 g / 300 g.', hinta: '27,00 € / 38,00 €' },
+          { ryhma: 'Puuhiiligrillistä', nimi: 'Entrecôte', merkit: 'L, G, FI',
+            kuvaus: 'Medium. 300 g.', hinta: '28,00 €' },
+          { ryhma: 'Puuhiiligrillistä', nimi: 'Naudan lehtipihvi', merkit: 'L, G, FI',
+            kuvaus: '180 g.', hinta: '25,00 €' },
+          { ryhma: 'Puuhiiligrillistä', nimi: 'Merilohi', merkit: 'L, G, EU',
+            kuvaus: '200 g.', hinta: '22,00 €' },
+          { ryhma: 'Puuhiiligrillistä', nimi: 'Porsaan BBQ-ribs', merkit: 'L, G, FI',
+            kuvaus: 'N. 400 g. Paistettu ananas.', hinta: '21,50 €' },
+          { ryhma: 'Puuhiiligrillistä', nimi: 'Maissikana vuohenjuustolla', merkit: 'L, G, EU',
+            kuvaus: '170 g. Chimichurri.', hinta: '21,00 €' },
+          { ryhma: 'Puuhiiligrillistä', nimi: 'Härkäruukku naudan sisäfilepaloista', merkit: 'L, G, FI',
+            kuvaus: '200 g. Valitsemallanne kastikkeella.', hinta: '22,50 €' },
+
+          /* --------------------------------------------- KASTIKKEET */
+          { ryhma: 'Kastikkeet', ryhmaLisa: '3,90 € kpl',
+            nimi: 'Pippurikastike', merkit: 'L, G', hinta: '3,90 €' },
+          { ryhma: 'Kastikkeet', nimi: 'Punaviinikastike', merkit: 'L, G', hinta: '3,90 €' },
+          { ryhma: 'Kastikkeet', nimi: 'Béarnaisekastike', merkit: 'L, G', hinta: '3,90 €' },
+          { ryhma: 'Kastikkeet', nimi: 'Kantarellikastike', merkit: 'L, G', hinta: '3,90 €' },
+          { ryhma: 'Kastikkeet', nimi: 'Hollandaisekastike', merkit: 'L, G', hinta: '3,90 €' },
+          { ryhma: 'Kastikkeet', nimi: 'Chimichurri-kastike', merkit: 'V', hinta: '3,90 €' },
+
+          /* --------------------------------------------- MAUSTEVOIT */
+          { ryhma: 'Maustevoit', ryhmaLisa: '2,90 € kpl',
+            nimi: 'Valkosipuli-sitrusvoi', merkit: 'L, G', hinta: '2,90 €' },
+          { ryhma: 'Maustevoit', nimi: 'Aurajuustovoi', merkit: 'L, G', hinta: '2,90 €' },
+
+          /* ---------------------------------------------- LISUKKEET */
+          { ryhma: 'Lisukkeet', ryhmaLisa: '5,90 € kpl',
+            nimi: 'Kermaperunat', merkit: 'L, G', hinta: '5,90 €' },
+          { ryhma: 'Lisukkeet', nimi: 'Valkosipulikermaperunat', merkit: 'L, G', hinta: '5,90 €' },
+          { ryhma: 'Lisukkeet', nimi: 'Parmesaanilla maustetut maalaisranskalaiset', merkit: 'L, G', hinta: '5,90 €' },
+          { ryhma: 'Lisukkeet', nimi: 'Maustetut maalaisranskalaiset', merkit: 'L, G', hinta: '5,90 €' },
+          { ryhma: 'Lisukkeet', nimi: 'Maustetut bataattiranskalaiset', merkit: 'L, G', hinta: '5,90 €' },
+          { ryhma: 'Lisukkeet', nimi: 'Caesar-salaatti', merkit: 'L',
+            kuvaus: 'Romaine-salaattia, valkosipulikrutonkeja, parmesanjuustoa ja Caesar-kastiketta (kastike sis. kalaa).',
+            hinta: '5,90 €' },
+          { ryhma: 'Lisukkeet', nimi: 'Talon kasvikset', merkit: 'L, G', hinta: '5,90 €' },
+          { ryhma: 'Lisukkeet', nimi: 'Liekin salaatti', merkit: 'VL, G',
+            kuvaus: 'Salaatti mix, parmesanjuustoa, rapeaa pekonia ja vinegretteä.', hinta: '5,90 €' },
+          { ryhma: 'Lisukkeet', nimi: 'Liekin loaded fries', merkit: 'VL, G',
+            kuvaus: 'Pekoni, parmesanjuusto, tuore chili, juustokastike, persilja.', hinta: '8,90 €' },
+
+          /* ----------------------------------------------- SALAATIT */
+          { ryhma: 'Salaatit', nimi: 'Caesarsalaatti',
+            kuvaus: 'Romaine-salaattia, valkosipulikrutonkeja, parmesanjuustoa ja Caesar-kastiketta (kastike sis. kalaa). Valitsemallanne lisukkeella: halloumijuusto, maissikana, merilohi, aurajuusto tai katkarapu.',
+            hinta: '21,60 €' },
+          { ryhma: 'Salaatit', nimi: 'Liekin salaatti',
+            kuvaus: 'Romaine-salaattia, punasalaattia, marinoitua punasipulia, paahdettuja chilicashewpähkinöitä, kirsikkatomaattia, kurkkua, tuoretta ananasta, vinegretteä ja talon leipää. Valitsemallanne lisukkeella: halloumijuusto, maissikana, merilohi, aurajuusto tai katkarapu.',
+            hinta: '21,60 €' },
+
+          /* ------------------------------------------------ BURGERIT */
+          { ryhma: 'Burgerit puuhiiligrillistä', nimi: 'Aslan burger',
+            kuvaus: 'Puuhiilillä medium grillattu 2 × 200 g rotukarjan pihviä, cheddarjuusto, Pepper Jack -sulatejuusto, pikkelöity tuore chili, itse tehtyä BBQ-kastiketta, maalaisranskalaisia ja aiolidippi.',
+            hinta: '28,50 €' },
+          { ryhma: 'Burgerit puuhiiligrillistä', nimi: 'Smoky jalapeno burger',
+            kuvaus: 'Puuhiilillä medium grillattu 200 g rotukarjan pihvi, savujuusto, jalapeno-relish, savuketsuppi, maalaisranskalaisia ja aiolidippi.',
+            hinta: '22,50 €' },
+          { ryhma: 'Burgerit puuhiiligrillistä', nimi: 'Tripla juusto burger',
+            kuvaus: 'Puuhiilillä medium grillattu 200 g rotukarjan pihvi, 1 cheddarjuusto, 2 Pepper Jack -sulatejuustoa, paholaisen hillo, maalaisranskalaisia ja aiolidippi.',
+            hinta: '22,50 €' },
+          { ryhma: 'Burgerit puuhiiligrillistä', nimi: 'Talon burger',
+            kuvaus: 'Puuhiilillä medium grillattu 200 g rotukarjan pihvi, cheddarjuustoa, pekonia, itse tehtyä BBQ-kastiketta, maalaisranskalaisia ja aiolidippi.',
+            hinta: '22,50 €' },
+          { ryhma: 'Burgerit puuhiiligrillistä', nimi: 'Vegeburger',
+            kuvaus: '1 kpl paneroitu vegepihvi, itse tehtyä BBQ-kastiketta, vegejuustoa, paistettu tuore ananas, chimichurri-kastike, maalaisranskalaisia ja itse tehty BBQ-dippi.',
+            hinta: '22,50 €' },
+          { ryhma: 'Burgerit puuhiiligrillistä', nimi: 'Kanaburger',
+            kuvaus: 'Puuhiilillä grillattu maissikanan rintafilee, vuohenjuusto, paholaisenmajoneesi, maalaisranskalaisia ja aiolidippi.',
+            hinta: '22,50 €' },
+          { ryhma: 'Burgerit puuhiiligrillistä', nimi: 'Aurajuustoburger',
+            kuvaus: 'Puuhiilillä medium grillattu 200 g rotukarjan pihvi, aurajuustoa, paistettu tuore ananas, paholaisenmajoneesia, maalaisranskalaisia ja aiolidippi.',
+            hinta: '22,50 €' },
+
+          /* --------------------------------------------------- LAPSET */
+          { ryhma: 'Lapset', nimi: 'Juustoburgeri', merkit: 'FI',
+            kuvaus: '100 g. Rotukarjan pihvi, cheddarjuustoa, majoneesia, ketsuppia, maalaisranskalaisia, salaattia ja tomaattia.',
+            hinta: '12,00 €' },
+          { ryhma: 'Lapset', nimi: 'Lasten lehtipihvi', merkit: 'FI',
+            kuvaus: '100 g. Lehtipihvi, maalaisranskalaisia, maustevoi, salaattia ja kurkkua.',
+            hinta: '13,00 €' },
+          { ryhma: 'Lapset', nimi: 'Lasten herkkukori', merkit: 'FI',
+            kuvaus: '2 kpl nauravaa nakkia, 3 kpl kananugettia, maalaisranskalaisia, ketsuppia, salaattia ja kurkkua.',
+            hinta: '12,00 €' },
+
+          /* --------------------------------------------- SUU MAKEAKSI */
+          { ryhma: 'Suu makeaksi', nimi: 'Liekin Dumle-suklaakakku',
+            kuvaus: 'Vaniljajäätelö, suklaakastike.', hinta: '13,00 €' },
+          { ryhma: 'Suu makeaksi', nimi: 'Jäätelöpallo kastikkeella',
+            kuvaus: 'Mansikka, vanilja tai suklaa. Valitsemasi kastikkeen kera: mansikka-, suklaa- tai kinuskikastike. Kysy päivän valikoimasta henkilökunnalta.',
+            hinta: '7,50 €' },
+          { ryhma: 'Suu makeaksi', nimi: 'Sorbetti', merkit: 'V',
+            kuvaus: 'Kysy päivän valikoimasta henkilökunnalta.', hinta: '8,50 €' }
+        ]
       },
+
+      /* ============================================================ */
       {
         avain: 'pikkujoulu',
         nimi: 'Pikkujoulu',
@@ -152,6 +305,8 @@ window.LIEKKI = {
         linkki: '',
         annokset: []
       },
+
+      /* ============================================================ */
       {
         avain: 'brunssi',
         nimi: 'Brunssi',
@@ -159,16 +314,119 @@ window.LIEKKI = {
         linkki: '',
         annokset: []
       },
+
+      /* ============================================================ */
       {
         avain: 'juomat',
         nimi: 'Juomat',
-        kuvaus: 'Oluet, viinit ja alkoholittomat.',
+        kuvaus: 'Oluet, siiderit, viinit, kahvit ja väkevät.',
         linkki: '',
-        annokset: []
+        huomiot: [
+          'Anniskelemme alkoholijuomia vain 18 vuotta täyttäneille. Kysy päivän valikoimasta henkilökunnalta.'
+        ],
+        annokset: [
+          /* ------------------------------------------------- HANASTA */
+          { ryhma: 'Hanasta', ryhmaLisa: '0,33 l / 0,5 l',
+            nimi: 'Karhu III', kuvaus: '4,6 %', hinta: '7,50 € / 8,50 €' },
+          { ryhma: 'Hanasta', nimi: 'Kronenburg 1664 Blanc', kuvaus: '5 %', hinta: '8,00 € / 9,90 €' },
+          { ryhma: 'Hanasta', nimi: 'Brooklyn Lager', kuvaus: '5,2 %', hinta: '8,50 € / 10,00 €' },
+
+          /* -------------------------------------------- PULLO-OLUET */
+          { ryhma: 'Pullo-olut', ryhmaLisa: '0,33 l',
+            nimi: 'Karhu IV', kuvaus: '5,3 %', hinta: '7,60 €' },
+          { ryhma: 'Pullo-olut', nimi: 'Corona', kuvaus: '4,5 %', hinta: '7,60 €' },
+
+          { ryhma: 'Pullo-olut 0,5 l', nimi: 'Budvar vaalea', kuvaus: '5 %', hinta: '9,90 €' },
+          { ryhma: 'Pullo-olut 0,5 l', nimi: 'Budvar tumma', kuvaus: '4,7 %', hinta: '9,90 €' },
+          { ryhma: 'Pullo-olut 0,5 l', nimi: 'Ginger Joe 0,33 l', kuvaus: '4 %', hinta: '9,00 €' },
+
+          /* ------------------------------------- SIIDERIT / LONKEROT */
+          { ryhma: 'Siiderit ja lonkerot', ryhmaLisa: '0,33 l',
+            nimi: 'Crowmoor Extra Dry', kuvaus: '4,7 %', hinta: '8,60 €' },
+          { ryhma: 'Siiderit ja lonkerot', nimi: 'Somersby Pear', kuvaus: '4,5 %', hinta: '8,60 €' },
+          { ryhma: 'Siiderit ja lonkerot', nimi: 'Somersby Apple', kuvaus: '4,5 %', hinta: '8,60 €' },
+          { ryhma: 'Siiderit ja lonkerot', nimi: 'Original lonkero', kuvaus: '5,5 %', hinta: '8,60 €' },
+          { ryhma: 'Siiderit ja lonkerot', nimi: 'Original karpalo lonkero', kuvaus: '5,5 %', hinta: '8,60 €' },
+          { ryhma: 'Siiderit ja lonkerot', nimi: 'Original ananas lonkero', kuvaus: '5,5 %', hinta: '8,60 €' },
+          { ryhma: 'Siiderit ja lonkerot', nimi: 'Original lemonade lonkero', kuvaus: '5,5 %', hinta: '8,60 €' },
+
+          /* ---------------------------------------- ALKOHOLITTOMAT */
+          { ryhma: 'Alkoholittomat', ryhmaLisa: '0,33 l / 0,5 l',
+            nimi: 'Limu', hinta: '3,60 € / 5,00 €' },
+          { ryhma: 'Alkoholittomat', nimi: 'Mehu', hinta: '3,60 € / 5,00 €' },
+          { ryhma: 'Alkoholittomat', nimi: 'Kukko Lager', kuvaus: '0 %', hinta: '7,00 €' },
+
+          /* ------------------------------------------ KUUMAT JUOMAT */
+          { ryhma: 'Kuumat juomat', nimi: 'Kahvi / tee', hinta: '3,50 €' },
+          { ryhma: 'Kuumat juomat', nimi: 'Kaakao', hinta: '4,50 €' },
+          { ryhma: 'Kuumat juomat', nimi: 'Erikoiskahvit', hinta: '4,50 €' },
+          { ryhma: 'Kuumat juomat', nimi: 'Cappuccino', hinta: '5,00 €' },
+          { ryhma: 'Kuumat juomat', nimi: 'Cafe latte', hinta: '5,00 €' },
+          { ryhma: 'Kuumat juomat', nimi: 'Espresso', hinta: '4,50 €' },
+
+          /* -------------------------------- KUUMAT ALKOHOLIJUOMAT */
+          { ryhma: 'Kuumat alkoholijuomat', nimi: 'Irish coffee', hinta: '11,60 €' },
+          { ryhma: 'Kuumat alkoholijuomat', nimi: 'Amaretto coffee', hinta: '11,60 €' },
+          { ryhma: 'Kuumat alkoholijuomat', nimi: 'French coffee', hinta: '11,60 €' },
+          { ryhma: 'Kuumat alkoholijuomat', nimi: 'Finlandia coffee', hinta: '11,00 €' },
+          { ryhma: 'Kuumat alkoholijuomat', nimi: 'Lumumba', hinta: '12,10 €' },
+          { ryhma: 'Kuumat alkoholijuomat', nimi: 'Minttu kaakao', hinta: '11,00 €' },
+
+          /* --------------------------------- VISKIT JA KONJAKIT */
+          { ryhma: 'Viskit ja konjakit', nimi: 'Chivas Regal 18YO', hinta: '16,40 €' },
+          { ryhma: 'Viskit ja konjakit', nimi: 'Jack Daniels', hinta: '8,70 €' },
+          { ryhma: 'Viskit ja konjakit', nimi: 'Jack Daniels Honey', hinta: '8,70 €' },
+          { ryhma: 'Viskit ja konjakit', nimi: 'Jameson', hinta: '9,50 €' },
+          { ryhma: 'Viskit ja konjakit', nimi: 'Laphroaig', kuvaus: 'Single malt.', hinta: '10,90 €' },
+          { ryhma: 'Viskit ja konjakit', nimi: 'Cognac VS', hinta: '8,70 €' },
+          { ryhma: 'Viskit ja konjakit', nimi: 'Cognac VSOP', hinta: '11,00 €' },
+          { ryhma: 'Viskit ja konjakit', nimi: 'Cognac XO', hinta: '18,70 €' },
+          { ryhma: 'Viskit ja konjakit', nimi: 'Calvados Berneroy XO', hinta: '9,80 €' },
+
+          /* --------------------------------------------- KUOHUVAT */
+          { ryhma: 'Kuohuvat', nimi: 'Soligo Prosecco Brut',
+            kuvaus: 'Italia. Erittäin kuiva, keskihapokas, ryhdikäs. Rypäleet: Glera.',
+            hinta: '12,00 € / 20 cl' },
+          { ryhma: 'Kuohuvat', nimi: 'Jaume Serra Cava Brut',
+            kuvaus: 'Espanja. Kuiva, kypsän ananaksinen, maukas.', hinta: '42,90 € / 75 cl' },
+          { ryhma: 'Kuohuvat', nimi: 'Rene Schloesser Brut Shampagne',
+            kuvaus: 'Ranska. Kuiva, raikkaan hedelmäinen, hienostunut. Rypäleet: Pinot Noir, Chardonnay, Pinot Meunier.',
+            hinta: '86,90 € / 75 cl' },
+
+          /* ------------------------------------------ VALKOVIINIT */
+          { ryhma: 'Valkoviinit', ryhmaLisa: '16 cl / 75 cl',
+            nimi: 'Lobo Loco Macabeo',
+            kuvaus: 'Espanja. Kuiva valkoviini, jonka tuoksussa on runsaasti kukkaisia aromeja. Maku on sopivan hapokas sekä kevyen greippinen.',
+            hinta: '9,50 € / 30,00 €' },
+          { ryhma: 'Valkoviinit', nimi: 'Invenioi Riesling',
+            kuvaus: 'Saksa. Rypäle: Riesling. Tuoksussa kukkaisuutta ja sitrusmaisuutta. Maku kuiva, raikas ja tasapainoinen, hieman Rieslingille tyypillistä mineraalisuutta. Ruokapari: merenelävät, salaatit, kasvisruoka.',
+            hinta: '12,00 € / 49,00 €' },
+          { ryhma: 'Valkoviinit', nimi: 'Tommasi Le Rosse Pinot Grigio',
+            kuvaus: 'Italia. Kuiva, päärynäinen, pirteä.', hinta: '13,50 € / 64,90 €' },
+
+          /* -------------------------------------------- ROSEVIINIT */
+          { ryhma: 'Roseviinit', ryhmaLisa: '16 cl / 75 cl',
+            nimi: 'Weingut Frank Herrnbaumgarten Rosé',
+            kuvaus: 'Itävalta. Kuiva, täyteläinen, runsaan marjaisa. Rypäleet: Pinot Noir, Zweigelt, Merlot.',
+            hinta: '12,00 € / 53,90 €' },
+
+          /* -------------------------------------------- PUNAVIINIT */
+          { ryhma: 'Punaviinit', ryhmaLisa: '16 cl / 75 cl',
+            nimi: 'Lobo Loco Tempranillo',
+            kuvaus: 'Espanja. Helposti juotava punaviini, jonka tuoksussa on runsaasti mansikkaa. Kevyen hapokas, marjaisen mansikkainen, jälkimaku silkkisen pehmeä.',
+            hinta: '9,50 € / 30,00 €' },
+          { ryhma: 'Punaviinit', nimi: 'Butchers Cut Premium Malbec',
+            kuvaus: 'Argentiina. Tuoksu runsaan hedelmäinen, melko intensiivinen ja mustasävytteinen paahteisin aromein. Maku keskitäyteläinen, runsaan hedelmäinen ja maukas, tasapainoinen. Pehmeän tanniininen, miellyttävän hapankirsikkainen hapokkuus.',
+            hinta: '13,10 € / 53,90 €' },
+          { ryhma: 'Punaviinit', nimi: 'Rocca Grande Passolo Rosso Salento',
+            kuvaus: 'Italia. Täyteläinen, mausteisen runsas, kypsytetty tammitynnyrissä 6 kk. Rypäleet: Negroamaro, Primitivo.',
+            hinta: '13,80 € / 64,90 €' },
+          { ryhma: 'Punaviinit', nimi: 'Pyros Barrel Selected Syrah',
+            kuvaus: 'Argentiina. Täyteläinen, maukas, runsaan hedelmäinen.', hinta: '82,50 €' }
+        ]
       }
     ]
   },
-
   /* ---------------------------------------------------------- ajankohtaista */
   /* Lisää ilmoitus näin:
        { otsikko: 'Poikkeava aukiolo', teksti: 'Juhannuksena suljettu.',

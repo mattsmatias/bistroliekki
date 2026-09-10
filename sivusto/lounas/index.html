@@ -29,7 +29,8 @@
 <meta name="twitter:description" content="Suosittu lounasbuffet arkisin klo 10:30–15 Tikkurilan keskustassa. Katso päivän lounaslista ja tule syömään Talvikkitielle, Vantaalle.">
 <meta name="twitter:image" content="https://bistroliekki.fi/assets/img/lounas-burgerit.webp">
 
-<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="manifest" href="../site.webmanifest">
 
@@ -60,8 +61,12 @@
 <header class="headeri" id="headeri">
   <div class="headeri__sisus">
     <a class="logo" href="../" aria-label="Bistro Liekki — etusivulle">
-      <span class="logo__nimi">Bistro Liekki</span>
-      <span class="logo__ala">Puuhiiligrilli · est. 2016</span>
+      <img class="logo__merkki" src="../assets/img/logo-merkki.webp" alt=""
+           width="502" height="260" decoding="async" fetchpriority="high">
+      <span class="logo__teksti">
+        <span class="logo__nimi">Bistro Liekki</span>
+        <span class="logo__ala">Puuhiiligrilli · est. 2016</span>
+      </span>
     </a>
 
     <nav class="navi" aria-label="Päävalikko"><a href="../">Etusivu</a><a href="../meista/">Tarina</a><a href="../menu/">Menu</a><a href="../lounas/">Lounas</a><a href="../catering/">Catering</a><a href="../galleria/">Galleria</a><a href="../lahjakortti/">Lahjakortti</a><a href="../yhteystiedot/">Yhteys</a></nav>
@@ -251,7 +256,10 @@
 <footer class="footeri">
   <div class="kuori footeri__ruudukko">
     <div>
-      <h2>Bistro Liekki</h2>
+      <h2 class="footeri__logo">
+        <img src="../assets/img/logo.webp" alt="Bistro Liekki"
+             width="538" height="520" loading="lazy" decoding="async">
+      </h2>
       <p class="footeri__iskulause">Puuhiiligrilli Tikkurilan sydämessä vuodesta 2016.</p>
     </div>
 
