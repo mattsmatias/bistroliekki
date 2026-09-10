@@ -82,7 +82,7 @@ PAGES = [
     dict(slug="vahvista-poytavaraus", file="vahvista-poytavaraus.html",
          title="Pöytävarauksen vahvistus — Bistro Liekki",
          desc="Pöytävarauksen vahvistussivu. Bistro Liekki, Talvikkitie 30, 01300 Vantaa. "
-              "Pöytävaraukset puhelimitse +358 44 9721307.",
+              "Pöytävaraukset puhelimitse 050 470 8530.",
          og="band-embers.webp", noindex=True),
 ]
 
@@ -196,11 +196,11 @@ def build_header(current, depth):
   <div class="mobiilivalikko__sisus">
     <nav aria-label="Mobiilivalikko">{mob}</nav>
     <div class="mobiilivalikko__jalki">
-      <a class="mobiilivalikko__yhteys" data-href="varaus-puhelin" href="#">
-        Pöytävaraukset <strong data-teksti="varaus-puhelin"></strong>
-      </a>
       <a class="mobiilivalikko__yhteys" data-href="puhelin" href="#">
-        Ravintola <strong data-teksti="puhelin"></strong>
+        Puhelin <strong data-teksti="puhelin"></strong>
+      </a>
+      <a class="mobiilivalikko__yhteys" data-href="sahkoposti" href="#">
+        Sähköposti <strong data-teksti="sahkoposti"></strong>
       </a>
       <a class="nappi" data-linkki="varaus" data-tyhjana="Soita ja varaa" href="#"><span>Varaa pöytä</span></a>
     </div>
@@ -241,9 +241,9 @@ def build_footer(depth):
       <p class="footeri__otsikko">Seuraa meitä</p>
       <div class="some">{some}</div>
       <p class="footeri__iskulause" style="margin-top:1.4rem">
-        Pöytävaraukset<br>
-        <a data-href="varaus-puhelin" href="#" style="color:var(--bone);font-size:1rem">
-          <span data-teksti="varaus-puhelin"></span></a>
+        Pöytävaraukset ja tiedustelut<br>
+        <a data-href="puhelin" href="#" style="color:var(--bone);font-size:1rem">
+          <span data-teksti="puhelin"></span></a>
       </p>
     </div>
   </div>
@@ -286,7 +286,7 @@ def structured_data(page):
   "description": "Puuhiiligrilli Tikkurilan sydämessä vuodesta 2016. Lounasbuffet arkisin, laaja à la carte ja catering.",
   "url": "https://bistroliekki.fi/",
   "telephone": "+358504708530",
-  "email": "talvikkitie@bistroliekki.fi",
+  "email": "ravintola@bistroliekki.fi",
   "servesCuisine": ["Grilliruoka", "Bistro", "Burgerit", "Pihvit"],
   "priceRange": "€€",
   "currenciesAccepted": "EUR",

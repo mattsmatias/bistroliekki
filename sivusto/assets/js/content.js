@@ -27,10 +27,15 @@ window.LIEKKI = {
   puhelin: '050 470 8530',
   puhelinHref: '+358504708530',
 
-  varausPuhelin: '+358 44 9721307',
-  varausPuhelinHref: '+358449721307',
+  /* Pöytävaraukset hoidetaan samasta numerosta kuin muutkin asiat. */
+  varausPuhelin: '050 470 8530',
+  varausPuhelinHref: '+358504708530',
 
-  sahkoposti: 'talvikkitie@bistroliekki.fi',
+  /* Yleinen sähköposti: yhteydenotot, tarjouspyynnöt ja lomakkeet. */
+  sahkoposti: 'ravintola@bistroliekki.fi',
+
+  /* Keittiön oma osoite: ruokaa ja keittiötä koskevat palautteet. */
+  keittioSahkoposti: 'keittio@bistroliekki.fi',
 
   /* ---------------------------------------------------------- aukioloajat */
   /* paiva: 0 = sunnuntai … 6 = lauantai. Sulje päivä jättämällä auki: null  */
@@ -161,7 +166,7 @@ window.LIEKKI = {
      -tilan ja ohjaa soittamaan tai avaamaan nykyisen listan. */
   menu: {
     /* Merkkien selitykset näkyvät ruokalistan alalaidassa. */
-    merkkiselite: 'L = laktoositon · VL = vähälaktoosinen · M = maidoton · G = gluteeniton · V = vegaani',
+    merkkiselite: 'L = laktoositon · VL = vähälaktoosinen · G = gluteeniton · V = vegaani',
 
     osiot: [
       /* ============================================================ */
@@ -292,6 +297,13 @@ window.LIEKKI = {
           { ryhma: 'Burgerit puuhiiligrillistä', nimi: 'Aurajuustoburger',
             kuvaus: 'Puuhiilillä medium grillattu 200 g rotukarjan pihvi, aurajuustoa, paistettu tuore ananas, paholaisenmajoneesia, maalaisranskalaisia ja aiolidippi.',
             hinta: '22,50 €' },
+          { ryhma: 'Burgerit puuhiiligrillistä', nimi: 'Puuhiili burgervati',
+            kuvaus: '3 valitsemaasi puuhiiliburgeria listaltamme (ei Aslan burger), ' +
+                    'jokaisessa 200 g rotukarjapihvi. Lisäksi 300 g puuhiiligrillattua ' +
+                    'pihvilihaa ja loaded fries: béarnaise-chilimajoneesi, ' +
+                    'parmesaanijuusto, ruohosipuli ja kevätsipuli, aioli sekä talossa ' +
+                    'pikkelöity tuore chili.',
+            hinta: '75,00 €', hintaLisa: 'norm. 95,00 €' },
 
           /* --------------------------------------------------- LAPSET */
           { ryhma: 'Lapset', nimi: 'Juustoburgeri', merkit: 'FI',
@@ -319,6 +331,8 @@ window.LIEKKI = {
       {
         avain: 'brunssi',
         nimi: 'Brunssi',
+        /* Brunssilistalla on myös M-merkintä, siksi oma selite. */
+        merkkiselite: 'L = laktoositon · VL = vähälaktoosinen · M = maidoton · G = gluteeniton · V = vegaani',
         kuvaus: 'Isänpäiväbrunssi katetaan kolmena kattauksena. Paikat kannattaa varata etukäteen — kattaukset täyttyvät nopeasti.',
         linkki: '',
         /* Tiedot näkyvät osion alussa omassa laatikossaan. */

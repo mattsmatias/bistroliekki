@@ -184,6 +184,7 @@
       puhelin: D.puhelin,
       'varaus-puhelin': D.varausPuhelin,
       sahkoposti: D.sahkoposti,
+      'keittio-sahkoposti': D.keittioSahkoposti,
       katu: D.osoite && D.osoite.katu,
       postitoimi: D.osoite ? D.osoite.postinumero + ' ' + D.osoite.kaupunki : '',
       vuosi: String(new Date().getFullYear()),
@@ -210,6 +211,9 @@
     $$('[data-href="puhelin"]').forEach(function (a) { a.href = 'tel:' + (D.puhelinHref || ''); });
     $$('[data-href="varaus-puhelin"]').forEach(function (a) { a.href = 'tel:' + (D.varausPuhelinHref || ''); });
     $$('[data-href="sahkoposti"]').forEach(function (a) { a.href = 'mailto:' + (D.sahkoposti || ''); });
+    $$('[data-href="keittio-sahkoposti"]').forEach(function (a) {
+      a.href = 'mailto:' + (D.keittioSahkoposti || D.sahkoposti || '');
+    });
 
     // Ulkoiset linkit content.js:stä. Puuttuva osoite -> kohtelias "tulossa".
     $$('[data-linkki]').forEach(function (a) {
@@ -902,6 +906,10 @@
 
         var data = new FormData(f);
         var osoite = D.lomakeOsoite;
+        // Taustajärjestelmä saa tiedon oikeasta vastaanottajasta
+        if (f.hasAttribute('data-vastaanottaja')) {
+          data.append('vastaanottaja', f.getAttribute('data-vastaanottaja'));
+        }
 
         if (osoite) {
           var nappi = $('button[type="submit"]', f);
@@ -924,7 +932,9 @@
             if (avain === 'yritys' || !String(arvo).trim()) return;
             runko.push(avain.charAt(0).toUpperCase() + avain.slice(1) + ': ' + arvo);
           });
-          window.location.href = 'mailto:' + (D.sahkoposti || '') +
+          // Lomake voi ohjata viestin eri osoitteeseen (esim. keittiön palaute)
+          var saaja = f.getAttribute('data-vastaanottaja') || D.sahkoposti || '';
+          window.location.href = 'mailto:' + saaja +
             '?subject=' + encodeURIComponent(otsikko) +
             '&body=' + encodeURIComponent(runko.join('\n'));
           nayta('ok', 'Avasimme viestin sähköpostiohjelmaasi. Voit myös soittaa: ' + (D.puhelin || '') + '.');
@@ -1158,7 +1168,9 @@
           (a.merkit ? '<span class="menu-rivi__merkit">' + turva(a.merkit) + '</span>' : '') +
           '</span>' +
           '<span class="menu-rivi__pisteet" aria-hidden="true"></span>' +
-          (a.hinta ? '<span class="menu-rivi__hinta">' + turva(a.hinta) + '</span>' : '') +
+          (a.hinta ? '<span class="menu-rivi__hinta">' + turva(a.hinta) +
+            (a.hintaLisa ? '<span class="menu-rivi__hintalisa">' + turva(a.hintaLisa) + '</span>' : '') +
+            '</span>' : '') +
           '</div>' +
           (a.kuvaus ? '<p class="menu-rivi__kuvaus">' + turva(a.kuvaus) + '</p>' : '') +
           '</div>';
@@ -1168,7 +1180,8 @@
     html += '</div>';
 
     var huomiot = (osio.huomiot || []).filter(Boolean);
-    var selite = (D.menu || {}).merkkiselite || '';
+    // Osio voi määritellä oman merkkiselitteensä (esim. brunssissa on M)
+    var selite = osio.merkkiselite || (D.menu || {}).merkkiselite || '';
     if (huomiot.length || selite) {
       html += '<div class="menu-huomiot">';
       huomiot.forEach(function (h) { html += '<p>' + turva(h) + '</p>'; });
@@ -1247,7 +1260,20 @@
       lomake.setAttribute('data-kiitos', kiitos[arvo] || 'Kiitos viestistäsi!');
       var piilo = $('input[name="aihe"]', lomake);
       if (piilo) piilo.value = arvo === 'tarjous' ? 'Tarjouspyyntö' : 'Palaute';
+      vastaanottaja();
     }
+
+    /* Ruokaa ja keittiötä koskeva palaute menee keittiön omaan osoitteeseen,
+       kaikki muu ravintolan yleiseen osoitteeseen. */
+    var kohde = $('[data-palaute-kohde]', lomake);
+    function vastaanottaja() {
+      var palautteessa = $('[data-aihe-nappi="palaute"]', lomake)
+        .getAttribute('aria-pressed') === 'true';
+      var keittiolle = palautteessa && kohde && kohde.value === 'keittio';
+      lomake.setAttribute('data-vastaanottaja',
+        keittiolle ? (D.keittioSahkoposti || D.sahkoposti || '') : (D.sahkoposti || ''));
+    }
+    if (kohde) kohde.addEventListener('change', vastaanottaja);
 
     napit.forEach(function (n) {
       n.addEventListener('click', function () {

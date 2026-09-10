@@ -1008,6 +1008,17 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 .tietolista .arvo { color: var(--bone-2); }
 .tietolista .arvo strong { color: var(--bone); font-weight: 600; }
+/* Pieni tarkennus arvon alle: kenelle numero tai osoite on tarkoitettu */
+.tietolista__lisa {
+  flex-basis: 100%;
+  margin-left: 9.5rem;
+  margin-top: -.35rem;
+  font-size: .68rem;
+  color: var(--bone-4);
+}
+@media (max-width: 479px) {
+  .tietolista__lisa { margin-left: 0; margin-top: 0; }
+}
 
 /* Aukioloaikataulukko */
 .aukiolot { list-style: none; margin: 0; padding: 0; }
@@ -1559,7 +1570,24 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .menu-rivi__ylä { display: flex; align-items: baseline; gap: 1rem; }
 .menu-rivi__nimi { font-family: var(--display); font-size: var(--step-1); color: var(--bone); }
 .menu-rivi__pisteet { flex: 1; border-bottom: 1px dotted var(--line); transform: translateY(-.2em); }
-.menu-rivi__hinta { font-variant-numeric: tabular-nums; color: var(--bone-2); white-space: nowrap; }
+.menu-rivi__hinta {
+  font-variant-numeric: tabular-nums;
+  color: var(--bone-2);
+  white-space: nowrap;
+  text-align: right;
+}
+/* Tarjoushinta erottuu hiillosvärillä, normaalihinta jää sen alle yliviivattuna */
+.menu-rivi__hinta:has(.menu-rivi__hintalisa) { color: var(--ember-lit); font-weight: 600; }
+.menu-rivi__hintalisa {
+  display: block;
+  margin-top: .15rem;
+  font-family: var(--sans);
+  font-size: .64rem;
+  letter-spacing: .06em;
+  color: var(--bone-4);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
 .menu-rivi__kuvaus { font-size: var(--step--1); color: var(--bone-4); }
 
 /* --------------------------------- Menu-sivun välilehdet ja paneelit */
