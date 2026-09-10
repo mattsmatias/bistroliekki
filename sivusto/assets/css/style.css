@@ -370,9 +370,11 @@ a { color: inherit; }
 }
 .headeri.on-kiinni .logo__ala { opacity: 0; max-height: 0; }
 
+/* Työpöytävalikko näkyy vasta kun logo, kahdeksan linkkiä, yhteystiedot ja
+   varauspainike mahtuvat riville. Sitä kapeammalla käytetään valikkonappia. */
 .navi { display: none; }
-@media (min-width: 1080px) {
-  .navi { display: flex; align-items: center; gap: clamp(1rem, 1.7vw, 2rem); }
+@media (min-width: 1240px) {
+  .navi { display: flex; align-items: center; gap: clamp(.9rem, 1.2vw, 1.25rem); }
 }
 .navi a {
   position: relative;
@@ -403,6 +405,141 @@ a { color: inherit; }
 .headeri__cta { display: none; }
 @media (min-width: 720px) { .headeri__cta { display: inline-flex; } }
 
+/* --------------------------------- Yhteystiedot valikon vieressä */
+/* Puhelimessa nämä ovat valikon sisällä ja kiinteässä alapalkissa, joten
+   headerissa ne näkyvät vasta kun tilaa riittää. 1080–1319 px: pelkkä
+   ikoni. 1320 px ylöspäin: numero ja osoite kokonaan. */
+.headeri__yhteys { display: none; }
+@media (min-width: 1240px) {
+  .headeri__yhteys { display: flex; align-items: center; gap: .2rem; }
+}
+.headeri__yhteyslinkki {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 40px;
+  padding-inline: .6rem;
+  border-radius: 2px;
+  font-size: .78rem;
+  letter-spacing: .02em;
+  text-decoration: none;
+  color: var(--bone-3);
+  white-space: nowrap;
+  transition: color .3s var(--ease), background-color .3s var(--ease);
+}
+.headeri__yhteyslinkki svg { flex: none; opacity: .75; transition: opacity .3s var(--ease); }
+.headeri__yhteyslinkki:hover { color: var(--bone); background: rgba(255,255,255,.05); }
+.headeri__yhteyslinkki:hover svg { opacity: 1; }
+/* Sähköpostiosoite on pitkä eikä mahdu kahdeksan valikkokohdan viereen millään
+   ruudun leveydellä (sisältöalue on enintään 1320 px). Siksi sähköposti on
+   headerissa ikonina ja puhelinnumero kokonaisuudessaan — numero on se, joka
+   pitää nähdä vilkaisulla. Molemmat näkyvät kokonaan valikossa ja footerissa. */
+.headeri__yhteyslinkki--posti span,
+.headeri__yhteyslinkki[data-href="sahkoposti"] span {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.headeri__yhteyslinkki[data-href="sahkoposti"] { padding-inline: .5rem; }
+/* Kapealla työpöytäruudulla myös numero jää pois, ikoni riittää */
+@media (min-width: 1240px) and (max-width: 1379px) {
+  .headeri__yhteyslinkki[data-href="puhelin"] span {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .headeri__yhteyslinkki { padding-inline: .5rem; }
+}
+/* Erotin headerin toimintojen ja yhteystietojen väliin */
+@media (min-width: 1240px) {
+  .headeri__yhteys::after {
+    content: '';
+    width: 1px; height: 20px;
+    margin-left: .45rem;
+    background: var(--line);
+  }
+  .headeri__sisus { gap: 1rem; }
+}
+
+/* ------------------------------------ ILMOITUS: SIVUSTO TYÖN ALLA */
+/* Kelluu sivun alalaidassa, ei vie tilaa sisällöltä eikä peitä navigaatiota.
+   Sulkeminen muistetaan istunnon ajan. */
+.tyonalla {
+  position: fixed;
+  left: var(--gutter); right: var(--gutter);
+  bottom: 1rem;
+  z-index: 750;
+  max-width: 640px;
+  margin-inline: auto;
+  background: rgba(20,16,14,.94);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--ember);
+  border-radius: 3px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.5);
+  transform: translateY(140%);
+  transition: transform .6s var(--ease-out), opacity .4s var(--ease);
+}
+.tyonalla.on-nakyvissa { transform: none; }
+.tyonalla.on-poistuu { transform: translateY(140%); opacity: 0; }
+.tyonalla__rivi {
+  display: flex;
+  align-items: flex-start;
+  gap: .85rem;
+  padding: .95rem 1rem;
+}
+.tyonalla__merkki {
+  flex: none;
+  width: 7px; height: 7px;
+  margin-top: .42rem;
+  border-radius: 50%;
+  background: var(--ember-lit);
+  box-shadow: 0 0 0 0 rgba(214,106,56,.55);
+  animation: tyonallaSyke 2.6s var(--ease) infinite;
+}
+@keyframes tyonallaSyke {
+  0%   { box-shadow: 0 0 0 0 rgba(214,106,56,.5); }
+  70%  { box-shadow: 0 0 0 9px rgba(214,106,56,0); }
+  100% { box-shadow: 0 0 0 0 rgba(214,106,56,0); }
+}
+.tyonalla__teksti {
+  margin: 0;
+  font-size: .8rem;
+  line-height: 1.5;
+  color: var(--bone-3);
+}
+.tyonalla__teksti strong { color: var(--bone); font-weight: 600; }
+.tyonalla__sulje {
+  flex: none;
+  width: 34px; height: 34px;
+  margin: -.3rem -.3rem 0 0;
+  display: grid; place-items: center;
+  background: none; border: 0; border-radius: 2px;
+  color: var(--bone-4);
+  cursor: pointer;
+  transition: color .3s var(--ease), background-color .3s var(--ease);
+}
+.tyonalla__sulje:hover { color: var(--bone); background: rgba(255,255,255,.06); }
+/* Puhelimessa kiinteä alapalkki on jo alalaidassa — ilmoitus sen yläpuolelle */
+@media (max-width: 719px) {
+  .tyonalla { bottom: calc(4.6rem + env(safe-area-inset-bottom, 0px)); }
+  .tyonalla__teksti { font-size: .76rem; }
+}
+@media (hover: none) and (pointer: coarse) {
+  .tyonalla__sulje { width: 44px; height: 44px; margin: -.5rem -.5rem 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tyonalla { transition: none; }
+  .tyonalla__merkki { animation: none; }
+}
+
 /* Hampurilainen */
 .valikkonappi {
   --koko: 46px;
@@ -414,7 +551,9 @@ a { color: inherit; }
   cursor: pointer;
   transition: border-color .3s var(--ease), background-color .3s var(--ease);
 }
-@media (min-width: 1080px) { .valikkonappi { display: none; } }
+/* Sama raja kuin työpöytävalikolla — muuten jää kaista, jolla kumpaakaan
+   valikkoa ei näy. */
+@media (min-width: 1240px) { .valikkonappi { display: none; } }
 .valikkonappi:hover { border-color: var(--line-strong); }
 .valikkonappi { position: relative; }
 .valikkonappi span {
@@ -1184,6 +1323,48 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .lomake { display: grid; gap: 1.3rem; }
 @media (min-width: 700px) { .lomake--kaksi { grid-template-columns: 1fr 1fr; } .lomake--kaksi .kentta--koko { grid-column: 1 / -1; } }
 
+/* Aiheen valinta: palaute vai tarjouspyyntö */
+.lomake__kysymys {
+  margin: 0 0 .7rem;
+  font-family: var(--sans);
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--bone-4);
+}
+.aihevalitsin {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-radius: 3px;
+}
+.aihevalitsin__nappi {
+  min-height: 44px;
+  padding: .6rem 1.15rem;
+  background: none;
+  border: 0;
+  border-radius: 2px;
+  font-family: var(--sans);
+  font-size: .74rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--bone-4);
+  cursor: pointer;
+  transition: color .3s var(--ease), background-color .3s var(--ease);
+}
+.aihevalitsin__nappi:hover { color: var(--bone-2); }
+.aihevalitsin__nappi.on-valittu {
+  background: var(--ember);
+  color: #fff;
+}
+@media (max-width: 419px) {
+  .aihevalitsin { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+  .aihevalitsin__nappi { padding-inline: .5rem; font-size: .7rem; }
+}
+
 .kentta { position: relative; display: flex; flex-direction: column; gap: .5rem; }
 .kentta label {
   font-size: .72rem;
@@ -1202,9 +1383,24 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   font-family: inherit;
   font-size: var(--step-0);
   line-height: 1.5;
+  /* Päivämäärävalitsin ja pudotusvalikko tummina, ei selaimen valkoisina */
+  color-scheme: dark;
   transition: border-color .3s var(--ease), background-color .3s var(--ease);
 }
 .kentta textarea { min-height: 160px; resize: vertical; }
+.kentta select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.6rem;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--bone-3) 50%),
+    linear-gradient(135deg, var(--bone-3) 50%, transparent 50%);
+  background-position: right 1.25rem center, right 1rem center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+.kentta input[type="date"] { min-height: 3.35rem; }
 .kentta input::placeholder, .kentta textarea::placeholder { color: var(--bone-4); }
 .kentta input:focus, .kentta textarea:focus, .kentta select:focus {
   outline: none;
@@ -1361,6 +1557,99 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .menu-rivi__pisteet { flex: 1; border-bottom: 1px dotted var(--line); transform: translateY(-.2em); }
 .menu-rivi__hinta { font-variant-numeric: tabular-nums; color: var(--bone-2); white-space: nowrap; }
 .menu-rivi__kuvaus { font-size: var(--step--1); color: var(--bone-4); }
+
+/* --------------------------------- Menu-sivun välilehdet ja paneelit */
+/* Välilehtirivi vierii kapealla ruudulla. Oikean reunan häivytys kertoo
+   että lehtiä on lisää — ilman sitä "Juomat" jää huomaamatta. */
+.menu-kehys { position: relative; }
+.menu-valilehdet {
+  position: relative;
+  display: flex;
+  gap: .3rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  transition: -webkit-mask-image .3s var(--ease), mask-image .3s var(--ease);
+}
+.menu-valilehdet.on-lisaa {
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 46px), transparent);
+  mask-image: linear-gradient(90deg, #000 calc(100% - 46px), transparent);
+}
+.menu-valilehdet::-webkit-scrollbar { display: none; }
+.menu-valilehti {
+  flex: none;
+  position: relative;
+  padding: .95rem 1.15rem;
+  min-height: 48px;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  font-family: var(--sans);
+  font-size: .78rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--bone-4);
+  cursor: pointer;
+  transition: color .3s var(--ease), border-color .35s var(--ease);
+}
+.menu-valilehti:hover { color: var(--bone-2); }
+.menu-valilehti[aria-selected='true'] {
+  color: var(--bone);
+  border-bottom-color: var(--ember);
+}
+.menu-paneeli { animation: menuEsiin .5s var(--ease-out) both; }
+@keyframes menuEsiin {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .menu-paneeli { animation: none; } }
+.menu-paneeli__kuvaus {
+  max-width: 60ch;
+  margin: 0 0 clamp(1.6rem, 3vw, 2.4rem);
+  color: var(--bone-3);
+  font-size: var(--step-0);
+}
+.menu-lista { max-width: 780px; }
+.menu-ryhma {
+  margin: clamp(2rem, 4vw, 3rem) 0 .4rem;
+  padding-bottom: .8rem;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--step-1);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ember-lit);
+}
+.menu-ryhma:first-child { margin-top: 0; }
+
+/* Osio, jonka annoksia ei ole vielä lisätty — rehellinen, ei tyhjä laatikko */
+.menu-tulossa {
+  max-width: 620px;
+  padding: clamp(1.8rem, 4vw, 2.8rem);
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-left: 2px solid var(--ember-deep);
+  border-radius: 3px;
+}
+.menu-tulossa__otsikko {
+  margin: 0 0 .7rem;
+  font-family: var(--sans);
+  font-size: .7rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ember-lit);
+}
+.menu-tulossa__teksti {
+  margin: 0 0 1.6rem;
+  color: var(--bone-3);
+  font-size: var(--step--1);
+  line-height: 1.65;
+}
+.menu-tulossa .napit { margin: 0; }
 
 /* -------------------------------------------------------- 21 ANIMOINTI/UX */
 [data-esiin] {

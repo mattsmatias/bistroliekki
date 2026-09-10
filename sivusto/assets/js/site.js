@@ -941,6 +941,250 @@
     });
   }
 
+  /* -------------------------------------------- 10b. ILMOITUS: TYÖN ALLA */
+  /* Kertoo kävijälle että sivusto on kesken. Sulkeminen muistetaan istunnon
+     ajan, jottei ilmoitus toistu joka sivunvaihdossa. */
+  function tyonAlla() {
+    var laatikko = $('[data-tyonalla]');
+    if (!laatikko) return;
+
+    var asetus = D.tyonAlla || {};
+    if (!asetus.naytetaan) { laatikko.remove(); return; }
+
+    var suljettu = false;
+    try { suljettu = sessionStorage.getItem('liekki-tyonalla') === 'kiinni'; } catch (e) {}
+    if (suljettu) { laatikko.remove(); return; }
+
+    var teksti = $('[data-tyonalla-teksti]', laatikko);
+    if (teksti) {
+      var sisalto = asetus.teksti || 'Sivusto on työn alla.';
+      var piste = sisalto.indexOf('.');
+      if (piste > 0 && piste < sisalto.length - 1) {
+        // Ensimmäinen virke lihavoituna, loppu tavallisena
+        teksti.innerHTML = '';
+        var vahva = document.createElement('strong');
+        vahva.textContent = sisalto.slice(0, piste + 1);
+        teksti.appendChild(vahva);
+        teksti.appendChild(document.createTextNode(' ' + sisalto.slice(piste + 1).trim()));
+      } else {
+        teksti.textContent = sisalto;
+      }
+    }
+
+    laatikko.hidden = false;
+    setTimeout(function () { laatikko.classList.add('on-nakyvissa'); }, kevyt ? 0 : 1400);
+
+    var nappi = $('[data-tyonalla-sulje]', laatikko);
+    if (nappi) {
+      nappi.addEventListener('click', function () {
+        laatikko.classList.add('on-poistuu');
+        try { sessionStorage.setItem('liekki-tyonalla', 'kiinni'); } catch (e) {}
+        setTimeout(function () { if (laatikko.parentNode) laatikko.remove(); }, 700);
+      });
+    }
+  }
+
+  /* ------------------------------------------------ 10c. MENU-SIVUN OSIOT */
+  /* Rakentaa ruokalistan content.js:n menu.osiot-listasta: välilehdet ylös,
+     annokset ryhmiteltyinä alle. Tyhjä osio näyttää "tulossa" -tilan sen
+     sijaan että jättäisi kohdan tyhjäksi. */
+  function menuOsiot() {
+    var kehys = $('[data-menu]');
+    if (!kehys) return;
+
+    var osiot = ((D.menu || {}).osiot || []).filter(function (o) { return o && o.nimi; });
+    if (!osiot.length) { kehys.remove(); return; }
+
+    var valilehdet = $('[data-menu-valilehdet]', kehys);
+    var paneelit   = $('[data-menu-paneelit]', kehys);
+    if (!valilehdet || !paneelit) return;
+
+    valilehdet.innerHTML = '';
+    paneelit.innerHTML = '';
+
+    osiot.forEach(function (osio, i) {
+      var avain = osio.avain || ('osio' + i);
+
+      var nappi = document.createElement('button');
+      nappi.type = 'button';
+      nappi.className = 'menu-valilehti';
+      nappi.id = 'valilehti-' + avain;
+      nappi.setAttribute('role', 'tab');
+      nappi.setAttribute('aria-controls', 'paneeli-' + avain);
+      nappi.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+      nappi.tabIndex = i === 0 ? 0 : -1;
+      nappi.textContent = osio.nimi;
+      valilehdet.appendChild(nappi);
+
+      var paneeli = document.createElement('div');
+      paneeli.className = 'menu-paneeli';
+      paneeli.id = 'paneeli-' + avain;
+      paneeli.setAttribute('role', 'tabpanel');
+      paneeli.setAttribute('aria-labelledby', 'valilehti-' + avain);
+      paneeli.hidden = i !== 0;
+      paneeli.innerHTML = paneelinSisalto(osio);
+      paneelit.appendChild(paneeli);
+    });
+
+    // Paneelit rakennettiin vasta nyt, joten puhelinlinkit kytketään tässä
+    // (taytaTiedot on jo ehtinyt ajaa).
+    $$('[data-href="puhelin"]', paneelit).forEach(function (a) {
+      a.href = 'tel:' + (D.puhelinHref || '');
+    });
+
+    var napit = $$('.menu-valilehti', valilehdet);
+    var levyt = $$('.menu-paneeli', paneelit);
+
+    function valitse(i, siirraKohdistus) {
+      napit.forEach(function (n, j) {
+        n.setAttribute('aria-selected', j === i ? 'true' : 'false');
+        n.tabIndex = j === i ? 0 : -1;
+      });
+      levyt.forEach(function (p, j) { p.hidden = j !== i; });
+      if (siirraKohdistus) napit[i].focus();
+      // Välilehti näkyviin, jos rivi on vieritettävä
+      if (napit[i].scrollIntoView) {
+        napit[i].scrollIntoView({ block: 'nearest', inline: 'center',
+                                  behavior: kevyt ? 'auto' : 'smooth' });
+      }
+      var avain = osiot[i].avain;
+      if (avain && history.replaceState) {
+        history.replaceState(null, '', '#' + avain);
+      }
+    }
+
+    napit.forEach(function (n, i) {
+      n.addEventListener('click', function () { valitse(i); });
+    });
+
+    valilehdet.addEventListener('keydown', function (e) {
+      var nyt = napit.indexOf(document.activeElement);
+      if (nyt < 0) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); valitse((nyt + 1) % napit.length, true); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); valitse((nyt - 1 + napit.length) % napit.length, true); }
+      if (e.key === 'Home')       { e.preventDefault(); valitse(0, true); }
+      if (e.key === 'End')        { e.preventDefault(); valitse(napit.length - 1, true); }
+    });
+
+    // Häivytys oikeaan reunaan vain jos välilehtiä on rivin ulkopuolella
+    function reunahaivy() {
+      var jaljella = valilehdet.scrollWidth - valilehdet.clientWidth - valilehdet.scrollLeft;
+      valilehdet.classList.toggle('on-lisaa', jaljella > 8);
+    }
+    valilehdet.addEventListener('scroll', reunahaivy, { passive: true });
+    window.addEventListener('resize', reunahaivy, { passive: true });
+    reunahaivy();
+    setTimeout(reunahaivy, 900);
+
+    // Suora linkki osioon: /menu/#brunssi
+    var kohde = (location.hash || '').replace('#', '');
+    if (kohde) {
+      var loytyi = -1;
+      osiot.forEach(function (o, i) { if (o.avain === kohde) loytyi = i; });
+      if (loytyi > 0) valitse(loytyi);
+    }
+  }
+
+  function paneelinSisalto(osio) {
+    var annokset = (osio.annokset || []).filter(function (a) { return a && a.nimi; });
+    var html = '';
+
+    if (osio.kuvaus) {
+      html += '<p class="menu-paneeli__kuvaus">' + turva(osio.kuvaus) + '</p>';
+    }
+
+    if (!annokset.length) {
+      // Ei keksitä annoksia: näytetään rehellinen "tulossa" -tila.
+      var osoite = osio.linkki ? (D.linkit || {})[osio.linkki] : '';
+      html += '<div class="menu-tulossa">' +
+        '<p class="menu-tulossa__otsikko">Lista päivittyy</p>' +
+        '<p class="menu-tulossa__teksti">Tämän osion annokset ja hinnat lisätään sivulle ' +
+        'lähiaikoina. Sillä välin kerromme mielellämme puhelimitse, mitä listalla on.</p>' +
+        '<div class="napit">' +
+        '<a class="nappi nappi--hiljainen" data-href="puhelin" href="#">' +
+        '<span>Soita ja kysy</span></a>' +
+        (osoite ? '<a class="nappi nappi--hiljainen" href="' + turva(osoite) +
+                  '" target="_blank" rel="noopener"><span>Avaa nykyinen lista</span></a>' : '') +
+        '</div></div>';
+      return html;
+    }
+
+    var edellinenRyhma = null;
+    html += '<div class="menu-lista">';
+    annokset.forEach(function (a) {
+      var ryhma = a.ryhma || '';
+      if (ryhma && ryhma !== edellinenRyhma) {
+        html += '<h3 class="menu-ryhma">' + turva(ryhma) + '</h3>';
+        edellinenRyhma = ryhma;
+      }
+      html += '<div class="menu-rivi">' +
+        '<div class="menu-rivi__ylä">' +
+        '<span class="menu-rivi__nimi">' + turva(a.nimi) + '</span>' +
+        '<span class="menu-rivi__pisteet" aria-hidden="true"></span>' +
+        (a.hinta ? '<span class="menu-rivi__hinta">' + turva(a.hinta) + '</span>' : '') +
+        '</div>' +
+        (a.kuvaus ? '<p class="menu-rivi__kuvaus">' + turva(a.kuvaus) + '</p>' : '') +
+        '</div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function turva(teksti) {
+    return String(teksti)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* ---------------------------------------------- 10d. YHTEYSLOMAKKEEN AIHE */
+  /* Yksi lomake, kaksi käyttötarkoitusta: palaute ja tarjouspyyntö. Aiheen
+     valinta näyttää vain siihen kuuluvat kentät, jottei lomake näytä
+     pitkältä kummassakaan tapauksessa. */
+  function lomakeAihe() {
+    var lomake = $('[data-aihevalinta]');
+    if (!lomake) return;
+
+    var napit = $$('[data-aihe-nappi]', lomake);
+    var lohkot = $$('[data-aihe-lohko]', lomake);
+    if (!napit.length) return;
+
+    function valitse(arvo) {
+      napit.forEach(function (n) {
+        var on = n.getAttribute('data-aihe-nappi') === arvo;
+        n.setAttribute('aria-pressed', on ? 'true' : 'false');
+        n.classList.toggle('on-valittu', on);
+      });
+      lohkot.forEach(function (lohko) {
+        var kenelle = (lohko.getAttribute('data-aihe-lohko') || '').split(' ');
+        var nakyy = kenelle.indexOf(arvo) > -1;
+        lohko.hidden = !nakyy;
+        // Piilotettu kenttä ei saa estää lähetystä pakollisuudellaan
+        $$('input, textarea, select', lohko).forEach(function (k) {
+          if (k.hasAttribute('data-pakollinen')) k.required = nakyy;
+          k.disabled = !nakyy;
+        });
+      });
+      var otsikot = { palaute: 'Asiakaspalaute — bistroliekki.fi',
+                      tarjous: 'Tarjouspyyntö — bistroliekki.fi' };
+      lomake.setAttribute('data-aihe', otsikot[arvo] || 'Yhteydenotto — bistroliekki.fi');
+      var kiitos = { palaute: 'Kiitos palautteestasi! Se menee suoraan ravintolan väelle.',
+                     tarjous: 'Kiitos tarjouspyynnöstä! Olemme yhteydessä pian.' };
+      lomake.setAttribute('data-kiitos', kiitos[arvo] || 'Kiitos viestistäsi!');
+      var piilo = $('input[name="aihe"]', lomake);
+      if (piilo) piilo.value = arvo === 'tarjous' ? 'Tarjouspyyntö' : 'Palaute';
+    }
+
+    napit.forEach(function (n) {
+      n.addEventListener('click', function () {
+        valitse(n.getAttribute('data-aihe-nappi'));
+      });
+    });
+
+    // Suora linkki: /yhteystiedot/#tarjouspyynto
+    var alku = (location.hash || '').indexOf('tarjous') > -1 ? 'tarjous' : 'palaute';
+    valitse(alku);
+  }
+
   /* ------------------------------------------------- 11. AKTIIVINEN NAVI */
   function aktiivinenNavi() {
     var polku = location.pathname.replace(/index\.html$/, '').replace(/\/$/, '') || '/';
@@ -961,7 +1205,10 @@
     ajankohtaista();
     galleria();
     tiktok();
+    menuOsiot();
+    lomakeAihe();
     lomakkeet();
+    tyonAlla();
     aktiivinenNavi();
     jaaSanoiksi();
     esiin();

@@ -20,16 +20,18 @@ DOMAIN = "https://bistroliekki.fi"
 
 NAV = [
     ("", "Etusivu"),
-    ("meista", "Meistä"),
-    ("menu", "À la Carte"),
+    ("meista", "Tarina"),
+    ("menu", "Menu"),
     ("lounas", "Lounas"),
     ("catering", "Catering"),
     ("galleria", "Galleria"),
     ("lahjakortti", "Lahjakortti"),
-    ("yhteystiedot", "Yhteystiedot"),
+    ("yhteystiedot", "Yhteys"),
 ]
 
-FOOTER_NAV = NAV + [("palaute", "Palaute")]
+# Palaute on yhdistetty Yhteys-sivuun; /palaute/ jää ohjaussivuksi, jottei
+# vanhat linkit hajoa. Sitä ei enää näytetä valikoissa.
+FOOTER_NAV = NAV
 
 PAGES = [
     dict(slug="", file="etusivu.html",
@@ -39,14 +41,14 @@ PAGES = [
               "Talvikkitie 30, Vantaa.",
          og="hero.webp"),
     dict(slug="meista", file="meista.html",
-         title="Meistä — Bistro Liekki | Puuhiiligrilli Tikkurilassa vuodesta 2016",
+         title="Tarina — Bistro Liekki | Puuhiiligrilli Tikkurilassa vuodesta 2016",
          desc="Bistro Liekki Puuhiiligrilli on tarjonnut kodikkaan ja rennon ruokailuhetken "
               "Tikkurilan keskustassa vuodesta 2016. Ravintolan ylpeys on puuhiiligrilli.",
          og="lounasbuffet.webp"),
     dict(slug="menu", file="menu.html",
-         title="À la Carte — Bistro Liekki | Pihvit ja burgerit puuhiilellä, Vantaa",
-         desc="Bistro Liekin à la carte -lista saa inspiraationsa puuhiiligrillistä: pihvejä, "
-              "burgereita ja grillin klassikoita Tikkurilassa, Vantaalla.",
+         title="Menu — Bistro Liekki | À la carte, pikkujoulu, brunssi ja juomat",
+         desc="Bistro Liekin ruokalistat yhdessä paikassa: à la carte, pikkujoulu, brunssi "
+              "ja juomat. Puuhiiligrilli Tikkurilan keskustassa, Vantaalla.",
          og="burgeri-pekoni.webp"),
     dict(slug="lounas", file="lounas.html",
          title="Lounas Tikkurilassa — Bistro Liekki | Lounasbuffet arkisin 10:30–15",
@@ -69,15 +71,14 @@ PAGES = [
               "puuhiiligrillin äärellä Tikkurilassa.",
          og="salaattipoyta.webp"),
     dict(slug="yhteystiedot", file="yhteystiedot.html",
-         title="Yhteystiedot ja aukioloajat — Bistro Liekki | Talvikkitie 30, Vantaa",
-         desc="Bistro Liekki, Talvikkitie 30, 01300 Vantaa. Puhelin 050 470 8530, "
-              "pöytävaraukset +358 44 9721307. Aukioloajat, kartta ja reittiohjeet.",
+         title="Yhteys — Bistro Liekki | Palaute, tarjouspyyntö ja yhteystiedot",
+         desc="Ota yhteyttä Bistro Liekkiin: anna palautetta tai pyydä tarjous. "
+              "Talvikkitie 30, 01300 Vantaa. Puhelin 050 470 8530, aukioloajat ja kartta.",
          og="lounasbuffet.webp"),
     dict(slug="palaute", file="palaute.html",
-         title="Palaute — Bistro Liekki | Kuinka palvelimme tänään?",
-         desc="Kerro meille, kuinka palvelimme tänään. Palautteesi menee suoraan ravintolan "
-              "väelle ja auttaa kehittämään Bistro Liekin palvelua Tikkurilassa.",
-         og="band-embers.webp"),
+         title="Palaute — Bistro Liekki",
+         desc="Palautelomake löytyy nyt Bistro Liekin Yhteys-sivulta.",
+         og="band-embers.webp", noindex=True),
     dict(slug="vahvista-poytavaraus", file="vahvista-poytavaraus.html",
          title="Pöytävarauksen vahvistus — Bistro Liekki",
          desc="Pöytävarauksen vahvistussivu. Bistro Liekki, Talvikkitie 30, 01300 Vantaa. "
@@ -106,6 +107,9 @@ ICONS = {
     "soita": '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">'
              '<path d="M21 16.4v2.6a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 011 3.2 2 2 0 013 1h2.6a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L6.7 8.9a16 16 0 006 6l1.3-1.1a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z" '
              'stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    "posti": '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">'
+             '<rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke="currentColor" stroke-width="1.6"/>'
+             '<path d="M3 6l9 6.5L21 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
     "sijainti": '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">'
                 '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1116 0z" stroke="currentColor" stroke-width="1.6"/>'
                 '<circle cx="12" cy="10" r="2.8" stroke="currentColor" stroke-width="1.6"/></svg>',
@@ -144,6 +148,18 @@ def build_header(current, depth):
 </div>""" if current == "" else ""
 
     return f"""{esirippu}<a class="ohita" href="#sisalto">Siirry sisältöön</a>
+
+<!-- Ilmoitus keskeneräisestä sivustosta. Poistuu näkyvistä kun content.js:n
+     tyonAlla-asetus muutetaan arvoon false. -->
+<div class="tyonalla" data-tyonalla hidden>
+  <div class="kuori tyonalla__rivi">
+    <span class="tyonalla__merkki" aria-hidden="true"></span>
+    <p class="tyonalla__teksti" data-tyonalla-teksti></p>
+    <button class="tyonalla__sulje" type="button" data-tyonalla-sulje
+            aria-label="Sulje ilmoitus">{ICONS['sulje']}</button>
+  </div>
+</div>
+
 <header class="headeri" id="headeri">
   <div class="headeri__sisus">
     <a class="logo" href="{nav_href('', depth)}" aria-label="Bistro Liekki — etusivulle">
@@ -154,6 +170,15 @@ def build_header(current, depth):
     <nav class="navi" aria-label="Päävalikko">{links}</nav>
 
     <div class="headeri__oikea">
+      <!-- Yhteystiedot valikon vieressä. Leveällä ruudulla numero ja osoite
+           näkyvät kokonaan, kapeammalla pelkkä ikoni, puhelimessa nämä ovat
+           valikon sisällä ja alapalkissa. -->
+      <div class="headeri__yhteys">
+        <a class="headeri__yhteyslinkki" data-href="puhelin" href="#" aria-label="Soita ravintolaan">
+          {ICONS['soita']}<span data-teksti="puhelin"></span></a>
+        <a class="headeri__yhteyslinkki" data-href="sahkoposti" href="#" aria-label="Lähetä sähköpostia">
+          {ICONS['posti']}<span data-teksti="sahkoposti"></span></a>
+      </div>
       <a class="nappi headeri__cta" data-linkki="varaus" data-tyhjana="Soita ja varaa"
          href="#"><span>Varaa pöytä</span></a>
       <button class="valikkonappi" type="button" aria-expanded="false"
@@ -271,6 +296,7 @@ def structured_data(page):
   },
   "geo": { "@type": "GeoCoordinates", "latitude": 60.293383, "longitude": 25.03193 },
   "hasMap": "https://www.google.com/maps?q=Talvikkitie+30,+01300+Vantaa",
+  "hasMenu": "https://bistroliekki.fi/menu/",
   "acceptsReservations": "https://operox.fi/book/bistro-liekki",
   "sameAs": [
     "https://www.facebook.com/BistroLiekkiTalvikkitie",

@@ -1,62 +1,29 @@
-<section class="sivuhero" data-parallaksi>
-  <div class="sivuhero__media">
-    <img src="{{up}}assets/img/band-embers.webp" alt="" aria-hidden="true"
-         fetchpriority="high" decoding="async" width="1800" height="900">
-  </div>
-  <div class="sivuhero__peite"></div>
-  <div class="kuori">
-    <ol class="murupolku">
-      <li><a href="{{linkki:}}">Etusivu</a></li>
-      <li>Palaute</li>
-    </ol>
-    <h1 data-sanat>Kuinka palvelimme<br>tänään?</h1>
-    <p class="ingressi">Palautteesi menee suoraan meille ja auttaa kehittämään ravintolaa.
-      Luemme jokaisen viestin.</p>
-  </div>
-</section>
+<!-- ===================================================================
+     PALAUTE — OHJAUSSIVU
 
-<section class="osio">
-  <div class="kuori rajaa-leveys" style="margin-inline:auto">
-    <form class="lomake" data-lomake data-aihe="Asiakaspalaute — bistroliekki.fi"
-          data-kiitos="Kiitos palautteestasi! Se menee suoraan ravintolan väelle."
-          novalidate data-esiin>
-      <div class="kentta">
-        <label for="p-sposti">Sähköposti <span class="pakollinen">*</span></label>
-        <input id="p-sposti" name="sahkoposti" type="email" autocomplete="email" required
-               placeholder="nimi@esimerkki.fi">
-      </div>
-      <div class="kentta">
-        <label for="p-kommentti">Kommentti <span class="pakollinen">*</span></label>
-        <textarea id="p-kommentti" name="kommentti" required
-                  placeholder="Kerro, miten käynti sujui — mikä toimi ja mitä voisimme tehdä paremmin."></textarea>
-      </div>
-
-      <div class="hunaja" aria-hidden="true">
-        <label for="p-yritys">Jätä tämä kenttä tyhjäksi</label>
-        <input id="p-yritys" name="yritys" type="text" tabindex="-1" autocomplete="off">
-      </div>
-
-      <div>
-        <button class="nappi" type="submit"><span>Lähetä palaute</span></button>
-      </div>
-      <p class="lomake-tietosuoja">Palaute käsitellään luottamuksellisesti ravintolan sisällä.
-        Emme julkaise palautteita sivustolla ilman lupaasi.</p>
-      <div class="lomake__viesti" data-lomake-viesti hidden></div>
-    </form>
-  </div>
-</section>
-
-<section class="osio osio--char viiva-ylä">
+     Palautelomake on siirretty Yhteys-sivulle. Tämä sivu jää paikoilleen,
+     jotta vanhat linkit ja hakukoneiden tulokset eivät johda virhesivulle.
+     Ohjaus tapahtuu heti; jos selain estää sen, kävijä näkee linkin.
+     =================================================================== -->
+<section class="osio" id="sisalto" style="min-height:60vh;display:grid;place-content:center">
   <div class="kuori keskita">
-    <p class="etiketti etiketti--keskellä" data-esiin>Kiireellinen asia?</p>
-    <h2 class="otsikko-m" data-esiin>Soita meille suoraan</h2>
-    <p class="leipa" data-esiin style="margin-top:1rem">Jos asia koskee tämänhetkistä
-      käyntiä tai varausta, tavoitat meidät nopeimmin puhelimitse.</p>
-    <div class="napit" data-esiin style="margin-top:1.8rem">
-      <a class="nappi nappi--hiljainen" data-href="puhelin" href="#">
-        {{ikoni:soita}}<span data-teksti="puhelin"></span></a>
-      <a class="nappi nappi--hiljainen" data-href="sahkoposti" href="#">
-        <span data-teksti="sahkoposti"></span></a>
+    <p class="etiketti etiketti--keskellä">Palaute</p>
+    <h1 class="otsikko-m" style="margin-top:.6rem">Palaute löytyy nyt Yhteys-sivulta</h1>
+    <p class="leipa" style="margin-top:1rem;max-width:52ch;margin-inline:auto">
+      Kokosimme palautteen, tarjouspyynnöt ja yhteystiedot samalle sivulle.
+      Siirrämme sinut sinne hetkessä.</p>
+    <div class="napit" style="margin-top:2rem;justify-content:center">
+      <a class="nappi" href="{{linkki:yhteystiedot}}#lomake"><span>Anna palautetta</span></a>
+      <a class="nappi nappi--ääriviiva" data-href="puhelin" href="#">
+        {{ikoni:soita}}<span>Soita meille</span></a>
     </div>
   </div>
 </section>
+
+<script>
+  /* Ohjaus Yhteys-sivulle. replace() jottei paluunappi jää jumiin tälle sivulle. */
+  (function () {
+    var kohde = document.querySelector('.nappi[href*="yhteystiedot"]');
+    if (kohde) setTimeout(function () { location.replace(kohde.href); }, 900);
+  })();
+</script>

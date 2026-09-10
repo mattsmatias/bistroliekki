@@ -10,80 +10,65 @@
   <div class="kuori">
     <ol class="murupolku">
       <li><a href="{{linkki:}}">Etusivu</a></li>
-      <li>À la Carte</li>
+      <li>Menu</li>
     </ol>
-    <h1 data-sanat>À la Carte</h1>
-    <p class="ingressi">Laajalta à la carte -listaltamme löydät puuhiiligrillin inspiroimia
-      annoksia, burgereita, pihvejä ja muita Bistro Liekin suosikkeja.</p>
+    <h1 data-sanat>Menu</h1>
+    <p class="ingressi">Kaikki Bistro Liekin listat yhdessä paikassa — à la carte,
+      pikkujoulu, brunssi ja juomat.</p>
     <div class="napit" style="margin-top:2rem">
-      <a class="nappi" data-linkki="menuTilaus" data-tyhjana="Soita ja kysy listasta"
-         data-vara-href="puhelin" href="#"><span>Avaa ruokalista</span></a>
-      <a class="nappi nappi--ääriviiva" data-linkki="varaus" data-tyhjana="Varaa puhelimitse"
+      <a class="nappi" data-linkki="varaus" data-tyhjana="Varaa puhelimitse"
          data-vara-href="varaus-puhelin" href="#"><span>Varaa pöytä</span></a>
+      <a class="nappi nappi--ääriviiva" data-href="puhelin" href="#">
+        {{ikoni:soita}}<span>Soita ja kysy</span></a>
     </div>
   </div>
 </section>
 
-<section class="osio">
+<!-- ===================================================================
+     RUOKALISTAN OSIOT
+
+     Osiot ja annokset tulevat tiedostosta assets/js/content.js kohdasta
+     "menu". Älä lisää annoksia tähän tiedostoon — lisää ne content.js:ään,
+     niin ne näkyvät oikeassa osiossa automaattisesti.
+
+     Jos osiossa ei ole vielä yhtään annosta, sivu näyttää sen kohdalla
+     "Lista päivittyy" -tilan ja ohjaa soittamaan.
+     =================================================================== -->
+<section class="osio" id="sisalto">
   <div class="kuori">
-
-    <!-- ===================================================================
-         RUOKALISTAN RAKENNE
-
-         Ruokalista on tarkoituksella jätetty tähän tyhjäksi, koska annoksia
-         ja hintoja ei ole vielä toimitettu. Lisää annokset alle näin — kopioi
-         yksi <div class="menu-osio"> jokaista listan osiota kohden ja yksi
-         <div class="menu-rivi"> jokaista annosta kohden:
-
-         <div class="menu-osio">
-           <div class="menu-osio__otsikko">
-             <h3>Puuhiiligrillistä</h3>
-           </div>
-
-           <div class="menu-rivi">
-             <div class="menu-rivi__ylä">
-               <span class="menu-rivi__nimi">Annoksen nimi</span>
-               <span class="menu-rivi__pisteet"></span>
-               <span class="menu-rivi__hinta">00,00 €</span>
-             </div>
-             <p class="menu-rivi__kuvaus">Lyhyt kuvaus annoksesta ja lisukkeista.</p>
-           </div>
-
-         </div>
-
-         Kun annokset on lisätty, poista alla oleva "listaus-tulossa" -osio.
-         =================================================================== -->
-
-    <div class="split split--laaja-teksti" data-esiin>
-      <div class="split__teksti">
-        <h2 class="otsikko-m">Ruoka syntyy hiilloksen päällä</h2>
-        <p class="leipa">Puuhiili palaa kuumana, ja siitä syntyy pinta, joka rapsahtaa.
-          Sama grilli antaa luonteen niin pihveille, burgereille kuin illan muillekin
-          annoksille.</p>
-        <p class="leipa">Ajantasainen à la carte -lista hintoineen aukeaa alla olevasta
-          painikkeesta. Kerrothan allergioista ja erikoisruokavalioista henkilökunnalle,
-          niin katsotaan yhdessä sopiva vaihtoehto.</p>
-        <div class="napit">
-          <a class="nappi" data-linkki="menuTilaus" data-tyhjana="Soita ja kysy listasta"
-             data-vara-href="puhelin" href="#"><span>Avaa ajantasainen lista</span></a>
-        </div>
-      </div>
-
-      <div class="split__media">
-        <div class="media media--3-2 media--zoom" data-verho>
-      <picture>
-      <source media="(max-width: 700px)" srcset="{{up}}assets/img/burgeri-chimichurri-sm.webp">
-        <img src="{{up}}assets/img/burgeri-chimichurri.webp" alt="Tuplaburgeri puuhiiligrillistä, cheddaria ja punaista kastiketta, vieressä ranskalaiset"
-             loading="lazy" decoding="async">
-      </picture>
-      <span class="media__merkinta">Grillin klassikot</span>
-    </div>
-      </div>
+    <div class="menu-kehys" data-menu data-esiin>
+      <div class="menu-valilehdet" data-menu-valilehdet role="tablist"
+           aria-label="Ruokalistan osiot"></div>
+      <div class="menu-paneelit" data-menu-paneelit></div>
     </div>
   </div>
 </section>
 
 <section class="osio osio--char viiva-ylä">
+  <div class="kuori split">
+    <div class="split__teksti" data-esiin>
+      <h2 class="otsikko-m">Ruoka syntyy hiilloksen päällä</h2>
+      <p class="leipa">Puuhiili palaa kuumempana kuin kaasu. Siitä syntyy pinta, joka
+        rapsahtaa, ja aromi, joka jää mieleen. Sama grilli antaa luonteen niin pihveille,
+        burgereille kuin illan muillekin annoksille.</p>
+      <p class="leipa">Kerrothan allergioista ja erikoisruokavalioista henkilökunnalle,
+        niin katsotaan yhdessä sopiva vaihtoehto.</p>
+    </div>
+
+    <div class="split__media" data-esiin style="--viive:1">
+      <div class="media media--3-2 media--zoom" data-verho>
+        <picture>
+          <source media="(max-width: 700px)" srcset="{{up}}assets/img/burgeri-chimichurri-sm.webp">
+          <img src="{{up}}assets/img/burgeri-chimichurri.webp" alt="Tuplaburgeri puuhiiligrillistä, cheddaria ja punaista kastiketta, vieressä ranskalaiset"
+               loading="lazy" decoding="async">
+        </picture>
+        <span class="media__merkinta">Grillin klassikot</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="osio viiva-ylä">
   <div class="kuori split">
     <div class="split__teksti" data-esiin>
       <p class="etiketti">Arkisin</p>

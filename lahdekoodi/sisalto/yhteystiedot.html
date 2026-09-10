@@ -10,12 +10,12 @@
   <div class="kuori">
     <ol class="murupolku">
       <li><a href="{{linkki:}}">Etusivu</a></li>
-      <li>Yhteystiedot</li>
+      <li>Yhteys</li>
     </ol>
     <p class="etiketti">Tikkurila, Vantaa</p>
-    <h1 data-sanat>Löydä meidät</h1>
-    <p class="ingressi"><span data-teksti="katu">Talvikkitie 30</span>,
-      <span data-teksti="postitoimi">01300 Vantaa</span></p>
+    <h1 data-sanat>Ota yhteyttä</h1>
+    <p class="ingressi">Palaute, tarjouspyyntö tai kysymys — kaikki tavoittaa meidät
+      samalta sivulta. Kiireellisissä asioissa soita suoraan.</p>
     <div class="napit" style="margin-top:2rem">
       <a class="nappi" data-href="puhelin" href="#">{{ikoni:soita}}<span>Soita meille</span></a>
       <a class="nappi nappi--ääriviiva" data-linkki="varaus" data-tyhjana="Varaa puhelimitse"
@@ -39,67 +39,103 @@
   </div>
 </section>
 
-<section class="osio" style="padding-top:0">
-  <div class="kuori split split--laaja-kuva split--ylos">
-    <div class="kartta-pilari" data-esiin>
-      <div class="kartta" data-kartta>
-        <div class="tyhja-tila" style="border:0;min-height:440px;display:grid;place-content:center">Kartta latautuu…</div>
-      </div>
-    </div>
+<!-- ===================================================================
+     YHTEYDENOTTOLOMAKE
 
-    <div class="split__teksti" data-esiin style="--viive:1">
-      <h2 class="otsikko-m">Bistro Liekki<br>Talvikkitie</h2>
+     Yksi lomake, kaksi aihetta: palaute ja tarjouspyyntö. Aiheen valinta
+     näyttää vain siihen kuuluvat kentät (site.js → lomakeAihe).
 
-      <ul class="tietolista" style="margin-top:1.4rem">
+     Lomake lähtee sähköpostina siihen asti kunnes content.js:n
+     "lomakeOsoite" täytetään lomakepalvelun osoitteella.
+     =================================================================== -->
+<section class="osio" style="padding-top:0" id="lomake">
+  <div class="kuori split split--laaja-teksti">
+    <div data-esiin>
+      <h2 class="otsikko-m">Lähetä viesti</h2>
+      <p class="leipa" style="margin-top:1rem">Luemme jokaisen viestin. Palaute menee
+        suoraan ravintolan väelle, ja tarjouspyyntöihin vastaamme yleensä saman tai
+        seuraavan arkipäivän aikana.</p>
+
+      <ul class="tietolista" style="margin-top:1.8rem">
         <li><span class="avain">Osoite</span><span class="arvo"><strong data-teksti="katu"></strong>, <span data-teksti="postitoimi"></span></span></li>
         <li><span class="avain">Ravintola</span><span class="arvo"><a data-href="puhelin" href="#" data-teksti="puhelin"></a></span></li>
         <li><span class="avain">Pöytävaraukset</span><span class="arvo"><a data-href="varaus-puhelin" href="#" data-teksti="varaus-puhelin"></a></span></li>
         <li><span class="avain">Sähköposti</span><span class="arvo"><a data-href="sahkoposti" href="#" data-teksti="sahkoposti"></a></span></li>
       </ul>
-
-      <h3 class="otsikko-s" style="margin-top:2.4rem">Aukioloajat</h3>
-      <ul class="aukiolot" data-aukiolot style="margin-top:1rem"></ul>
-      <p class="leipa" style="font-size:.82rem;color:var(--bone-4);margin-top:1rem"
-         data-teksti="keittio"></p>
-
-      <h3 class="otsikko-s" style="margin-top:2.4rem">Lounas</h3>
-      <ul class="tietolista">
-        <li><span class="avain">Lounasbuffet</span><span class="arvo"><strong data-teksti="lounas-paivat"></strong> klo <strong data-teksti="lounas-aika"></strong></span></li>
-      </ul>
     </div>
-  </div>
-</section>
 
-<section class="osio osio--char viiva-ylä">
-  <div class="kuori split split--laaja-teksti">
-    <div data-esiin>
-      <h2 class="otsikko-m">Lähetä viesti</h2>
-      <p class="leipa" style="margin-top:1rem">Kysyttävää varauksesta, ruokalistasta tai
-        cateringista? Jätä viesti, niin vastaamme mahdollisimman pian. Kiireellisissä
-        asioissa soita suoraan.</p>
-      <div class="napit" style="margin-top:1.6rem">
-        <a class="nappi nappi--hiljainen" data-href="puhelin" href="#">
-          {{ikoni:soita}}<span data-teksti="puhelin"></span></a>
+    <form class="lomake lomake--kaksi" data-lomake data-aihevalinta
+          data-aihe="Yhteydenotto — bistroliekki.fi"
+          data-kiitos="Kiitos viestistäsi! Olemme yhteydessä pian."
+          novalidate data-esiin style="--viive:1">
+
+      <div class="kentta--koko">
+        <p class="lomake__kysymys" id="aihe-otsikko">Mitä asia koskee?</p>
+        <div class="aihevalitsin" role="group" aria-labelledby="aihe-otsikko">
+          <button class="aihevalitsin__nappi on-valittu" type="button"
+                  data-aihe-nappi="palaute" aria-pressed="true">Palaute</button>
+          <button class="aihevalitsin__nappi" type="button"
+                  data-aihe-nappi="tarjous" aria-pressed="false">Tarjouspyyntö</button>
+        </div>
+        <input type="hidden" name="aihe" value="Palaute">
       </div>
-    </div>
 
-    <form class="lomake lomake--kaksi" data-lomake data-aihe="Yhteydenotto — bistroliekki.fi"
-          data-kiitos="Kiitos viestistäsi! Olemme yhteydessä pian." novalidate data-esiin style="--viive:1">
+      <!-- Yhteiset kentät -->
       <div class="kentta">
-        <label for="y-nimi">Koko nimi <span class="pakollinen">*</span></label>
-        <input id="y-nimi" name="nimi" type="text" autocomplete="name" required placeholder="Etunimi Sukunimi">
+        <label for="y-nimi">Nimi <span class="pakollinen">*</span></label>
+        <input id="y-nimi" name="nimi" type="text" autocomplete="name" required
+               placeholder="Etunimi Sukunimi">
       </div>
       <div class="kentta">
         <label for="y-sposti">Sähköposti <span class="pakollinen">*</span></label>
-        <input id="y-sposti" name="sahkoposti" type="email" autocomplete="email" required placeholder="nimi@esimerkki.fi">
+        <input id="y-sposti" name="sahkoposti" type="email" autocomplete="email" required
+               placeholder="nimi@esimerkki.fi">
       </div>
-      <div class="kentta kentta--koko">
-        <label for="y-puh">Puhelin</label>
-        <input id="y-puh" name="puhelin" type="tel" autocomplete="tel" placeholder="040 123 4567">
+
+      <!-- Vain palaute -->
+      <div class="kentta kentta--koko" data-aihe-lohko="palaute">
+        <label for="y-kaynti">Milloin kävit?</label>
+        <input id="y-kaynti" name="kaynti" type="text"
+               placeholder="Esim. lounas eilen tai viime perjantai-ilta">
       </div>
-      <div class="kentta kentta--koko">
-        <label for="y-viesti">Viesti <span class="pakollinen">*</span></label>
-        <textarea id="y-viesti" name="viesti" required placeholder="Kerro, miten voimme auttaa."></textarea>
+
+      <!-- Vain tarjouspyyntö -->
+      <div class="kentta" data-aihe-lohko="tarjous">
+        <label for="y-puh">Puhelin <span class="pakollinen">*</span></label>
+        <input id="y-puh" name="puhelin" type="tel" autocomplete="tel"
+               data-pakollinen placeholder="040 123 4567">
+      </div>
+      <div class="kentta" data-aihe-lohko="tarjous">
+        <label for="y-henkilot">Henkilömäärä</label>
+        <input id="y-henkilot" name="henkilot" type="text" inputmode="numeric"
+               placeholder="Esim. 25">
+      </div>
+      <div class="kentta" data-aihe-lohko="tarjous">
+        <label for="y-paiva">Tilaisuuden päivä</label>
+        <input id="y-paiva" name="paiva" type="date">
+      </div>
+      <div class="kentta" data-aihe-lohko="tarjous">
+        <label for="y-tyyppi">Tilaisuuden tyyppi</label>
+        <select id="y-tyyppi" name="tyyppi">
+          <option value="">Valitse…</option>
+          <option>Catering ravintolan ulkopuolelle</option>
+          <option>Yksityistilaisuus ravintolassa</option>
+          <option>Pikkujoulut</option>
+          <option>Brunssi tai muu ryhmäruokailu</option>
+          <option>Muu</option>
+        </select>
+      </div>
+
+      <!-- Yhteinen viestikenttä, otsikko vaihtuu aiheen mukaan -->
+      <div class="kentta kentta--koko" data-aihe-lohko="palaute">
+        <label for="y-palaute">Palaute <span class="pakollinen">*</span></label>
+        <textarea id="y-palaute" name="palaute" data-pakollinen
+                  placeholder="Kerro, miten käynti sujui — mikä toimi ja mitä voisimme tehdä paremmin."></textarea>
+      </div>
+      <div class="kentta kentta--koko" data-aihe-lohko="tarjous">
+        <label for="y-toiveet">Kerro tilaisuudesta <span class="pakollinen">*</span></label>
+        <textarea id="y-toiveet" name="toiveet" data-pakollinen
+                  placeholder="Millainen tilaisuus, mihin aikaan, ruokatoiveet ja mahdolliset erikoisruokavaliot."></textarea>
       </div>
 
       <div class="hunaja" aria-hidden="true">
@@ -111,8 +147,42 @@
         <button class="nappi" type="submit"><span>Lähetä viesti</span></button>
       </div>
       <p class="lomake-tietosuoja kentta--koko">Käsittelemme yhteystietosi vain viestiisi
-        vastaamiseen.</p>
+        vastaamiseen. Palaute käsitellään luottamuksellisesti ravintolan sisällä, emmekä
+        julkaise sitä sivustolla ilman lupaasi.</p>
       <div class="lomake__viesti kentta--koko" data-lomake-viesti hidden></div>
     </form>
+  </div>
+</section>
+
+<section class="osio osio--char viiva-ylä" style="padding-top:0">
+  <div class="kuori split split--laaja-kuva split--ylos">
+    <div class="kartta-pilari" data-esiin>
+      <div class="kartta" data-kartta>
+        <div class="tyhja-tila" style="border:0;min-height:440px;display:grid;place-content:center">Kartta latautuu…</div>
+      </div>
+    </div>
+
+    <div class="split__teksti" data-esiin style="--viive:1">
+      <h2 class="otsikko-m">Bistro Liekki<br>Talvikkitie</h2>
+      <p class="leipa" style="margin-top:1rem">Löydät meidät Tikkurilan keskustasta,
+        kävelymatkan päästä juna-asemalta.</p>
+
+      <h3 class="otsikko-s" style="margin-top:2.4rem">Aukioloajat</h3>
+      <ul class="aukiolot" data-aukiolot style="margin-top:1rem"></ul>
+      <p class="leipa" style="font-size:.82rem;color:var(--bone-4);margin-top:1rem"
+         data-teksti="keittio"></p>
+
+      <h3 class="otsikko-s" style="margin-top:2.4rem">Lounas</h3>
+      <ul class="tietolista">
+        <li><span class="avain">Lounasbuffet</span><span class="arvo"><strong data-teksti="lounas-paivat"></strong> klo <strong data-teksti="lounas-aika"></strong></span></li>
+      </ul>
+
+      <div class="napit" style="margin-top:2rem">
+        <a class="nappi nappi--hiljainen" data-linkki="reittiohjeet" href="#">
+          {{ikoni:sijainti}}<span>Reittiohjeet</span></a>
+        <a class="nappi nappi--hiljainen" data-href="sahkoposti" href="#">
+          {{ikoni:posti}}<span data-teksti="sahkoposti"></span></a>
+      </div>
+    </div>
   </div>
 </section>

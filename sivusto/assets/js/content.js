@@ -109,6 +109,66 @@ window.LIEKKI = {
      Tarkistettu 8.9.2026: 43,2 t. seuraajaa. */
   tiktokSeuraajat: '43 000',
 
+  /* ------------------------------------------------------ sivusto työn alla */
+  /* Ilmoitus, joka kertoo kävijälle että sivusto on vielä kesken.
+     Kun sivusto on valmis, vaihda naytetaan: false — ilmoitus katoaa
+     kaikilta sivuilta. Kävijä voi myös sulkea sen itse, jolloin se pysyy
+     poissa loppukäynnin ajan. */
+  tyonAlla: {
+    naytetaan: true,
+    teksti: 'Sivusto on työn alla. Osa sisällöstä on vielä keskeneräistä, ' +
+            'ja tiedot voivat muuttua. Varmistathan ruokalistat ja aukioloajat ' +
+            'meiltä suoraan.'
+  },
+
+  /* -------------------------------------------------------------- ruokalista */
+  /* Menu-sivun osiot. Annoksia EI ole keksitty — lisää ne tähän kun lista on
+     valmis, niin sivu täyttyy itsestään.
+
+     Lisää annos näin:
+       { ryhma: 'Alkuruoat', nimi: 'Annoksen nimi',
+         kuvaus: 'Lyhyt kuvaus', hinta: '00,00 €' }
+
+     "ryhma" kokoaa annokset otsikoiden alle (esim. Alkuruoat, Pihvit,
+     Burgerit, Jälkiruoat). Sama ryhmä peräkkäisillä riveillä = yksi otsikko.
+     Jätä "kuvaus" tyhjäksi jos sitä ei tarvita.
+
+     Jos osion annoslista on tyhjä, sivu näyttää kohteliaan "tulossa"
+     -tilan ja ohjaa soittamaan tai avaamaan nykyisen listan. */
+  menu: {
+    osiot: [
+      {
+        avain: 'alacarte',
+        nimi: 'À la carte',
+        kuvaus: 'Puuhiiligrillin inspiroimat annokset, pihvit ja burgerit.',
+        /* Linkki nykyiseen listaan. Näkyy vain jos annokset-lista on tyhjä. */
+        linkki: 'menuTilaus',
+        annokset: []
+      },
+      {
+        avain: 'pikkujoulu',
+        nimi: 'Pikkujoulu',
+        kuvaus: 'Pikkujoulukauden menu ryhmille.',
+        linkki: '',
+        annokset: []
+      },
+      {
+        avain: 'brunssi',
+        nimi: 'Brunssi',
+        kuvaus: 'Brunssin tarjonta.',
+        linkki: '',
+        annokset: []
+      },
+      {
+        avain: 'juomat',
+        nimi: 'Juomat',
+        kuvaus: 'Oluet, viinit ja alkoholittomat.',
+        linkki: '',
+        annokset: []
+      }
+    ]
+  },
+
   /* ---------------------------------------------------------- ajankohtaista */
   /* Lisää ilmoitus näin:
        { otsikko: 'Poikkeava aukiolo', teksti: 'Juhannuksena suljettu.',

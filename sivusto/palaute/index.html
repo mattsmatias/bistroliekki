@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Palaute — Bistro Liekki | Kuinka palvelimme tänään?</title>
-<meta name="description" content="Kerro meille, kuinka palvelimme tänään. Palautteesi menee suoraan ravintolan väelle ja auttaa kehittämään Bistro Liekin palvelua Tikkurilassa.">
+<title>Palaute — Bistro Liekki</title>
+<meta name="description" content="Palautelomake löytyy nyt Bistro Liekin Yhteys-sivulta.">
 <link rel="canonical" href="https://bistroliekki.fi/palaute/">
-<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content="noindex, follow">
 <meta name="theme-color" content="#080707">
 <meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,14 +19,14 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Bistro Liekki">
 <meta property="og:locale" content="fi_FI">
-<meta property="og:title" content="Palaute — Bistro Liekki | Kuinka palvelimme tänään?">
-<meta property="og:description" content="Kerro meille, kuinka palvelimme tänään. Palautteesi menee suoraan ravintolan väelle ja auttaa kehittämään Bistro Liekin palvelua Tikkurilassa.">
+<meta property="og:title" content="Palaute — Bistro Liekki">
+<meta property="og:description" content="Palautelomake löytyy nyt Bistro Liekin Yhteys-sivulta.">
 <meta property="og:url" content="https://bistroliekki.fi/palaute/">
 <meta property="og:image" content="https://bistroliekki.fi/assets/img/band-embers.webp">
 <meta property="og:image:alt" content="Bistro Liekin burgeri puuhiiligrillistä">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Palaute — Bistro Liekki | Kuinka palvelimme tänään?">
-<meta name="twitter:description" content="Kerro meille, kuinka palvelimme tänään. Palautteesi menee suoraan ravintolan väelle ja auttaa kehittämään Bistro Liekin palvelua Tikkurilassa.">
+<meta name="twitter:title" content="Palaute — Bistro Liekki">
+<meta name="twitter:description" content="Palautelomake löytyy nyt Bistro Liekin Yhteys-sivulta.">
 <meta name="twitter:image" content="https://bistroliekki.fi/assets/img/band-embers.webp">
 
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -45,6 +45,18 @@
 </head>
 <body>
 <a class="ohita" href="#sisalto">Siirry sisältöön</a>
+
+<!-- Ilmoitus keskeneräisestä sivustosta. Poistuu näkyvistä kun content.js:n
+     tyonAlla-asetus muutetaan arvoon false. -->
+<div class="tyonalla" data-tyonalla hidden>
+  <div class="kuori tyonalla__rivi">
+    <span class="tyonalla__merkki" aria-hidden="true"></span>
+    <p class="tyonalla__teksti" data-tyonalla-teksti></p>
+    <button class="tyonalla__sulje" type="button" data-tyonalla-sulje
+            aria-label="Sulje ilmoitus"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5"/></svg></button>
+  </div>
+</div>
+
 <header class="headeri" id="headeri">
   <div class="headeri__sisus">
     <a class="logo" href="../" aria-label="Bistro Liekki — etusivulle">
@@ -52,9 +64,18 @@
       <span class="logo__ala">Puuhiiligrilli · est. 2016</span>
     </a>
 
-    <nav class="navi" aria-label="Päävalikko"><a href="../">Etusivu</a><a href="../meista/">Meistä</a><a href="../menu/">À la Carte</a><a href="../lounas/">Lounas</a><a href="../catering/">Catering</a><a href="../galleria/">Galleria</a><a href="../lahjakortti/">Lahjakortti</a><a href="../yhteystiedot/">Yhteystiedot</a></nav>
+    <nav class="navi" aria-label="Päävalikko"><a href="../">Etusivu</a><a href="../meista/">Tarina</a><a href="../menu/">Menu</a><a href="../lounas/">Lounas</a><a href="../catering/">Catering</a><a href="../galleria/">Galleria</a><a href="../lahjakortti/">Lahjakortti</a><a href="../yhteystiedot/">Yhteys</a></nav>
 
     <div class="headeri__oikea">
+      <!-- Yhteystiedot valikon vieressä. Leveällä ruudulla numero ja osoite
+           näkyvät kokonaan, kapeammalla pelkkä ikoni, puhelimessa nämä ovat
+           valikon sisällä ja alapalkissa. -->
+      <div class="headeri__yhteys">
+        <a class="headeri__yhteyslinkki" data-href="puhelin" href="#" aria-label="Soita ravintolaan">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 16.4v2.6a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 011 3.2 2 2 0 013 1h2.6a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L6.7 8.9a16 16 0 006 6l1.3-1.1a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-teksti="puhelin"></span></a>
+        <a class="headeri__yhteyslinkki" data-href="sahkoposti" href="#" aria-label="Lähetä sähköpostia">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 6l9 6.5L21 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span data-teksti="sahkoposti"></span></a>
+      </div>
       <a class="nappi headeri__cta" data-linkki="varaus" data-tyhjana="Soita ja varaa"
          href="#"><span>Varaa pöytä</span></a>
       <button class="valikkonappi" type="button" aria-expanded="false"
@@ -68,7 +89,7 @@
 
 <div class="mobiilivalikko" id="mobiilivalikko" aria-hidden="true">
   <div class="mobiilivalikko__sisus">
-    <nav aria-label="Mobiilivalikko"><a class="mob-linkki" href="../" style="--i:0">Etusivu</a><a class="mob-linkki" href="../meista/" style="--i:1">Meistä</a><a class="mob-linkki" href="../menu/" style="--i:2">À la Carte</a><a class="mob-linkki" href="../lounas/" style="--i:3">Lounas</a><a class="mob-linkki" href="../catering/" style="--i:4">Catering</a><a class="mob-linkki" href="../galleria/" style="--i:5">Galleria</a><a class="mob-linkki" href="../lahjakortti/" style="--i:6">Lahjakortti</a><a class="mob-linkki" href="../yhteystiedot/" style="--i:7">Yhteystiedot</a><a class="mob-linkki" href="../palaute/" style="--i:8">Palaute</a></nav>
+    <nav aria-label="Mobiilivalikko"><a class="mob-linkki" href="../" style="--i:0">Etusivu</a><a class="mob-linkki" href="../meista/" style="--i:1">Tarina</a><a class="mob-linkki" href="../menu/" style="--i:2">Menu</a><a class="mob-linkki" href="../lounas/" style="--i:3">Lounas</a><a class="mob-linkki" href="../catering/" style="--i:4">Catering</a><a class="mob-linkki" href="../galleria/" style="--i:5">Galleria</a><a class="mob-linkki" href="../lahjakortti/" style="--i:6">Lahjakortti</a><a class="mob-linkki" href="../yhteystiedot/" style="--i:7">Yhteys</a></nav>
     <div class="mobiilivalikko__jalki">
       <a class="mobiilivalikko__yhteys" data-href="varaus-puhelin" href="#">
         Pöytävaraukset <strong data-teksti="varaus-puhelin"></strong>
@@ -81,68 +102,35 @@
   </div>
 </div>
 <main id="sisalto">
-<section class="sivuhero" data-parallaksi>
-  <div class="sivuhero__media">
-    <img src="../assets/img/band-embers.webp" alt="" aria-hidden="true"
-         fetchpriority="high" decoding="async" width="1800" height="900">
-  </div>
-  <div class="sivuhero__peite"></div>
-  <div class="kuori">
-    <ol class="murupolku">
-      <li><a href="../">Etusivu</a></li>
-      <li>Palaute</li>
-    </ol>
-    <h1 data-sanat>Kuinka palvelimme<br>tänään?</h1>
-    <p class="ingressi">Palautteesi menee suoraan meille ja auttaa kehittämään ravintolaa.
-      Luemme jokaisen viestin.</p>
-  </div>
-</section>
+<!-- ===================================================================
+     PALAUTE — OHJAUSSIVU
 
-<section class="osio">
-  <div class="kuori rajaa-leveys" style="margin-inline:auto">
-    <form class="lomake" data-lomake data-aihe="Asiakaspalaute — bistroliekki.fi"
-          data-kiitos="Kiitos palautteestasi! Se menee suoraan ravintolan väelle."
-          novalidate data-esiin>
-      <div class="kentta">
-        <label for="p-sposti">Sähköposti <span class="pakollinen">*</span></label>
-        <input id="p-sposti" name="sahkoposti" type="email" autocomplete="email" required
-               placeholder="nimi@esimerkki.fi">
-      </div>
-      <div class="kentta">
-        <label for="p-kommentti">Kommentti <span class="pakollinen">*</span></label>
-        <textarea id="p-kommentti" name="kommentti" required
-                  placeholder="Kerro, miten käynti sujui — mikä toimi ja mitä voisimme tehdä paremmin."></textarea>
-      </div>
-
-      <div class="hunaja" aria-hidden="true">
-        <label for="p-yritys">Jätä tämä kenttä tyhjäksi</label>
-        <input id="p-yritys" name="yritys" type="text" tabindex="-1" autocomplete="off">
-      </div>
-
-      <div>
-        <button class="nappi" type="submit"><span>Lähetä palaute</span></button>
-      </div>
-      <p class="lomake-tietosuoja">Palaute käsitellään luottamuksellisesti ravintolan sisällä.
-        Emme julkaise palautteita sivustolla ilman lupaasi.</p>
-      <div class="lomake__viesti" data-lomake-viesti hidden></div>
-    </form>
-  </div>
-</section>
-
-<section class="osio osio--char viiva-ylä">
+     Palautelomake on siirretty Yhteys-sivulle. Tämä sivu jää paikoilleen,
+     jotta vanhat linkit ja hakukoneiden tulokset eivät johda virhesivulle.
+     Ohjaus tapahtuu heti; jos selain estää sen, kävijä näkee linkin.
+     =================================================================== -->
+<section class="osio" id="sisalto" style="min-height:60vh;display:grid;place-content:center">
   <div class="kuori keskita">
-    <p class="etiketti etiketti--keskellä" data-esiin>Kiireellinen asia?</p>
-    <h2 class="otsikko-m" data-esiin>Soita meille suoraan</h2>
-    <p class="leipa" data-esiin style="margin-top:1rem">Jos asia koskee tämänhetkistä
-      käyntiä tai varausta, tavoitat meidät nopeimmin puhelimitse.</p>
-    <div class="napit" data-esiin style="margin-top:1.8rem">
-      <a class="nappi nappi--hiljainen" data-href="puhelin" href="#">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 16.4v2.6a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 011 3.2 2 2 0 013 1h2.6a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L6.7 8.9a16 16 0 006 6l1.3-1.1a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-teksti="puhelin"></span></a>
-      <a class="nappi nappi--hiljainen" data-href="sahkoposti" href="#">
-        <span data-teksti="sahkoposti"></span></a>
+    <p class="etiketti etiketti--keskellä">Palaute</p>
+    <h1 class="otsikko-m" style="margin-top:.6rem">Palaute löytyy nyt Yhteys-sivulta</h1>
+    <p class="leipa" style="margin-top:1rem;max-width:52ch;margin-inline:auto">
+      Kokosimme palautteen, tarjouspyynnöt ja yhteystiedot samalle sivulle.
+      Siirrämme sinut sinne hetkessä.</p>
+    <div class="napit" style="margin-top:2rem;justify-content:center">
+      <a class="nappi" href="../yhteystiedot/#lomake"><span>Anna palautetta</span></a>
+      <a class="nappi nappi--ääriviiva" data-href="puhelin" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 16.4v2.6a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 011 3.2 2 2 0 013 1h2.6a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L6.7 8.9a16 16 0 006 6l1.3-1.1a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Soita meille</span></a>
     </div>
   </div>
 </section>
+
+<script>
+  /* Ohjaus Yhteys-sivulle. replace() jottei paluunappi jää jumiin tälle sivulle. */
+  (function () {
+    var kohde = document.querySelector('.nappi[href*="yhteystiedot"]');
+    if (kohde) setTimeout(function () { location.replace(kohde.href); }, 900);
+  })();
+</script>
 
 </main>
 <footer class="footeri">
