@@ -202,8 +202,8 @@ window.LIEKKI = {
        nykyiseen tilausjärjestelmään — vaihda kun uusi on käytössä. */
     menuTilaus:  'https://bistroliekki.fi/talvikkitie/menu.php',
 
-    /* Lahjakortin ostolinkki — sama Operox-sivu kuin pöytävaraus. */
-    lahjakortti: 'https://www.operox.fi/restaurants/bistro-liekki',
+    /* Lahjakortin ostolinkki — Operoxin oma lahjakorttisivu. */
+    lahjakortti: 'https://www.operox.fi/gift-cards/bistro-liekki',
 
     /* Edenred — Paras lounas -äänestys. Tyhjennä kun kampanja päättyy. */
     edenred:     'https://paraslounas.edenred.fi/fi/aanesta',

@@ -138,7 +138,9 @@ def nav_linkki(slug, label, luokka="", tyyli=""):
     s = f' style="{tyyli}"' if tyyli else ""
     if slug.startswith("linkki:"):
         avain = slug.split(":", 1)[1]
-        return (f'<a{l}{s} data-linkki="{avain}" data-tyhjana="Soita ja kysy" '
+        # Valikkokohdan teksti ei saa vaihtua vaikka osoite puuttuisi —
+        # navigaatiossa lukee aina kohteen nimi, ei toimintakehotusta.
+        return (f'<a{l}{s} data-linkki="{avain}" data-tyhjana="{label}" '
                 f'data-vara-href="puhelin" href="#"><span>{label}</span></a>')
     return f'<a{l}{s} href="{{HREF}}">{label}</a>'
 
