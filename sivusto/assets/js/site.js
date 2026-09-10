@@ -521,7 +521,12 @@
     if (!kehys) return;
 
     var profiili = ((D.some || {}).tiktok || '').replace(/\/+$/, '');
-    if (!profiili) { var os = kehys.closest('section'); if (os) os.remove(); return; }
+    // Ilman osoitetta poistetaan vain TikTok-kortti, ei koko some-osiota
+    if (!profiili) {
+      var kortti = kehys.closest('[data-some-kortti]') || kehys.closest('section');
+      if (kortti) kortti.remove();
+      return;
+    }
 
     var tunnus = (profiili.match(/@([\w.\-]+)/) || [])[1] || '';
     var videot = (D.tiktokVideot || []).slice(0, 8);
@@ -970,6 +975,93 @@
         viesti.setAttribute('role', 'status');
       }
     });
+  }
+
+  /* --------------------------------------------------- 7b. SOME-KANAVAT */
+  /* Etusivun some-osio: Instagram-kuvat, Facebook-sivun upotus ja korttien
+     piilotus niiltä kanavilta, joille ei ole osoitetta content.js:ssä. */
+  function someKanavat() {
+    var osio = $('[data-some-kortti]');
+    if (!osio) return;
+    var some = D.some || {};
+
+    // Kortit ilman osoitetta pois
+    $$('[data-some-kortti]').forEach(function (k) {
+      if (!some[k.getAttribute('data-some-kortti')]) k.remove();
+    });
+
+    instagramKortti(some.instagram);
+    facebookKortti(some.facebook);
+
+    // Jos yhtään korttia ei jäänyt, koko osio pois
+    var ruudukko = $('.some-ruudukko');
+    if (ruudukko && !ruudukko.children.length) ruudukko.remove();
+  }
+
+  /* Instagram ei tarjoa ilmaista profiiliupotusta, joten kortissa näkyvät
+     ravintolan omat kuvat ja linkki profiiliin. */
+  function instagramKortti(osoite) {
+    var kehys = $('[data-instagram]');
+    if (!kehys) return;
+    var kuvat = (D.instagramKuvat || []).filter(function (k) { return k && k.kuva; }).slice(0, 4);
+    if (!kuvat.length || !osoite) {
+      var k = kehys.closest('[data-some-kortti]');
+      if (k) k.remove();
+      return;
+    }
+    kehys.innerHTML = kuvat.map(function (k) {
+      return '<a class="some-ig__kuva" href="' + turva(osoite) + '" target="_blank" rel="noopener">' +
+        '<img src="' + turva(polku(k.kuva)) + '" alt="' + turva(k.alt || '') +
+        '" loading="lazy" decoding="async"></a>';
+    }).join('');
+  }
+
+  /* Facebook-kortti. Facebookin oma sivu-upotus renderöityy aina valkoisella
+     taustalla eikä sitä voi tyylitellä, joten se rikkoisi sivuston tumman
+     ilmeen. Oletuksena näytetään talon oma kortti; upotuksen saa käyttöön
+     content.js:stä (someUpotukset.facebook: true). */
+  function facebookKortti(osoite) {
+    var kehys = $('[data-facebook]');
+    if (!kehys) return;
+    if (!osoite) {
+      var k = kehys.closest('[data-some-kortti]');
+      if (k) k.remove();
+      return;
+    }
+
+    function omaKortti() {
+      kehys.innerHTML = '<a class="some-vara" href="' + turva(osoite) + '" target="_blank" rel="noopener">' +
+        '<img class="some-vara__kuva" src="' + polku('assets/img/lammin-poyta.webp') + '" alt="" ' +
+        'aria-hidden="true" loading="lazy" decoding="async">' +
+        '<span class="some-vara__sisus">' +
+        '<span class="some-vara__otsikko">Ajankohtaista Facebookissa</span>' +
+        '<span class="some-vara__teksti">Poikkeusaukiolot, tapahtumat ja viikon kuulumiset ' +
+        'löytyvät Facebook-sivultamme.</span>' +
+        '<span class="some-vara__linkki">Avaa Facebook</span></span></a>';
+    }
+
+    if (!((D.someUpotukset || {}).facebook)) { omaKortti(); return; }
+
+    function lataa() {
+      var f = document.createElement('iframe');
+      f.src = 'https://www.facebook.com/plugins/page.php?href=' + encodeURIComponent(osoite) +
+              '&tabs=timeline&width=400&height=520&small_header=true&adapt_container_width=true' +
+              '&hide_cover=false&show_facepile=false&locale=fi_FI';
+      f.title = 'Bistro Liekki Facebookissa';
+      f.loading = 'lazy';
+      f.style.cssText = 'border:0;overflow:hidden;width:100%;height:520px';
+      f.setAttribute('scrolling', 'no');
+      f.setAttribute('allow', 'encrypted-media');
+      f.onerror = omaKortti;
+      kehys.appendChild(f);
+    }
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (m) {
+        m.forEach(function (x) { if (x.isIntersecting) { lataa(); io.disconnect(); } });
+      }, { rootMargin: '400px' });
+      io.observe(kehys);
+    } else { lataa(); }
   }
 
   /* ------------------------------------------ 10a. ILMOITUS: ÄÄNESTYS */
@@ -1477,6 +1569,7 @@
     ajankohtaista();
     galleria();
     tiktok();
+    someKanavat();
     menuOsiot();
     viikonLounas();
     saavutukset();

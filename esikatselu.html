@@ -1220,34 +1220,208 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .valolaatikko__nuoli--edell { left: 1.2rem; top: 50%; transform: translateY(-50%); }
 .valolaatikko__nuoli--seur { right: 1.2rem; top: 50%; transform: translateY(-50%); }
 
-/* --------------------------------------------------------------- 15 TIKTOK */
-.tiktok-ylä {
+/* ------------------------------------------------------------ 15 SOME */
+.some-yla {
   display: grid;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(1.6rem, 3vw, 2.6rem);
   align-items: end;
   margin-bottom: clamp(2rem, 4vw, 3.2rem);
 }
-@media (min-width: 860px) {
-  .tiktok-ylä { grid-template-columns: 1fr auto; }
-}
-.tiktok-ylä h2 + .leipa { margin-top: 1.1rem; }
-.tiktok-sivu { display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
-@media (min-width: 860px) { .tiktok-sivu { align-items: flex-end; text-align: right; } }
+@media (min-width: 900px) { .some-yla { grid-template-columns: 1fr auto; } }
+.some-yla__teksti { max-width: 46ch; }
+.some-yla h2 + .leipa { margin-top: 1.1rem; }
 
-.tiktok-luku { display: flex; align-items: baseline; gap: .6rem; margin: 0; }
-.tiktok-luku strong {
-  font-family: var(--display);
-  font-size: var(--step-3);
-  font-weight: 600;
-  color: var(--bone);
-  line-height: 1;
+/* Kanavaikonit: iso osumapinta, nimi ikonin alla */
+.some-ikonit {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
 }
-.tiktok-luku span {
-  font-size: .72rem;
-  letter-spacing: .18em;
+@media (min-width: 900px) { .some-ikonit { justify-content: flex-end; } }
+.some-ikoni {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .45rem;
+  min-width: 74px;
+  min-height: 74px;
+  padding: .8rem .6rem;
+  background: var(--char-3);
+  border: 1px solid var(--line-soft);
+  border-radius: 3px;
+  color: var(--bone-3);
+  text-decoration: none;
+  transition: color .3s var(--ease), border-color .3s var(--ease),
+              background-color .3s var(--ease), transform .3s var(--ease-out);
+}
+.some-ikoni span {
+  font-family: var(--sans);
+  font-size: .6rem;
+  font-weight: 500;
+  letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--bone-4);
 }
+.some-ikoni:hover {
+  color: var(--bone);
+  border-color: var(--ember);
+  background: var(--char-3);
+  transform: translateY(-2px);
+}
+.some-ikoni svg { width: 20px; height: 20px; }
+
+/* Kanavakortit rinnakkain */
+.some-ruudukko {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  /* Kortit venyvät samaan korkeuteen, kun ne ovat vierekkäin. */
+  align-items: stretch;
+}
+@media (min-width: 720px)  { .some-ruudukko { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1080px) { .some-ruudukko { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.some-kortti {
+  display: flex;
+  flex-direction: column;
+  background: var(--char);
+  border: 1px solid var(--line-soft);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.some-kortti__ylä {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  padding: .85rem 1rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+.some-kortti__merkki {
+  display: grid;
+  place-items: center;
+  width: 30px; height: 30px;
+  flex: none;
+  border-radius: 2px;
+  background: var(--char-3);
+  color: var(--bone-2);
+}
+.some-kortti__merkki svg { width: 16px; height: 16px; }
+.some-kortti__nimi {
+  font-family: var(--sans);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--bone-2);
+}
+.some-kortti__linkki {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  /* Kosketuskohde vähintään 44 px korkea, jotta linkkiin osuu sormella. */
+  min-height: 44px;
+  padding-inline: .35rem;
+  margin-right: -.35rem;
+  font-family: var(--sans);
+  font-size: .68rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--bone-4);
+  transition: color .3s var(--ease);
+}
+.some-kortti__linkki:hover { color: var(--ember-lit); }
+.some-kortti__linkki svg { transition: transform .3s var(--ease-out); }
+.some-kortti__linkki:hover svg { transform: translateX(3px); }
+.some-kortti__sisus {
+  padding: 1rem;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.some-kortti__sisus > *:not([hidden]) { flex: 1 1 auto; min-height: 0; }
+
+/* TikTok-kortin pystyvideot ovat luonnostaan muita korkeampia — rajataan
+   ne, jotta kortit ovat suunnilleen samanmittaisia. */
+.some-kortti[data-some-kortti="tiktok"] .karuselli__rata > * {
+  width: 100%;
+  max-width: 100%;
+}
+.some-kortti[data-some-kortti="tiktok"] .tiktok-kortti { aspect-ratio: 4 / 5; }
+.some-kortti[data-some-kortti="tiktok"] .karuselli__nappi { display: none; }
+
+/* Instagram: neljä kuvaa ruudukkona */
+.some-ig {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .5rem;
+}
+.some-ig__kuva {
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.some-ig__kuva img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform .6s var(--ease-out), opacity .3s var(--ease);
+}
+.some-ig__kuva:hover img { transform: scale(1.06); opacity: .9; }
+
+/* Facebook-upotus ja varakortti */
+.some-fb { min-height: 200px; }
+.some-fb iframe { display: block; border-radius: 2px; }
+.some-vara {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: clamp(1.2rem, 2.5vw, 1.8rem);
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-radius: 2px;
+  text-decoration: none;
+}
+.some-vara__otsikko {
+  font-family: var(--display);
+  font-size: var(--step-1);
+  color: var(--bone);
+}
+.some-vara__teksti { font-size: var(--step--1); color: var(--bone-4); line-height: 1.55; }
+.some-vara__linkki {
+  margin-top: .4rem;
+  font-family: var(--sans);
+  font-size: .68rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ember-lit);
+}
+
+/* Varakortissa on oma kuvamme taustana, jotta kortti ei jää tyhjäksi
+   laatikoksi Facebook-upotuksen ollessa pois päältä. */
+.some-vara { position: relative; overflow: hidden; padding: 0; min-height: 250px; }
+.some-vara__kuva {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: .3;
+  filter: saturate(.75);
+  transition: transform .8s var(--ease-out), opacity .4s var(--ease);
+}
+.some-vara:hover .some-vara__kuva { transform: scale(1.04); opacity: .38; }
+.some-vara__sisus {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  height: 100%;
+  justify-content: flex-end;
+  padding: clamp(1.2rem, 2.5vw, 1.8rem);
+  background: linear-gradient(to top,
+              rgba(8, 7, 7, .94) 0%, rgba(8, 7, 7, .78) 45%, rgba(8, 7, 7, .3) 100%);
+}
+
 
 /* ------------------------------------------------ TIKTOK-KARUSELLI */
 /* Vaakasuuntainen selattava rata: pyyhkäisy puhelimella, nuolet
@@ -1437,6 +1611,50 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   letter-spacing: .06em;
   color: var(--bone-4);
   text-align: center;
+}
+
+/* --------------------------------------- 15b SOMEKORTTIEN TASAKORKEUS */
+/* Kun kanavakortit ovat vierekkäin, niiden sisältöalue saa saman
+   korkeuden ja jokainen upotus venyy siihen. Tämän lohkon on oltava
+   .karuselli-, .tiktok-kortti-, .some-ig- ja .some-fb-perussääntöjen
+   JÄLKEEN, jotta se voittaa kaskadissa. */
+@media (min-width: 720px) {
+  .some-kortti__sisus {
+    height: clamp(320px, 30vw, 420px);
+    flex: 0 0 auto;
+    overflow: hidden;
+  }
+  .some-kortti__sisus > *:not([hidden]) { flex: 1 1 auto; min-height: 0; }
+
+  /* TikTok: karuselli täyttää korkeuden, pisterivi jää sen alle */
+  .some-kortti[data-some-kortti="tiktok"] [data-tiktok-vara],
+  .some-kortti[data-some-kortti="tiktok"] .karuselli {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .some-kortti[data-some-kortti="tiktok"] [data-tiktok-vara][hidden] { display: none; }
+  .some-kortti[data-some-kortti="tiktok"] [data-tiktok-vara] > .karuselli { flex: 1 1 auto; }
+  .some-kortti[data-some-kortti="tiktok"] .karuselli__rata {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-items: stretch;
+  }
+  .some-kortti[data-some-kortti="tiktok"] .karuselli__pisteet { flex: 0 0 auto; }
+  .some-kortti[data-some-kortti="tiktok"] .tiktok-kortti {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+  /* Kortin ylätunnisteen "Avaa" kertoo saman — turha rivi pois. */
+  .some-kortti[data-some-kortti="tiktok"] .tiktok-vara-teksti { display: none; }
+
+  /* Instagram: neljä kuvaa täyttää alueen kahtena rivinä */
+  .some-ig { grid-template-rows: 1fr 1fr; height: 100%; }
+  .some-ig__kuva { aspect-ratio: auto; min-height: 0; }
+
+  /* Facebook: varakortti venyy samaan mittaan */
+  .some-fb { display: flex; flex-direction: column; min-height: 0; }
+  .some-fb .some-vara { flex: 1 1 auto; min-height: 0; }
 }
 
 /* ------------------------------------------------------------ 16 LOMAKKEET */
@@ -1711,10 +1929,30 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 .menu-osio__otsikko h3 { font-size: var(--step-2); text-transform: uppercase; letter-spacing: .02em; }
 .menu-rivi { display: grid; gap: .3rem; padding-block: 1.1rem; border-bottom: 1px solid var(--line-soft); }
-.menu-rivi__ylä { display: flex; align-items: baseline; gap: 1rem; }
-.menu-rivi__nimi { font-family: var(--display); font-size: var(--step-1); color: var(--bone); }
-.menu-rivi__pisteet { flex: 1; border-bottom: 1px dotted var(--line); transform: translateY(-.2em); }
+/* Kapealla ruudulla pitkä nimi ja kahden hinnan pari eivät mahdu samalle
+   riville — silloin hinta siirtyy omalle rivilleen oikeaan reunaan. */
+.menu-rivi__ylä {
+  display: flex;
+  align-items: baseline;
+  column-gap: 1rem;
+  row-gap: .1rem;
+  flex-wrap: wrap;
+}
+.menu-rivi__nimi {
+  font-family: var(--display);
+  font-size: var(--step-1);
+  color: var(--bone);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.menu-rivi__pisteet {
+  flex: 1 1 1.2rem;
+  min-width: 1.2rem;
+  border-bottom: 1px dotted var(--line);
+  transform: translateY(-.2em);
+}
 .menu-rivi__hinta {
+  margin-left: auto;
   font-variant-numeric: tabular-nums;
   color: var(--bone-2);
   white-space: nowrap;
@@ -2615,7 +2853,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 }
 
 /* --------------------------------------------------------- 24.9 LASKURI */
-.luku__arvo, .tiktok-luku strong { font-variant-numeric: tabular-nums; }
+.luku__arvo { font-variant-numeric: tabular-nums; }
 
 /* ------------------------------------------ 24.10 LIGHTBOXIN ZOOM-AVAUS */
 .valolaatikko img { will-change: transform; }
@@ -2918,66 +3156,109 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   </div>
 </section>
 
-<!-- ============================================================= TIKTOK -->
-<section class="osio osio--char2" aria-labelledby="tiktok">
+<!-- =============================================================== SOME -->
+<!-- Kanavat tulevat content.js:n some-lohkosta. Tyhjä osoite piilottaa
+     kanavan ikonin ja kortin automaattisesti — lisää osoite, niin se
+     ilmestyy sivulle. -->
+<section class="osio osio--char2" aria-labelledby="some">
   <div class="kuori">
-    <div class="tiktok-ylä" data-esiin>
-      <div>
-        <p class="etiketti">TikTok · @bistroliekki</p>
-        <h2 class="otsikko-m" id="tiktok">Katso, mitä<br>grillissä tapahtuu</h2>
-        <p class="leipa">Kuvaamme keittiöstä ja hiilloksesta TikTokissa — ruoka
+    <div class="some-yla" data-esiin>
+      <div class="some-yla__teksti">
+        <p class="etiketti">Seuraa meitä</p>
+        <h2 class="otsikko-m" id="some">Katso, mitä<br>grillissä tapahtuu</h2>
+        <p class="leipa">Kuvaamme keittiöstä ja hiilloksesta somessa — ruoka
           sellaisena kuin se syntyy.</p>
       </div>
 
-      <div class="tiktok-sivu">
-        <p class="tiktok-luku" data-piilota-ryhma>
-          <strong data-teksti="tiktok-seuraajat" data-piilota-tyhjana data-laskuri="0"></strong>
-          <span>seuraajaa TikTokissa</span>
-        </p>
-        <a class="nappi nappi--ääriviiva" data-some="tiktok" href="#">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 2h-3.1v13.1a2.7 2.7 0 11-2.3-2.7v-3.2a5.9 5.9 0 105.4 5.9V9.3a7 7 0 004 1.3V7.5a4 4 0 01-4-4V2z"/></svg><span>Seuraa meitä</span></a>
-      </div>
+      <nav class="some-ikonit" aria-label="Bistro Liekki sosiaalisessa mediassa">
+        <a class="some-ikoni" data-some="tiktok" href="#" aria-label="TikTok">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 2h-3.1v13.1a2.7 2.7 0 11-2.3-2.7v-3.2a5.9 5.9 0 105.4 5.9V9.3a7 7 0 004 1.3V7.5a4 4 0 01-4-4V2z"/></svg><span>TikTok</span></a>
+        <a class="some-ikoni" data-some="instagram" href="#" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg><span>Instagram</span></a>
+        <a class="some-ikoni" data-some="facebook" href="#" aria-label="Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5V6.9c0-.8.2-1.2 1.4-1.2H17V2.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2v1.8H8v3.2h2.5V21H14v-9.3h2.5l.4-3.2H14z"/></svg><span>Facebook</span></a>
+        <a class="some-ikoni" data-some="snapchat" href="#" aria-label="Snapchat">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c-3 0-5 2.2-5 5.1 0 .6.1 1.4.1 1.9-.5.3-1 .1-1.4-.2-.5-.4-1.2 0-1.2.6 0 .8.7 1.4 1.5 1.7.3.2.6.3.6.6 0 .6-1.6 2.2-3.3 2.6-.4.1-.6.5-.5.9.2.6 1.1.9 1.9 1 .1.4.2.7.4.9.2.2.6.2 1 .1.5 0 1-.1 1.6.1.6.2 1.1.6 1.7 1 .6.4 1.3.7 2.4.7s1.8-.3 2.4-.7c.6-.4 1.1-.8 1.7-1 .6-.2 1.1-.1 1.6-.1.4.1.8.1 1-.1.2-.2.3-.5.4-.9.8-.1 1.7-.4 1.9-1 .1-.4-.1-.8-.5-.9-1.7-.4-3.3-2-3.3-2.6 0-.3.3-.4.6-.6.8-.3 1.5-.9 1.5-1.7 0-.6-.7-1-1.2-.6-.4.3-.9.5-1.4.2 0-.5.1-1.3.1-1.9 0-2.9-2-5.1-5-5.1z"/></svg><span>Snapchat</span></a>
+        <a class="some-ikoni" data-some="youtube" href="#" aria-label="YouTube">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.5 7.2a2.7 2.7 0 00-1.9-1.9C18.9 4.8 12 4.8 12 4.8s-6.9 0-8.6.5A2.7 2.7 0 001.5 7.2 28 28 0 001 12a28 28 0 00.5 4.8 2.7 2.7 0 001.9 1.9c1.7.5 8.6.5 8.6.5s6.9 0 8.6-.5a2.7 2.7 0 001.9-1.9A28 28 0 0023 12a28 28 0 00-.5-4.8zM9.8 15.3V8.7l5.7 3.3-5.7 3.3z"/></svg><span>YouTube</span></a>
+      </nav>
     </div>
 
-    <!-- Selattava karuselli: pyyhkäise puhelimella, nuolet työpöydällä.
-         Videot tulevat content.js:n tiktokVideot-listasta. Jos lista on
-         tyhjä, tähän tulee TikTokin oma profiiliupotus. -->
-    <div class="karuselli" data-esiin hidden>
-      <button class="karuselli__nappi karuselli__nappi--edell" type="button"
-              aria-label="Edellinen video"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M10 1L2 9l8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
-      <div class="karuselli__rata" data-tiktok aria-label="Bistro Liekin TikTok-videot"></div>
-      <button class="karuselli__nappi karuselli__nappi--seur" type="button"
-              aria-label="Seuraava video"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M2 1l8 8-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
-      <div class="karuselli__pisteet" aria-hidden="true"></div>
-    </div>
+    <div class="some-ruudukko" data-esiin>
 
-    <!-- Varanäkymä, jos upotus estyy (mainostenesto tai evästekielto) -->
-    <div data-tiktok-vara hidden>
-      <div class="karuselli">
-        <button class="karuselli__nappi karuselli__nappi--edell" type="button"
-                aria-label="Edellinen"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M10 1L2 9l8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
-        <div class="karuselli__rata">
-          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-            <img data-img="pysty-burgeri.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-            <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
-            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Puuhiiligrilli</span></span>
-          </a>
-          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-            <img data-img="pysty-buffet.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-            <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
-            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Lounasbuffet</span></span>
-          </a>
-          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-            <img data-img="pysty-pekoni.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-            <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
-            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Grillin klassikot</span></span>
-          </a>
+      <!-- TikTok: videot tulevat TikTokista. Jos upotus estyy, tilalle
+           tulevat ravintolan omat pystykuvat samassa karusellissa. -->
+      <article class="some-kortti" data-some-kortti="tiktok">
+        <header class="some-kortti__ylä">
+          <span class="some-kortti__merkki"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 2h-3.1v13.1a2.7 2.7 0 11-2.3-2.7v-3.2a5.9 5.9 0 105.4 5.9V9.3a7 7 0 004 1.3V7.5a4 4 0 01-4-4V2z"/></svg></span>
+          <span class="some-kortti__nimi">TikTok</span>
+          <a class="some-kortti__linkki" data-some="tiktok" href="#">Avaa <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true"><path d="M9 1l4 4-4 4M13 5H0" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg></a>
+        </header>
+
+        <div class="some-kortti__sisus">
+          <div class="karuselli" hidden>
+            <button class="karuselli__nappi karuselli__nappi--edell" type="button"
+                    aria-label="Edellinen video"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M10 1L2 9l8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
+            <div class="karuselli__rata" data-tiktok aria-label="Bistro Liekin TikTok-videot"></div>
+            <button class="karuselli__nappi karuselli__nappi--seur" type="button"
+                    aria-label="Seuraava video"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M2 1l8 8-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
+            <div class="karuselli__pisteet" aria-hidden="true"></div>
+          </div>
+
+          <div data-tiktok-vara hidden>
+            <div class="karuselli">
+              <button class="karuselli__nappi karuselli__nappi--edell" type="button"
+                      aria-label="Edellinen"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M10 1L2 9l8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
+              <div class="karuselli__rata">
+                <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+                  <img data-img="pysty-burgeri.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                  <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
+                  <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Puuhiiligrilli</span></span>
+                </a>
+                <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+                  <img data-img="pysty-buffet.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                  <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
+                  <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Lounasbuffet</span></span>
+                </a>
+                <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+                  <img data-img="pysty-pekoni.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                  <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
+                  <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Grillin klassikot</span></span>
+                </a>
+              </div>
+              <button class="karuselli__nappi karuselli__nappi--seur" type="button"
+                      aria-label="Seuraava"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M2 1l8 8-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
+              <div class="karuselli__pisteet" aria-hidden="true"></div>
+            </div>
+            <p class="tiktok-vara-teksti">Videot aukeavat TikTokissa.</p>
+          </div>
         </div>
-        <button class="karuselli__nappi karuselli__nappi--seur" type="button"
-                aria-label="Seuraava"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" aria-hidden="true"><path d="M2 1l8 8-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
-        <div class="karuselli__pisteet" aria-hidden="true"></div>
-      </div>
-      <p class="tiktok-vara-teksti">Videot aukeavat TikTokissa.</p>
+      </article>
+
+      <!-- Instagram: profiilikuvat content.js:n instagramKuvat-listasta -->
+      <article class="some-kortti" data-some-kortti="instagram">
+        <header class="some-kortti__ylä">
+          <span class="some-kortti__merkki"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg></span>
+          <span class="some-kortti__nimi">Instagram</span>
+          <a class="some-kortti__linkki" data-some="instagram" href="#">Avaa <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true"><path d="M9 1l4 4-4 4M13 5H0" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg></a>
+        </header>
+        <div class="some-kortti__sisus">
+          <div class="some-ig" data-instagram></div>
+        </div>
+      </article>
+
+      <!-- Facebook: sivun oma upotus. Jos se estyy, tilalle tulee linkkikortti. -->
+      <article class="some-kortti" data-some-kortti="facebook">
+        <header class="some-kortti__ylä">
+          <span class="some-kortti__merkki"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5V6.9c0-.8.2-1.2 1.4-1.2H17V2.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2v1.8H8v3.2h2.5V21H14v-9.3h2.5l.4-3.2H14z"/></svg></span>
+          <span class="some-kortti__nimi">Facebook</span>
+          <a class="some-kortti__linkki" data-some="facebook" href="#">Avaa <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true"><path d="M9 1l4 4-4 4M13 5H0" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg></a>
+        </header>
+        <div class="some-kortti__sisus">
+          <div class="some-fb" data-facebook></div>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
@@ -4051,12 +4332,40 @@ window.LIEKKI = {
   },
 
   /* ------------------------------------------------------------------ some */
+  /* Tyhjä osoite ('') piilottaa kyseisen kanavan ikonin ja kortin kokonaan.
+     Lisää osoite, niin se ilmestyy sivulle itsestään. */
   some: {
     facebook:  'https://www.facebook.com/BistroLiekkiTalvikkitie',
     instagram: 'https://www.instagram.com/bistroliekkitalvikkitie/',
     tiktok:    'https://www.tiktok.com/@bistroliekki',
+    snapchat:  '',                    // esim. https://www.snapchat.com/add/kayttajatunnus
     youtube:   ''                     // lisää kanavan osoite kun se on olemassa
   },
+
+  /* ---------------------------------------------------- some-upotukset */
+  /* TikTokin videot tulevat suoraan TikTokista aina.
+
+     Facebookin oma sivu-upotus renderöityy valkoisella taustalla eikä sitä
+     voi tyylitellä, joten se rikkoisi sivuston tumman ilmeen. Siksi
+     Facebook-kortissa on oletuksena talon oma kortti ja linkki sivulle.
+     Vaihda arvoksi true, jos haluat silti Facebookin oman upotuksen.
+
+     Instagram ei tarjoa ilmaista profiiliupotusta lainkaan, joten sen
+     kortissa näkyvät alla olevat kuvat. */
+  someUpotukset: {
+    facebook: false
+  },
+
+  /* -------------------------------------------------- Instagram-nostot */
+  /* Instagram ei tarjoa ilmaista profiiliupotusta, joten etusivun
+     Instagram-kortissa näkyvät nämä kuvat. Ne linkittävät profiiliin.
+     Kuvat ovat samasta kansiosta kuin gallerian kuvat. */
+  instagramKuvat: [
+    { kuva: window.__KUVAT['pysty-burgeri.webp'], alt: 'Burgeri puuhiiligrillistä' },
+    { kuva: window.__KUVAT['pysty-buffet.webp'],  alt: 'Lounasbuffetin lämpimät ruoat' },
+    { kuva: window.__KUVAT['pysty-pekoni.webp'],  alt: 'Burgeri pekonilla' },
+    { kuva: window.__KUVAT['burgeri-chimichurri.webp'], alt: 'Tuplaburgeri ja ranskalaiset' }
+  ],
 
   /* --------------------------------------------------------------- tiktok */
   /* Etusivulla näkyy TikTok-profiilin uusimmat videot suoraan TikTokista.
@@ -4071,11 +4380,6 @@ window.LIEKKI = {
        ]
      Tyhjä lista = uusimmat videot automaattisesti. */
   tiktokVideot: [],
-
-  /* Seuraajamäärä TikTokissa. Näkyy etusivun TikTok-osiossa.
-     Päivitä silloin tällöin, tai jätä tyhjäksi ('') niin lukua ei näytetä.
-     Tarkistettu 8.9.2026: 43,2 t. seuraajaa. */
-  tiktokSeuraajat: '43 000',
 
   /* --------------------------------------------------------- äänestys */
   /* Edenredin Suomen Paras Lounas -äänestys. Laatikko näkyy sivun
@@ -5067,7 +5371,12 @@ window.LIEKKI = {
     if (!kehys) return;
 
     var profiili = ((D.some || {}).tiktok || '').replace(/\/+$/, '');
-    if (!profiili) { var os = kehys.closest('section'); if (os) os.remove(); return; }
+    // Ilman osoitetta poistetaan vain TikTok-kortti, ei koko some-osiota
+    if (!profiili) {
+      var kortti = kehys.closest('[data-some-kortti]') || kehys.closest('section');
+      if (kortti) kortti.remove();
+      return;
+    }
 
     var tunnus = (profiili.match(/@([\w.\-]+)/) || [])[1] || '';
     var videot = (D.tiktokVideot || []).slice(0, 8);
@@ -5516,6 +5825,93 @@ window.LIEKKI = {
         viesti.setAttribute('role', 'status');
       }
     });
+  }
+
+  /* --------------------------------------------------- 7b. SOME-KANAVAT */
+  /* Etusivun some-osio: Instagram-kuvat, Facebook-sivun upotus ja korttien
+     piilotus niiltä kanavilta, joille ei ole osoitetta content.js:ssä. */
+  function someKanavat() {
+    var osio = $('[data-some-kortti]');
+    if (!osio) return;
+    var some = D.some || {};
+
+    // Kortit ilman osoitetta pois
+    $$('[data-some-kortti]').forEach(function (k) {
+      if (!some[k.getAttribute('data-some-kortti')]) k.remove();
+    });
+
+    instagramKortti(some.instagram);
+    facebookKortti(some.facebook);
+
+    // Jos yhtään korttia ei jäänyt, koko osio pois
+    var ruudukko = $('.some-ruudukko');
+    if (ruudukko && !ruudukko.children.length) ruudukko.remove();
+  }
+
+  /* Instagram ei tarjoa ilmaista profiiliupotusta, joten kortissa näkyvät
+     ravintolan omat kuvat ja linkki profiiliin. */
+  function instagramKortti(osoite) {
+    var kehys = $('[data-instagram]');
+    if (!kehys) return;
+    var kuvat = (D.instagramKuvat || []).filter(function (k) { return k && k.kuva; }).slice(0, 4);
+    if (!kuvat.length || !osoite) {
+      var k = kehys.closest('[data-some-kortti]');
+      if (k) k.remove();
+      return;
+    }
+    kehys.innerHTML = kuvat.map(function (k) {
+      return '<a class="some-ig__kuva" href="' + turva(osoite) + '" target="_blank" rel="noopener">' +
+        '<img src="' + turva(polku(k.kuva)) + '" alt="' + turva(k.alt || '') +
+        '" loading="lazy" decoding="async"></a>';
+    }).join('');
+  }
+
+  /* Facebook-kortti. Facebookin oma sivu-upotus renderöityy aina valkoisella
+     taustalla eikä sitä voi tyylitellä, joten se rikkoisi sivuston tumman
+     ilmeen. Oletuksena näytetään talon oma kortti; upotuksen saa käyttöön
+     content.js:stä (someUpotukset.facebook: true). */
+  function facebookKortti(osoite) {
+    var kehys = $('[data-facebook]');
+    if (!kehys) return;
+    if (!osoite) {
+      var k = kehys.closest('[data-some-kortti]');
+      if (k) k.remove();
+      return;
+    }
+
+    function omaKortti() {
+      kehys.innerHTML = '<a class="some-vara" href="' + turva(osoite) + '" target="_blank" rel="noopener">' +
+        '<img class="some-vara__kuva" src="' + polku('assets/img/lammin-poyta.webp') + '" alt="" ' +
+        'aria-hidden="true" loading="lazy" decoding="async">' +
+        '<span class="some-vara__sisus">' +
+        '<span class="some-vara__otsikko">Ajankohtaista Facebookissa</span>' +
+        '<span class="some-vara__teksti">Poikkeusaukiolot, tapahtumat ja viikon kuulumiset ' +
+        'löytyvät Facebook-sivultamme.</span>' +
+        '<span class="some-vara__linkki">Avaa Facebook</span></span></a>';
+    }
+
+    if (!((D.someUpotukset || {}).facebook)) { omaKortti(); return; }
+
+    function lataa() {
+      var f = document.createElement('iframe');
+      f.src = 'https://www.facebook.com/plugins/page.php?href=' + encodeURIComponent(osoite) +
+              '&tabs=timeline&width=400&height=520&small_header=true&adapt_container_width=true' +
+              '&hide_cover=false&show_facepile=false&locale=fi_FI';
+      f.title = 'Bistro Liekki Facebookissa';
+      f.loading = 'lazy';
+      f.style.cssText = 'border:0;overflow:hidden;width:100%;height:520px';
+      f.setAttribute('scrolling', 'no');
+      f.setAttribute('allow', 'encrypted-media');
+      f.onerror = omaKortti;
+      kehys.appendChild(f);
+    }
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (m) {
+        m.forEach(function (x) { if (x.isIntersecting) { lataa(); io.disconnect(); } });
+      }, { rootMargin: '400px' });
+      io.observe(kehys);
+    } else { lataa(); }
   }
 
   /* ------------------------------------------ 10a. ILMOITUS: ÄÄNESTYS */
@@ -6023,6 +6419,7 @@ window.LIEKKI = {
     ajankohtaista();
     galleria();
     tiktok();
+    someKanavat();
     menuOsiot();
     viikonLounas();
     saavutukset();

@@ -211,12 +211,40 @@ window.LIEKKI = {
   },
 
   /* ------------------------------------------------------------------ some */
+  /* Tyhjä osoite ('') piilottaa kyseisen kanavan ikonin ja kortin kokonaan.
+     Lisää osoite, niin se ilmestyy sivulle itsestään. */
   some: {
     facebook:  'https://www.facebook.com/BistroLiekkiTalvikkitie',
     instagram: 'https://www.instagram.com/bistroliekkitalvikkitie/',
     tiktok:    'https://www.tiktok.com/@bistroliekki',
+    snapchat:  '',                    // esim. https://www.snapchat.com/add/kayttajatunnus
     youtube:   ''                     // lisää kanavan osoite kun se on olemassa
   },
+
+  /* ---------------------------------------------------- some-upotukset */
+  /* TikTokin videot tulevat suoraan TikTokista aina.
+
+     Facebookin oma sivu-upotus renderöityy valkoisella taustalla eikä sitä
+     voi tyylitellä, joten se rikkoisi sivuston tumman ilmeen. Siksi
+     Facebook-kortissa on oletuksena talon oma kortti ja linkki sivulle.
+     Vaihda arvoksi true, jos haluat silti Facebookin oman upotuksen.
+
+     Instagram ei tarjoa ilmaista profiiliupotusta lainkaan, joten sen
+     kortissa näkyvät alla olevat kuvat. */
+  someUpotukset: {
+    facebook: false
+  },
+
+  /* -------------------------------------------------- Instagram-nostot */
+  /* Instagram ei tarjoa ilmaista profiiliupotusta, joten etusivun
+     Instagram-kortissa näkyvät nämä kuvat. Ne linkittävät profiiliin.
+     Kuvat ovat samasta kansiosta kuin gallerian kuvat. */
+  instagramKuvat: [
+    { kuva: 'assets/img/pysty-burgeri.webp', alt: 'Burgeri puuhiiligrillistä' },
+    { kuva: 'assets/img/pysty-buffet.webp',  alt: 'Lounasbuffetin lämpimät ruoat' },
+    { kuva: 'assets/img/pysty-pekoni.webp',  alt: 'Burgeri pekonilla' },
+    { kuva: 'assets/img/burgeri-chimichurri.webp', alt: 'Tuplaburgeri ja ranskalaiset' }
+  ],
 
   /* --------------------------------------------------------------- tiktok */
   /* Etusivulla näkyy TikTok-profiilin uusimmat videot suoraan TikTokista.
@@ -231,11 +259,6 @@ window.LIEKKI = {
        ]
      Tyhjä lista = uusimmat videot automaattisesti. */
   tiktokVideot: [],
-
-  /* Seuraajamäärä TikTokissa. Näkyy etusivun TikTok-osiossa.
-     Päivitä silloin tällöin, tai jätä tyhjäksi ('') niin lukua ei näytetä.
-     Tarkistettu 8.9.2026: 43,2 t. seuraajaa. */
-  tiktokSeuraajat: '43 000',
 
   /* --------------------------------------------------------- äänestys */
   /* Edenredin Suomen Paras Lounas -äänestys. Laatikko näkyy sivun

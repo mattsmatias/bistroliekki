@@ -1216,34 +1216,208 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .valolaatikko__nuoli--edell { left: 1.2rem; top: 50%; transform: translateY(-50%); }
 .valolaatikko__nuoli--seur { right: 1.2rem; top: 50%; transform: translateY(-50%); }
 
-/* --------------------------------------------------------------- 15 TIKTOK */
-.tiktok-ylä {
+/* ------------------------------------------------------------ 15 SOME */
+.some-yla {
   display: grid;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(1.6rem, 3vw, 2.6rem);
   align-items: end;
   margin-bottom: clamp(2rem, 4vw, 3.2rem);
 }
-@media (min-width: 860px) {
-  .tiktok-ylä { grid-template-columns: 1fr auto; }
-}
-.tiktok-ylä h2 + .leipa { margin-top: 1.1rem; }
-.tiktok-sivu { display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
-@media (min-width: 860px) { .tiktok-sivu { align-items: flex-end; text-align: right; } }
+@media (min-width: 900px) { .some-yla { grid-template-columns: 1fr auto; } }
+.some-yla__teksti { max-width: 46ch; }
+.some-yla h2 + .leipa { margin-top: 1.1rem; }
 
-.tiktok-luku { display: flex; align-items: baseline; gap: .6rem; margin: 0; }
-.tiktok-luku strong {
-  font-family: var(--display);
-  font-size: var(--step-3);
-  font-weight: 600;
-  color: var(--bone);
-  line-height: 1;
+/* Kanavaikonit: iso osumapinta, nimi ikonin alla */
+.some-ikonit {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
 }
-.tiktok-luku span {
-  font-size: .72rem;
-  letter-spacing: .18em;
+@media (min-width: 900px) { .some-ikonit { justify-content: flex-end; } }
+.some-ikoni {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .45rem;
+  min-width: 74px;
+  min-height: 74px;
+  padding: .8rem .6rem;
+  background: var(--char-3);
+  border: 1px solid var(--line-soft);
+  border-radius: 3px;
+  color: var(--bone-3);
+  text-decoration: none;
+  transition: color .3s var(--ease), border-color .3s var(--ease),
+              background-color .3s var(--ease), transform .3s var(--ease-out);
+}
+.some-ikoni span {
+  font-family: var(--sans);
+  font-size: .6rem;
+  font-weight: 500;
+  letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--bone-4);
 }
+.some-ikoni:hover {
+  color: var(--bone);
+  border-color: var(--ember);
+  background: var(--char-3);
+  transform: translateY(-2px);
+}
+.some-ikoni svg { width: 20px; height: 20px; }
+
+/* Kanavakortit rinnakkain */
+.some-ruudukko {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  /* Kortit venyvät samaan korkeuteen, kun ne ovat vierekkäin. */
+  align-items: stretch;
+}
+@media (min-width: 720px)  { .some-ruudukko { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1080px) { .some-ruudukko { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.some-kortti {
+  display: flex;
+  flex-direction: column;
+  background: var(--char);
+  border: 1px solid var(--line-soft);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.some-kortti__ylä {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  padding: .85rem 1rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+.some-kortti__merkki {
+  display: grid;
+  place-items: center;
+  width: 30px; height: 30px;
+  flex: none;
+  border-radius: 2px;
+  background: var(--char-3);
+  color: var(--bone-2);
+}
+.some-kortti__merkki svg { width: 16px; height: 16px; }
+.some-kortti__nimi {
+  font-family: var(--sans);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--bone-2);
+}
+.some-kortti__linkki {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  /* Kosketuskohde vähintään 44 px korkea, jotta linkkiin osuu sormella. */
+  min-height: 44px;
+  padding-inline: .35rem;
+  margin-right: -.35rem;
+  font-family: var(--sans);
+  font-size: .68rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--bone-4);
+  transition: color .3s var(--ease);
+}
+.some-kortti__linkki:hover { color: var(--ember-lit); }
+.some-kortti__linkki svg { transition: transform .3s var(--ease-out); }
+.some-kortti__linkki:hover svg { transform: translateX(3px); }
+.some-kortti__sisus {
+  padding: 1rem;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.some-kortti__sisus > *:not([hidden]) { flex: 1 1 auto; min-height: 0; }
+
+/* TikTok-kortin pystyvideot ovat luonnostaan muita korkeampia — rajataan
+   ne, jotta kortit ovat suunnilleen samanmittaisia. */
+.some-kortti[data-some-kortti="tiktok"] .karuselli__rata > * {
+  width: 100%;
+  max-width: 100%;
+}
+.some-kortti[data-some-kortti="tiktok"] .tiktok-kortti { aspect-ratio: 4 / 5; }
+.some-kortti[data-some-kortti="tiktok"] .karuselli__nappi { display: none; }
+
+/* Instagram: neljä kuvaa ruudukkona */
+.some-ig {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .5rem;
+}
+.some-ig__kuva {
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.some-ig__kuva img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform .6s var(--ease-out), opacity .3s var(--ease);
+}
+.some-ig__kuva:hover img { transform: scale(1.06); opacity: .9; }
+
+/* Facebook-upotus ja varakortti */
+.some-fb { min-height: 200px; }
+.some-fb iframe { display: block; border-radius: 2px; }
+.some-vara {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: clamp(1.2rem, 2.5vw, 1.8rem);
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-radius: 2px;
+  text-decoration: none;
+}
+.some-vara__otsikko {
+  font-family: var(--display);
+  font-size: var(--step-1);
+  color: var(--bone);
+}
+.some-vara__teksti { font-size: var(--step--1); color: var(--bone-4); line-height: 1.55; }
+.some-vara__linkki {
+  margin-top: .4rem;
+  font-family: var(--sans);
+  font-size: .68rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ember-lit);
+}
+
+/* Varakortissa on oma kuvamme taustana, jotta kortti ei jää tyhjäksi
+   laatikoksi Facebook-upotuksen ollessa pois päältä. */
+.some-vara { position: relative; overflow: hidden; padding: 0; min-height: 250px; }
+.some-vara__kuva {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: .3;
+  filter: saturate(.75);
+  transition: transform .8s var(--ease-out), opacity .4s var(--ease);
+}
+.some-vara:hover .some-vara__kuva { transform: scale(1.04); opacity: .38; }
+.some-vara__sisus {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  height: 100%;
+  justify-content: flex-end;
+  padding: clamp(1.2rem, 2.5vw, 1.8rem);
+  background: linear-gradient(to top,
+              rgba(8, 7, 7, .94) 0%, rgba(8, 7, 7, .78) 45%, rgba(8, 7, 7, .3) 100%);
+}
+
 
 /* ------------------------------------------------ TIKTOK-KARUSELLI */
 /* Vaakasuuntainen selattava rata: pyyhkäisy puhelimella, nuolet
@@ -1433,6 +1607,50 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   letter-spacing: .06em;
   color: var(--bone-4);
   text-align: center;
+}
+
+/* --------------------------------------- 15b SOMEKORTTIEN TASAKORKEUS */
+/* Kun kanavakortit ovat vierekkäin, niiden sisältöalue saa saman
+   korkeuden ja jokainen upotus venyy siihen. Tämän lohkon on oltava
+   .karuselli-, .tiktok-kortti-, .some-ig- ja .some-fb-perussääntöjen
+   JÄLKEEN, jotta se voittaa kaskadissa. */
+@media (min-width: 720px) {
+  .some-kortti__sisus {
+    height: clamp(320px, 30vw, 420px);
+    flex: 0 0 auto;
+    overflow: hidden;
+  }
+  .some-kortti__sisus > *:not([hidden]) { flex: 1 1 auto; min-height: 0; }
+
+  /* TikTok: karuselli täyttää korkeuden, pisterivi jää sen alle */
+  .some-kortti[data-some-kortti="tiktok"] [data-tiktok-vara],
+  .some-kortti[data-some-kortti="tiktok"] .karuselli {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .some-kortti[data-some-kortti="tiktok"] [data-tiktok-vara][hidden] { display: none; }
+  .some-kortti[data-some-kortti="tiktok"] [data-tiktok-vara] > .karuselli { flex: 1 1 auto; }
+  .some-kortti[data-some-kortti="tiktok"] .karuselli__rata {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-items: stretch;
+  }
+  .some-kortti[data-some-kortti="tiktok"] .karuselli__pisteet { flex: 0 0 auto; }
+  .some-kortti[data-some-kortti="tiktok"] .tiktok-kortti {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+  /* Kortin ylätunnisteen "Avaa" kertoo saman — turha rivi pois. */
+  .some-kortti[data-some-kortti="tiktok"] .tiktok-vara-teksti { display: none; }
+
+  /* Instagram: neljä kuvaa täyttää alueen kahtena rivinä */
+  .some-ig { grid-template-rows: 1fr 1fr; height: 100%; }
+  .some-ig__kuva { aspect-ratio: auto; min-height: 0; }
+
+  /* Facebook: varakortti venyy samaan mittaan */
+  .some-fb { display: flex; flex-direction: column; min-height: 0; }
+  .some-fb .some-vara { flex: 1 1 auto; min-height: 0; }
 }
 
 /* ------------------------------------------------------------ 16 LOMAKKEET */
@@ -1707,10 +1925,30 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 .menu-osio__otsikko h3 { font-size: var(--step-2); text-transform: uppercase; letter-spacing: .02em; }
 .menu-rivi { display: grid; gap: .3rem; padding-block: 1.1rem; border-bottom: 1px solid var(--line-soft); }
-.menu-rivi__ylä { display: flex; align-items: baseline; gap: 1rem; }
-.menu-rivi__nimi { font-family: var(--display); font-size: var(--step-1); color: var(--bone); }
-.menu-rivi__pisteet { flex: 1; border-bottom: 1px dotted var(--line); transform: translateY(-.2em); }
+/* Kapealla ruudulla pitkä nimi ja kahden hinnan pari eivät mahdu samalle
+   riville — silloin hinta siirtyy omalle rivilleen oikeaan reunaan. */
+.menu-rivi__ylä {
+  display: flex;
+  align-items: baseline;
+  column-gap: 1rem;
+  row-gap: .1rem;
+  flex-wrap: wrap;
+}
+.menu-rivi__nimi {
+  font-family: var(--display);
+  font-size: var(--step-1);
+  color: var(--bone);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.menu-rivi__pisteet {
+  flex: 1 1 1.2rem;
+  min-width: 1.2rem;
+  border-bottom: 1px dotted var(--line);
+  transform: translateY(-.2em);
+}
 .menu-rivi__hinta {
+  margin-left: auto;
   font-variant-numeric: tabular-nums;
   color: var(--bone-2);
   white-space: nowrap;
@@ -2611,7 +2849,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 }
 
 /* --------------------------------------------------------- 24.9 LASKURI */
-.luku__arvo, .tiktok-luku strong { font-variant-numeric: tabular-nums; }
+.luku__arvo { font-variant-numeric: tabular-nums; }
 
 /* ------------------------------------------ 24.10 LIGHTBOXIN ZOOM-AVAUS */
 .valolaatikko img { will-change: transform; }

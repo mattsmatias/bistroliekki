@@ -208,66 +208,109 @@
   </div>
 </section>
 
-<!-- ============================================================= TIKTOK -->
-<section class="osio osio--char2" aria-labelledby="tiktok">
+<!-- =============================================================== SOME -->
+<!-- Kanavat tulevat content.js:n some-lohkosta. Tyhjä osoite piilottaa
+     kanavan ikonin ja kortin automaattisesti — lisää osoite, niin se
+     ilmestyy sivulle. -->
+<section class="osio osio--char2" aria-labelledby="some">
   <div class="kuori">
-    <div class="tiktok-ylä" data-esiin>
-      <div>
-        <p class="etiketti">TikTok · @bistroliekki</p>
-        <h2 class="otsikko-m" id="tiktok">Katso, mitä<br>grillissä tapahtuu</h2>
-        <p class="leipa">Kuvaamme keittiöstä ja hiilloksesta TikTokissa — ruoka
+    <div class="some-yla" data-esiin>
+      <div class="some-yla__teksti">
+        <p class="etiketti">Seuraa meitä</p>
+        <h2 class="otsikko-m" id="some">Katso, mitä<br>grillissä tapahtuu</h2>
+        <p class="leipa">Kuvaamme keittiöstä ja hiilloksesta somessa — ruoka
           sellaisena kuin se syntyy.</p>
       </div>
 
-      <div class="tiktok-sivu">
-        <p class="tiktok-luku" data-piilota-ryhma>
-          <strong data-teksti="tiktok-seuraajat" data-piilota-tyhjana data-laskuri="0"></strong>
-          <span>seuraajaa TikTokissa</span>
-        </p>
-        <a class="nappi nappi--ääriviiva" data-some="tiktok" href="#">
-          {{ikoni:tiktok}}<span>Seuraa meitä</span></a>
-      </div>
+      <nav class="some-ikonit" aria-label="Bistro Liekki sosiaalisessa mediassa">
+        <a class="some-ikoni" data-some="tiktok" href="#" aria-label="TikTok">
+          {{ikoni:tiktok}}<span>TikTok</span></a>
+        <a class="some-ikoni" data-some="instagram" href="#" aria-label="Instagram">
+          {{ikoni:instagram}}<span>Instagram</span></a>
+        <a class="some-ikoni" data-some="facebook" href="#" aria-label="Facebook">
+          {{ikoni:facebook}}<span>Facebook</span></a>
+        <a class="some-ikoni" data-some="snapchat" href="#" aria-label="Snapchat">
+          {{ikoni:snapchat}}<span>Snapchat</span></a>
+        <a class="some-ikoni" data-some="youtube" href="#" aria-label="YouTube">
+          {{ikoni:youtube}}<span>YouTube</span></a>
+      </nav>
     </div>
 
-    <!-- Selattava karuselli: pyyhkäise puhelimella, nuolet työpöydällä.
-         Videot tulevat content.js:n tiktokVideot-listasta. Jos lista on
-         tyhjä, tähän tulee TikTokin oma profiiliupotus. -->
-    <div class="karuselli" data-esiin hidden>
-      <button class="karuselli__nappi karuselli__nappi--edell" type="button"
-              aria-label="Edellinen video">{{ikoni:vasen}}</button>
-      <div class="karuselli__rata" data-tiktok aria-label="Bistro Liekin TikTok-videot"></div>
-      <button class="karuselli__nappi karuselli__nappi--seur" type="button"
-              aria-label="Seuraava video">{{ikoni:oikea}}</button>
-      <div class="karuselli__pisteet" aria-hidden="true"></div>
-    </div>
+    <div class="some-ruudukko" data-esiin>
 
-    <!-- Varanäkymä, jos upotus estyy (mainostenesto tai evästekielto) -->
-    <div data-tiktok-vara hidden>
-      <div class="karuselli">
-        <button class="karuselli__nappi karuselli__nappi--edell" type="button"
-                aria-label="Edellinen">{{ikoni:vasen}}</button>
-        <div class="karuselli__rata">
-          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-            <img src="{{up}}assets/img/pysty-burgeri.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-            <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
-            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Puuhiiligrilli</span></span>
-          </a>
-          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-            <img src="{{up}}assets/img/pysty-buffet.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-            <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
-            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Lounasbuffet</span></span>
-          </a>
-          <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
-            <img src="{{up}}assets/img/pysty-pekoni.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-            <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
-            <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Grillin klassikot</span></span>
-          </a>
+      <!-- TikTok: videot tulevat TikTokista. Jos upotus estyy, tilalle
+           tulevat ravintolan omat pystykuvat samassa karusellissa. -->
+      <article class="some-kortti" data-some-kortti="tiktok">
+        <header class="some-kortti__ylä">
+          <span class="some-kortti__merkki">{{ikoni:tiktok}}</span>
+          <span class="some-kortti__nimi">TikTok</span>
+          <a class="some-kortti__linkki" data-some="tiktok" href="#">Avaa {{ikoni:nuoli}}</a>
+        </header>
+
+        <div class="some-kortti__sisus">
+          <div class="karuselli" hidden>
+            <button class="karuselli__nappi karuselli__nappi--edell" type="button"
+                    aria-label="Edellinen video">{{ikoni:vasen}}</button>
+            <div class="karuselli__rata" data-tiktok aria-label="Bistro Liekin TikTok-videot"></div>
+            <button class="karuselli__nappi karuselli__nappi--seur" type="button"
+                    aria-label="Seuraava video">{{ikoni:oikea}}</button>
+            <div class="karuselli__pisteet" aria-hidden="true"></div>
+          </div>
+
+          <div data-tiktok-vara hidden>
+            <div class="karuselli">
+              <button class="karuselli__nappi karuselli__nappi--edell" type="button"
+                      aria-label="Edellinen">{{ikoni:vasen}}</button>
+              <div class="karuselli__rata">
+                <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+                  <img src="{{up}}assets/img/pysty-burgeri.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                  <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
+                  <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Puuhiiligrilli</span></span>
+                </a>
+                <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+                  <img src="{{up}}assets/img/pysty-buffet.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                  <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
+                  <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Lounasbuffet</span></span>
+                </a>
+                <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
+                  <img src="{{up}}assets/img/pysty-pekoni.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                  <span class="tiktok-kortti__soita" aria-hidden="true">{{ikoni:toisto}}</span>
+                  <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Grillin klassikot</span></span>
+                </a>
+              </div>
+              <button class="karuselli__nappi karuselli__nappi--seur" type="button"
+                      aria-label="Seuraava">{{ikoni:oikea}}</button>
+              <div class="karuselli__pisteet" aria-hidden="true"></div>
+            </div>
+            <p class="tiktok-vara-teksti">Videot aukeavat TikTokissa.</p>
+          </div>
         </div>
-        <button class="karuselli__nappi karuselli__nappi--seur" type="button"
-                aria-label="Seuraava">{{ikoni:oikea}}</button>
-        <div class="karuselli__pisteet" aria-hidden="true"></div>
-      </div>
-      <p class="tiktok-vara-teksti">Videot aukeavat TikTokissa.</p>
+      </article>
+
+      <!-- Instagram: profiilikuvat content.js:n instagramKuvat-listasta -->
+      <article class="some-kortti" data-some-kortti="instagram">
+        <header class="some-kortti__ylä">
+          <span class="some-kortti__merkki">{{ikoni:instagram}}</span>
+          <span class="some-kortti__nimi">Instagram</span>
+          <a class="some-kortti__linkki" data-some="instagram" href="#">Avaa {{ikoni:nuoli}}</a>
+        </header>
+        <div class="some-kortti__sisus">
+          <div class="some-ig" data-instagram></div>
+        </div>
+      </article>
+
+      <!-- Facebook: sivun oma upotus. Jos se estyy, tilalle tulee linkkikortti. -->
+      <article class="some-kortti" data-some-kortti="facebook">
+        <header class="some-kortti__ylä">
+          <span class="some-kortti__merkki">{{ikoni:facebook}}</span>
+          <span class="some-kortti__nimi">Facebook</span>
+          <a class="some-kortti__linkki" data-some="facebook" href="#">Avaa {{ikoni:nuoli}}</a>
+        </header>
+        <div class="some-kortti__sisus">
+          <div class="some-fb" data-facebook></div>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
