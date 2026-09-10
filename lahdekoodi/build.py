@@ -164,12 +164,9 @@ def build_header(current, depth):
 <header class="headeri" id="headeri">
   <div class="headeri__sisus">
     <a class="logo" href="{nav_href('', depth)}" aria-label="Bistro Liekki — etusivulle">
-      <img class="logo__merkki" src="{up}assets/img/logo-merkki.webp" alt=""
-           width="502" height="260" decoding="async" fetchpriority="high">
-      <span class="logo__teksti">
-        <span class="logo__nimi">Bistro Liekki</span>
-        <span class="logo__ala">Puuhiiligrilli · est. 2016</span>
-      </span>
+      <img class="logo__kuva" src="{up}assets/img/logo.webp"
+           alt="Bistro Liekki" width="538" height="520"
+           decoding="async" fetchpriority="high">
     </a>
 
     <nav class="navi" aria-label="Päävalikko">{links}</nav>

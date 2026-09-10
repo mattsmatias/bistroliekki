@@ -342,43 +342,32 @@ a { color: inherit; }
   gap: 1.5rem;
 }
 
+/* Headerin logo: ravintolan oma logo sellaisenaan, ei erillistä tekstiä.
+   Korkeus on sidottu headerin korkeuteen, joten logo ei voi kasvaa yli
+   palkin edes silloin kun tyylitiedosto latautuu myöhässä. */
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: .6rem;
   text-decoration: none;
-  line-height: 1;
+  line-height: 0;
   flex: none;
 }
-/* Liekki- ja grillimerkki logosta. Sanamerkki on tekstinä vieressä, jotta se
-   pysyy terävänä ja luettavana myös pienessä koossa. */
-.logo__merkki {
+.logo__kuva {
+  display: block;
   width: auto;
-  height: clamp(30px, 3.4vw, 40px);
-  flex: none;
-  transition: height .45s var(--ease);
+  height: 62px;
+  max-height: calc(var(--header-h) - 22px);
+  transition: height .45s var(--ease), max-height .45s var(--ease);
 }
-.headeri.on-kiinni .logo__merkki { height: clamp(26px, 2.8vw, 32px); }
-.logo__teksti { display: inline-flex; flex-direction: column; gap: .18rem; }
-.logo__nimi {
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: clamp(1.05rem, .95rem + .5vw, 1.4rem);
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  color: var(--bone);
-  transition: font-size .45s var(--ease);
+/* Työpöydällä headerissa on tilaa, joten logo saa olla isompi ja luettavampi */
+@media (min-width: 720px) {
+  :root { --header-h: 112px; }
+  .logo__kuva { height: 84px; }
 }
-.logo__ala {
-  font-size: .58rem;
-  letter-spacing: .34em;
-  text-transform: uppercase;
-  color: var(--ember-lit);
-  transition: opacity .35s var(--ease), max-height .45s var(--ease);
-  max-height: 1.4em;
-  overflow: hidden;
+.headeri.on-kiinni .logo__kuva {
+  height: 46px;
+  max-height: calc(var(--header-h-min) - 14px);
 }
-.headeri.on-kiinni .logo__ala { opacity: 0; max-height: 0; }
 
 /* Työpöytävalikko näkyy vasta kun logo, kahdeksan linkkiä, yhteystiedot ja
    varauspainike mahtuvat riville. Sitä kapeammalla käytetään valikkonappia. */
@@ -1666,6 +1655,122 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 .menu-rivi__kuvaus { max-width: 62ch; }
 
+/* --------------------------------------------- SAAVUTUKSET (Tarina) */
+.saavutukset__ylä { max-width: 60ch; margin-bottom: clamp(2.4rem, 5vw, 3.6rem); }
+.saavutukset {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.2rem);
+}
+@media (min-width: 720px) {
+  .saavutukset { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+}
+.saavutus {
+  position: relative;
+  padding: clamp(1.5rem, 3vw, 2.1rem);
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-top: 2px solid var(--ember);
+  border-radius: 3px;
+}
+/* Uusin vuosi erottuu hiillosreunuksella */
+.saavutus:first-child { background: var(--char-3); }
+.saavutus__vuosi {
+  margin: 0 0 1.1rem;
+  font-family: var(--display);
+  font-size: clamp(2rem, 1.5rem + 1.6vw, 2.8rem);
+  font-variation-settings: 'opsz' 72, 'SOFT' 18, 'WONK' 0;
+  line-height: 1;
+  color: var(--ember-lit);
+}
+.saavutus__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: .8rem;
+}
+.saavutus__lista li {
+  position: relative;
+  padding-left: 1.5rem;
+  font-size: var(--step--1);
+  line-height: 1.55;
+  color: var(--bone-2);
+}
+.saavutus__lista li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: .48em;
+  width: 8px; height: 8px;
+  background: var(--ember);
+  transform: rotate(45deg);
+}
+
+/* Tapahtuman tiedot: päivä, kattaukset, hinta */
+.menu-tiedot {
+  max-width: 820px;
+  margin: 0 0 clamp(2rem, 4vw, 3rem);
+  padding: clamp(1.2rem, 2.5vw, 1.7rem) clamp(1.2rem, 2.5vw, 1.8rem);
+  list-style: none;
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-left: 2px solid var(--ember);
+  border-radius: 3px;
+  display: grid;
+  gap: .75rem;
+}
+.menu-tiedot li {
+  display: grid;
+  gap: .2rem;
+}
+@media (min-width: 560px) {
+  .menu-tiedot li {
+    grid-template-columns: 9rem 1fr;
+    align-items: baseline;
+    gap: .4rem 1.4rem;
+  }
+}
+.menu-tiedot__avain {
+  font-family: var(--sans);
+  font-size: .68rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--bone-4);
+}
+.menu-tiedot__arvo { color: var(--bone); font-size: var(--step-0); line-height: 1.45; }
+
+/* Buffet-ryhmä: pelkkiä nimiä, ei hintasaraketta */
+.menu-buffet {
+  list-style: none;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: .85rem;
+}
+@media (min-width: 780px) {
+  .menu-buffet { grid-template-columns: 1fr 1fr; gap: .9rem clamp(1.5rem, 3vw, 2.6rem); }
+}
+.menu-buffet li {
+  display: grid;
+  gap: .18rem;
+  padding-left: 1rem;
+  position: relative;
+}
+.menu-buffet li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: .62em;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--ember-deep);
+}
+.menu-buffet__nimi {
+  font-family: var(--display);
+  font-size: var(--step-0);
+  color: var(--bone);
+  line-height: 1.35;
+}
+.menu-buffet__kuvaus { font-size: var(--step--1); color: var(--bone-4); }
+
 /* Osion loppuhuomautukset ja merkkien selitys */
 .menu-huomiot {
   max-width: 820px;
@@ -1860,7 +1965,7 @@ html { -webkit-tap-highlight-color: transparent; }
 /* Kosketuskohteiden vähimmäiskoko: puhelin- ja sähköpostilinkit ovat
    toimintoja, ei koristeita — niihin pitää osua kerralla. */
 @media (hover: none) and (pointer: coarse) {
-  .logo { min-height: 46px; justify-content: center; padding-block: .35rem; }
+  .logo { min-height: 48px; align-items: center; }
   /* Tabletti vaaka-asennossa nayttaa työpöytävalikon — kosketuskoko myös siihen */
   .navi a { padding-block: .78rem; }
   .mobiilivalikko__yhteys {

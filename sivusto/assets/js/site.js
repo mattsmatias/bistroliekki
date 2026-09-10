@@ -1093,6 +1093,17 @@
       html += '<p class="menu-paneeli__kuvaus">' + turva(osio.kuvaus) + '</p>';
     }
 
+    // Tapahtuman tiedot (päivä, kattaukset, hinta) omassa laatikossaan
+    var tiedot = (osio.tiedot || []).filter(function (r) { return r && r.avain; });
+    if (tiedot.length) {
+      html += '<ul class="menu-tiedot">';
+      tiedot.forEach(function (r) {
+        html += '<li><span class="menu-tiedot__avain">' + turva(r.avain) + '</span>' +
+                '<span class="menu-tiedot__arvo">' + turva(r.arvo || '') + '</span></li>';
+      });
+      html += '</ul>';
+    }
+
     if (!annokset.length) {
       // Ei keksitä annoksia: näytetään rehellinen "tulossa" -tila.
       var osoite = osio.linkki ? (D.linkit || {})[osio.linkki] : '';
@@ -1112,36 +1123,48 @@
     // Ryhmitellään annokset otsikoiden alle. Sama ryhmänimi peräkkäin
     // = yksi otsikko; ryhmaLisa poimitaan ryhmän ensimmäiseltä riviltä.
     var edellinenRyhma = null;
+    var hinnaton = false;   // buffet-ryhmä: yhdelläkään rivillä ei ole hintaa
     html += '<div class="menu-lista">';
     annokset.forEach(function (a, i) {
       var ryhma = a.ryhma || '';
       if (ryhma !== edellinenRyhma) {
-        if (edellinenRyhma !== null) html += '</div>';
+        if (edellinenRyhma !== null) html += hinnaton ? '</ul></div>' : '</div>';
         var lisa = a.ryhmaLisa || '';
-        if (!lisa) {
-          // Lisätieto voi olla myös ryhmän myöhemmällä rivillä
-          for (var j = i; j < annokset.length && annokset[j].ryhma === ryhma; j++) {
-            if (annokset[j].ryhmaLisa) { lisa = annokset[j].ryhmaLisa; break; }
-          }
+        hinnaton = true;
+        for (var j = i; j < annokset.length && annokset[j].ryhma === ryhma; j++) {
+          if (!lisa && annokset[j].ryhmaLisa) lisa = annokset[j].ryhmaLisa;
+          if (annokset[j].hinta) hinnaton = false;
         }
         html += '<div class="menu-ryhma">' +
           '<h3 class="menu-ryhma__otsikko">' + turva(ryhma) +
           (lisa ? '<span class="menu-ryhma__lisa">' + turva(lisa) + '</span>' : '') +
           '</h3>';
+        // Buffet-ryhmä listataan tiiviisti — hinnaton rivi ei tarvitse
+        // pisteviivaa hintasarakkeeseen, jota ei ole.
+        if (hinnaton) html += '<ul class="menu-buffet">';
         edellinenRyhma = ryhma;
       }
-      html += '<div class="menu-rivi">' +
-        '<div class="menu-rivi__ylä">' +
-        '<span class="menu-rivi__nimi">' + turva(a.nimi) +
-        (a.merkit ? '<span class="menu-rivi__merkit">' + turva(a.merkit) + '</span>' : '') +
-        '</span>' +
-        '<span class="menu-rivi__pisteet" aria-hidden="true"></span>' +
-        (a.hinta ? '<span class="menu-rivi__hinta">' + turva(a.hinta) + '</span>' : '') +
-        '</div>' +
-        (a.kuvaus ? '<p class="menu-rivi__kuvaus">' + turva(a.kuvaus) + '</p>' : '') +
-        '</div>';
+
+      if (hinnaton) {
+        html += '<li><span class="menu-buffet__nimi">' + turva(a.nimi) +
+          (a.merkit ? '<span class="menu-rivi__merkit">' + turva(a.merkit) + '</span>' : '') +
+          '</span>' +
+          (a.kuvaus ? '<span class="menu-buffet__kuvaus">' + turva(a.kuvaus) + '</span>' : '') +
+          '</li>';
+      } else {
+        html += '<div class="menu-rivi">' +
+          '<div class="menu-rivi__ylä">' +
+          '<span class="menu-rivi__nimi">' + turva(a.nimi) +
+          (a.merkit ? '<span class="menu-rivi__merkit">' + turva(a.merkit) + '</span>' : '') +
+          '</span>' +
+          '<span class="menu-rivi__pisteet" aria-hidden="true"></span>' +
+          (a.hinta ? '<span class="menu-rivi__hinta">' + turva(a.hinta) + '</span>' : '') +
+          '</div>' +
+          (a.kuvaus ? '<p class="menu-rivi__kuvaus">' + turva(a.kuvaus) + '</p>' : '') +
+          '</div>';
+      }
     });
-    if (edellinenRyhma !== null) html += '</div>';
+    if (edellinenRyhma !== null) html += hinnaton ? '</ul></div>' : '</div>';
     html += '</div>';
 
     var huomiot = (osio.huomiot || []).filter(Boolean);
@@ -1159,6 +1182,33 @@
     return String(teksti)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* --------------------------------------------------- 10c2. SAAVUTUKSET */
+  /* Tarina-sivun tunnustukset content.js:n saavutukset-listasta,
+     uusin vuosi ensin. Jos lista on tyhjä, koko osio jää pois. */
+  function saavutukset() {
+    var kehys = $('[data-saavutukset]');
+    if (!kehys) return;
+
+    var vuodet = (D.saavutukset || []).filter(function (v) {
+      return v && v.vuosi && (v.tunnustukset || []).length;
+    });
+    if (!vuodet.length) {
+      var osio = kehys.closest('section');
+      if (osio) osio.remove(); else kehys.remove();
+      return;
+    }
+
+    kehys.innerHTML = vuodet.map(function (v, i) {
+      var rivit = v.tunnustukset.map(function (t) {
+        return '<li>' + turva(t) + '</li>';
+      }).join('');
+      return '<div class="saavutus" data-esiin style="--viive:' + i + '">' +
+        '<p class="saavutus__vuosi">' + turva(v.vuosi) + '</p>' +
+        '<ul class="saavutus__lista">' + rivit + '</ul>' +
+        '</div>';
+    }).join('');
   }
 
   /* ---------------------------------------------- 10d. YHTEYSLOMAKKEEN AIHE */
@@ -1231,6 +1281,7 @@
     galleria();
     tiktok();
     menuOsiot();
+    saavutukset();
     lomakeAihe();
     lomakkeet();
     tyonAlla();

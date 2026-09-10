@@ -121,6 +121,24 @@ window.LIEKKI = {
             'meiltä suoraan.'
   },
 
+  /* ------------------------------------------------------------ saavutukset */
+  /* Tarina-sivun tunnustukset. Uusin vuosi ensin — sivu näyttää ne tässä
+     järjestyksessä. Lisää uusi vuosi listan alkuun. */
+  saavutukset: [
+    { vuosi: '2026', tunnustukset: [
+      'Suomen paras burger -kisassa sijalla 19'
+    ] },
+    { vuosi: '2025', tunnustukset: [
+      'Suomen 4. paras lounasravintola',
+      'Uudenmaan paras ravintola',
+      'Suomen paras burger -kisassa sijalla 17'
+    ] },
+    { vuosi: '2024', tunnustukset: [
+      'Suomen 2. paras lounasravintola',
+      'Uudenmaan paras ravintola'
+    ] }
+  ],
+
   /* -------------------------------------------------------------- ruokalista */
   /* Menu-sivun osiot. Sisältö on kirjoitettu ravintolan omasta
      BL MENU 2026 -listasta.
@@ -143,7 +161,7 @@ window.LIEKKI = {
      -tilan ja ohjaa soittamaan tai avaamaan nykyisen listan. */
   menu: {
     /* Merkkien selitykset näkyvät ruokalistan alalaidassa. */
-    merkkiselite: 'L = laktoositon · VL = vähälaktoosinen · G = gluteeniton · V = vegaani',
+    merkkiselite: 'L = laktoositon · VL = vähälaktoosinen · M = maidoton · G = gluteeniton · V = vegaani',
 
     osiot: [
       /* ============================================================ */
@@ -299,22 +317,75 @@ window.LIEKKI = {
 
       /* ============================================================ */
       {
-        avain: 'pikkujoulu',
-        nimi: 'Pikkujoulu',
-        kuvaus: 'Pikkujoulukauden menu ryhmille.',
-        linkki: '',
-        annokset: []
-      },
-
-      /* ============================================================ */
-      {
         avain: 'brunssi',
         nimi: 'Brunssi',
-        kuvaus: 'Brunssin tarjonta.',
+        kuvaus: 'Isänpäiväbrunssi katetaan kolmena kattauksena. Paikat kannattaa varata etukäteen — kattaukset täyttyvät nopeasti.',
         linkki: '',
-        annokset: []
-      },
+        /* Tiedot näkyvät osion alussa omassa laatikossaan. */
+        tiedot: [
+          { avain: 'Päivä',      arvo: 'Sunnuntai 8.11.2026' },
+          { avain: 'Kattaukset', arvo: 'Klo 12.00–13.45 · 14.00–15.45 · 16.00–17.45' },
+          { avain: 'Hinta',      arvo: '39 € / hlö' },
+          { avain: 'Lapset',     arvo: '0–9 v. 2 € / ikävuosi' }
+        ],
+        huomiot: [
+          'Kerrothan allergioista ja erikoisruokavalioista varauksen yhteydessä, niin huomioimme ne kattauksessa.'
+        ],
+        annokset: [
+          /* ------------------------------- ALKURUOKA JA SALAATTIPÖYTÄ */
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Munavoi-piirakka', merkit: 'L' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Savuporo ruisnapit', merkit: 'L' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Kurkku', merkit: 'M, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Tomaatti', merkit: 'M, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Punajuurihummus', merkit: 'M, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Zaziki', merkit: 'L, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Paahdetut rakuunajuurekset', merkit: 'M, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Metsäsieni–yrttisalaatti', merkit: 'L, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Kylmäsavuporo–leipäjuustosalaatti', merkit: 'L, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Granaattiomena–vuohenjuustosalaatti' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Graavilohta sitrusvinegrette', merkit: 'M, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Mausteinen salami-pastasalaatti', merkit: 'L' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Vihersalaatti-sekoitus', merkit: 'M, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Tuore hedelmäsalaatti', merkit: 'M, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Viinilehtikääryleet', merkit: 'L, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Dijon perunasalaatti', merkit: 'M, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Välimeren oliivi–fetajuustosalaatti', merkit: 'L, G' },
+          { ryhma: 'Alkuruoka ja salaattipöytä', nimi: 'Savustettu kana–pekoni–Caesar', merkit: 'VL, G' },
 
+          /* ------------------------------------------------ PÄÄRUOAT */
+          { ryhma: 'Pääruoat', nimi: 'Ylikypsää naudan brisketiä', merkit: 'M, G',
+            kuvaus: 'Tummaa punaviinikastiketta ja kasviksia.' },
+          { ryhma: 'Pääruoat', nimi: 'Paahdettua paholaisen kanaa', merkit: 'L, G',
+            kuvaus: 'Paistettua vuohenjuustoa.' },
+          { ryhma: 'Pääruoat', nimi: 'Chimichurri-marinoitua uunilohta', merkit: 'L, G',
+            kuvaus: 'Metsäsienikastikkeessa.' },
+          { ryhma: 'Pääruoat', nimi: 'Basmatiriisi', merkit: 'M, G' },
+          { ryhma: 'Pääruoat', nimi: 'Tryffeli-perunapyree', merkit: 'L, G' },
+          { ryhma: 'Pääruoat', nimi: 'Paneroidut sipulirenkaat', merkit: 'L' },
+          { ryhma: 'Pääruoat', nimi: 'Röstiperunat', merkit: 'L, G' },
+          { ryhma: 'Pääruoat', nimi: 'Lihapulla-nakki ranskalaiset', merkit: 'L' },
+          { ryhma: 'Pääruoat', nimi: 'Ranch kanaburger', merkit: 'L, myös G' },
+          { ryhma: 'Pääruoat', nimi: 'Pekoni-kananmuna burger', merkit: 'L, myös G' },
+          { ryhma: 'Pääruoat', nimi: 'Pannupizza',
+            kuvaus: 'Pepperoni, aura, sipuli.' },
+
+          /* ---------------------------------------------- JÄLKIRUOAT */
+          { ryhma: 'Jälkiruoat', nimi: 'Mustikkapannukakut', merkit: 'L',
+            kuvaus: 'Vaniljakastike (L) ja mansikkahillo (M, G).' },
+          { ryhma: 'Jälkiruoat', nimi: 'Liekin suklaakakku', merkit: 'L' },
+          { ryhma: 'Jälkiruoat', nimi: 'Mansikka pannacotta', merkit: 'L, G' },
+          { ryhma: 'Jälkiruoat', nimi: 'Mintturahka', merkit: 'L, G' },
+          { ryhma: 'Jälkiruoat', nimi: 'Tuoreet hedelmät vaniljakastikkeella', merkit: 'G' },
+          { ryhma: 'Jälkiruoat', nimi: 'Keksisekoitus', merkit: 'L' },
+          { ryhma: 'Jälkiruoat', nimi: 'Karkkisekoitus', merkit: 'L, G' },
+
+          /* --------------------------------------------- RUOKAJUOMAT */
+          { ryhma: 'Ruokajuomat', nimi: 'Appelsiinimehu' },
+          { ryhma: 'Ruokajuomat', nimi: 'Omenamehu' },
+          { ryhma: 'Ruokajuomat', nimi: 'Limubuffet' },
+          { ryhma: 'Ruokajuomat', nimi: 'Vesi' }
+        ]
+      },
       /* ============================================================ */
       {
         avain: 'juomat',
