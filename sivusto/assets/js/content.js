@@ -61,7 +61,134 @@ window.LIEKKI = {
     /* Tarkista hinta ja päivitä tarvittaessa. Jätä tyhjäksi ("") jos et
        halua näyttää hintaa lainkaan. */
     hinta: '16,00 €',
-    hintaLisatieto: ''                // esim. 'Eläkeläiset ja opiskelijat 15,00 €'
+    hintaLisatieto: 'Eläkeläiset ja opiskelijat 15,00 €'
+  },
+
+  /* ------------------------------------------------------- lounaslista */
+  /* Viikon lounasbuffet. Näkyy Lounas-sivulla heti hero-kuvan alla, ja
+     kuluva päivä korostuu automaattisesti.
+
+     PÄIVITTÄMINEN JOKA VIIKKO:
+       1. Vaihda "viikko" ja "ajalla".
+       2. Vaihda jokaisen päivän "pvm" ja annokset.
+       3. Tallenna — muuta ei tarvita.
+
+     Annos kirjoitetaan näin:  { nimi: 'Annoksen nimi', merkit: 'L, G' }
+     Merkit voi jättää pois, jos niitä ei ole.
+
+     Jos jätät "paivat"-listan tyhjäksi, sivu näyttää kohteliaan
+     "lista päivittyy" -tilan ja ohjaa soittamaan. */
+  lounaslista: {
+    viikko: '37',
+    ajalla: '7.9.–11.9.',
+    merkkiselite: 'L = laktoositon · VL = vähälaktoosinen · G = gluteeniton · M = maidoton',
+    huomio: 'Pidätämme oikeuden kaikkiin muutoksiin.',
+
+    /* Mitä lounaaseen kuuluu — näkyy listan yläpuolella */
+    sisaltyy: [
+      'Lämpimät ruoat',
+      'Burgerit',
+      'Pizzat',
+      'Alkupala-leivät',
+      'Runsas salaattipöytä',
+      'Runsas jälkiruokapöytä',
+      'Kahvi ja tee',
+      'Vesi, sitrusvesi ja limu'
+    ],
+
+    hinnat: [
+      { nimi: 'Lounasbuffet',    hinta: '16,00 €' },
+      { nimi: 'Eläkeläiset',     hinta: '15,00 €' },
+      { nimi: 'Opiskelijat',     hinta: '15,00 €' },
+      { nimi: 'Lapset 0–9 v.',   hinta: '1,50 € / ikävuosi' }
+    ],
+
+    /* paiva: 1 = maanantai … 5 = perjantai */
+    paivat: [
+      { paiva: 1, nimi: 'Maanantai', pvm: '7.9.', annokset: [
+        { nimi: 'Pariloitua kanaa yrttikastikkeessa', merkit: 'L, G' },
+        { nimi: 'Hiiligrillattu lohta hummerikastikkeella', merkit: 'L, G' },
+        { nimi: 'Naudan maksaa dijon-sipulikastikkeessa', merkit: 'L, G' },
+        { nimi: 'Paistettu kebab tomaattikastikkeessa', merkit: 'M, G' },
+        { nimi: 'Täytetyt hodarit', merkit: 'L' },
+        { nimi: 'Rapeat wingsit', merkit: 'M, G' },
+        { nimi: 'Basmatiriisi', merkit: 'M, G' },
+        { nimi: 'Kermaperunat', merkit: 'L, G' },
+        { nimi: 'Grilliranskalaiset', merkit: 'M, G' },
+        { nimi: 'Päivän pannupizza' },
+        { nimi: 'Päivän smash-burgerit', lisa: 'Pyydettäessä L, G, kasvis tai vege' },
+        { nimi: 'Sriracha-pekoni smash' },
+        { nimi: 'Ranch kanaburger' },
+        { nimi: 'Pulledpork burger' }
+      ] },
+
+      { paiva: 2, nimi: 'Tiistai', pvm: '8.9.', annokset: [
+        { nimi: 'Hiiligrillistä Liekin Aura-lihapullat', merkit: 'L' },
+        { nimi: 'Pasta carbonara', merkit: 'L' },
+        { nimi: 'Mureaa kanaa teriyaki-kastikkeessa', merkit: 'M, G' },
+        { nimi: 'Paistettu kebab tomaattikastikkeessa', merkit: 'M, G' },
+        { nimi: 'Täytetyt hodarit', merkit: 'L' },
+        { nimi: 'Rapeat wingsit', merkit: 'M, G' },
+        { nimi: 'Yrttiperunat', merkit: 'L, G' },
+        { nimi: 'Grilliranskalaiset', merkit: 'M, G' },
+        { nimi: 'Basmatiriisi', merkit: 'M, G' },
+        { nimi: 'Päivän pannupizza' },
+        { nimi: 'Päivän smash-burgerit', lisa: 'Pyydettäessä L, G, kasvis tai vege' },
+        { nimi: 'Fire demon smash' },
+        { nimi: 'Ranch kanaburger' },
+        { nimi: 'Pulledpork burger' }
+      ] },
+
+      { paiva: 3, nimi: 'Keskiviikko', pvm: '9.9.', annokset: [
+        { nimi: 'Liekin buffalo-lasagne', merkit: 'L' },
+        { nimi: 'Pariloitua kuhaa ja kasviksia tillipestolla', merkit: 'L' },
+        { nimi: 'Mureaa kanaa salsakastikkeessa', merkit: 'L, G' },
+        { nimi: 'Paistettu kebab tomaattikastikkeessa', merkit: 'M, G' },
+        { nimi: 'Täytetyt hodarit', merkit: 'L' },
+        { nimi: 'Rapeat wingsit' },
+        { nimi: 'Muusi', merkit: 'L, G' },
+        { nimi: 'Basmatiriisi', merkit: 'M, G' },
+        { nimi: 'Grilliranskalaiset', merkit: 'M, G' },
+        { nimi: 'Päivän pannupizza' },
+        { nimi: 'Päivän smash-burgerit', lisa: 'Pyydettäessä L, G, kasvis tai vege' },
+        { nimi: 'Teriyaki smash' },
+        { nimi: 'Ranch kanaburger' },
+        { nimi: 'Pulledpork burger' }
+      ] },
+
+      { paiva: 4, nimi: 'Torstai', pvm: '10.9.', annokset: [
+        { nimi: 'Hiiligrillattua kanaa kreikkalaisessa kastikkeessa', merkit: 'L, G' },
+        { nimi: 'Uunilohta mäti-smetanakastikkeella', merkit: 'L, G' },
+        { nimi: 'Ylikypsä kassler Aura-kastikkeella', merkit: 'L, G' },
+        { nimi: 'Paistettu kebab tomaattikastikkeessa', merkit: 'M, G' },
+        { nimi: 'Täytetyt hodarit', merkit: 'L' },
+        { nimi: 'Rapeat wingsit', merkit: 'M, G' },
+        { nimi: 'Basmatiriisi', merkit: 'M, G' },
+        { nimi: 'Grilliranskalaiset', merkit: 'M, G' },
+        { nimi: 'Muusi', merkit: 'L, G' },
+        { nimi: 'Päivän pannupizza' },
+        { nimi: 'Päivän smash-burgerit', lisa: 'Pyydettäessä L, G, kasvis tai vege' },
+        { nimi: 'Salsa nacho smash' },
+        { nimi: 'Ranch kanaburger' },
+        { nimi: 'Pulledpork burger' }
+      ] },
+
+      { paiva: 5, nimi: 'Perjantai', pvm: '11.9.', annokset: [
+        { nimi: 'Liekin lihamureke chipotle-kastikkeella', merkit: 'L' },
+        { nimi: 'Hiiligrillatut kanavartaat curry-kastikkeella', merkit: 'L, G' },
+        { nimi: 'Ylikypsää härkää punaviinissä', merkit: 'M, G' },
+        { nimi: 'Paistettu kebab tomaattikastikkeessa', merkit: 'L, G' },
+        { nimi: 'Täytetyt hodarit', merkit: 'L' },
+        { nimi: 'Rapeat wingsit', merkit: 'M, G' },
+        { nimi: 'Ranskalaiset', merkit: 'L, G' },
+        { nimi: 'Valkosipuli-kermaperunat', merkit: 'L, G' },
+        { nimi: 'Päivän pannupizza' },
+        { nimi: 'Päivän smash-burgerit', lisa: 'Pyydettäessä L, G, kasvis tai vege' },
+        { nimi: 'Onion lover smash' },
+        { nimi: 'Ranch kanaburger' },
+        { nimi: 'Pulledpork burger' }
+      ] }
+    ]
   },
 
   /* ---------------------------------------------------------------- linkit */
@@ -72,9 +199,6 @@ window.LIEKKI = {
     /* À la carte -lista / verkkotilaus. Osoittaa toistaiseksi ravintolan
        nykyiseen tilausjärjestelmään — vaihda kun uusi on käytössä. */
     menuTilaus:  'https://bistroliekki.fi/talvikkitie/menu.php',
-
-    /* Päivän lounaslista */
-    lounaslista: 'https://bistroliekki.fi/talvikkitie/lunchmenu.php',
 
     /* Lahjakortin ostolinkki. Lisää osoite kun se on saatavilla. */
     lahjakortti: '',

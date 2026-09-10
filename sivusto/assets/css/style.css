@@ -1683,6 +1683,158 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 .menu-rivi__kuvaus { max-width: 62ch; }
 
+/* ------------------------------------------ VIIKON LOUNAS (Lounas) */
+.lounasviikko__ylä { margin-bottom: clamp(2.2rem, 4.5vw, 3.4rem); }
+.lounasviikko__ylä .otsikko-l { margin-top: .4rem; }
+
+/* Mitä lounaaseen kuuluu */
+.lounas-sisaltyy {
+  margin-top: clamp(1.6rem, 3vw, 2.2rem);
+  padding: clamp(1.2rem, 2.5vw, 1.7rem) clamp(1.2rem, 2.5vw, 1.8rem);
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-left: 2px solid var(--ember);
+  border-radius: 3px;
+}
+.lounas-sisaltyy__otsikko {
+  margin: 0 0 .9rem;
+  font-family: var(--sans);
+  font-size: .68rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ember-lit);
+}
+.lounas-sisaltyy ul {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: grid;
+  gap: .5rem clamp(1rem, 2.5vw, 2rem);
+}
+/* Kahteen sarakkeeseen jo kapealla ruudulla, jotta viikon lista ei jää
+   turhan kauas alas puhelimessa. */
+@media (min-width: 360px) { .lounas-sisaltyy ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem .9rem; } }
+@media (min-width: 1000px) { .lounas-sisaltyy ul { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.lounas-sisaltyy li {
+  position: relative;
+  padding-left: .95rem;
+  font-size: var(--step--1);
+  color: var(--bone-2);
+}
+.lounas-sisaltyy li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: .58em;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--ember-deep);
+}
+
+/* Hinnat */
+.lounas-hinnat {
+  list-style: none;
+  margin: clamp(1.2rem, 2.5vw, 1.8rem) 0 0;
+  padding: 0;
+  display: grid;
+  gap: .55rem clamp(1.2rem, 3vw, 2.4rem);
+}
+@media (min-width: 400px) { .lounas-hinnat { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .lounas-hinnat { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.lounas-hinnat li {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+  padding-block: .45rem;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: var(--step--1);
+}
+.lounas-hinnat__nimi { color: var(--bone-4); }
+.lounas-hinnat__hinta {
+  margin-left: auto;
+  color: var(--bone);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Viikonpäivät */
+.lounaspaivat {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.4rem);
+}
+/* minmax(0,…) jotta pitkät annosnimet eivät leventäisi sarakkeita.
+   Viisi saraketta olisi liian ahdas 14 annokselle, siksi enintään kolme. */
+@media (min-width: 620px)  { .lounaspaivat { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .lounaspaivat { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.lounaspaiva {
+  padding: clamp(1.2rem, 2.2vw, 1.5rem);
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-top: 2px solid var(--line);
+  border-radius: 3px;
+}
+/* Kuluva päivä erottuu hiilloksella */
+.lounaspaiva.on-tanaan {
+  background: var(--char-3);
+  border-top-color: var(--ember);
+  box-shadow: 0 0 0 1px rgba(201,85,42,.25), 0 14px 40px rgba(0,0,0,.35);
+}
+.lounaspaiva__ylä {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .5rem .7rem;
+  padding-bottom: .85rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+.lounaspaiva__nimi {
+  margin: 0;
+  font-size: var(--step-1);
+  letter-spacing: -.005em;
+  color: var(--bone);
+}
+.lounaspaiva__pvm {
+  font-family: var(--sans);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  color: var(--bone-4);
+}
+.lounaspaiva__merkki {
+  margin-left: auto;
+  flex: none;
+  padding: .22rem .5rem;
+  background: var(--ember);
+  border-radius: 2px;
+  font-family: var(--sans);
+  font-size: .58rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+}
+.lounaspaiva__lista {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: grid;
+  gap: .62rem;
+}
+.lounaspaiva__lista li { line-height: 1.4; overflow-wrap: anywhere; }
+.lounaspaiva__annos {
+  font-size: var(--step--1);
+  color: var(--bone-2);
+}
+.lounaspaiva .menu-rivi__merkit { margin-left: .4rem; }
+/* Huomautus annoksen alla — ei ruokavaliomerkintä, joten tavallista tekstiä */
+.lounaspaiva__lisa {
+  display: block;
+  margin-top: .12rem;
+  font-size: .72rem;
+  line-height: 1.4;
+  color: var(--bone-4);
+}
+
 /* --------------------------------------------- SAAVUTUKSET (Tarina) */
 .saavutukset__ylä { max-width: 60ch; margin-bottom: clamp(2.4rem, 5vw, 3.6rem); }
 .saavutukset {

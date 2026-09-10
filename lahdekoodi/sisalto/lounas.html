@@ -33,14 +33,27 @@
   </div>
 </section>
 
-<section class="osio" style="padding-top:0">
+<!-- ===================================================================
+     VIIKON LOUNASLISTA
+
+     Sisältö tulee tiedostosta assets/js/content.js kohdasta "lounaslista".
+     Kuluva päivä korostuu automaattisesti, ja puhelimessa se nostetaan
+     listan ensimmäiseksi. Päivitä lista kerran viikossa content.js:ään.
+     =================================================================== -->
+<section class="osio" style="padding-top:0" id="sisalto">
   <div class="kuori">
-    <div class="kortit kortit--3" data-esiin>
+    <div class="lounasviikko" data-lounaslista></div>
+  </div>
+</section>
+
+<section class="osio osio--char viiva-ylä">
+  <div class="kuori">
+    <div class="kortit kortit--2" data-esiin>
       <article class="kortti">
         <p class="kortti__nro">Milloin</p>
         <h3><span data-teksti="lounas-aika">10:30–15:00</span></h3>
         <p>Lounasbuffet katetaan <span data-teksti="lounas-paivat-pieni">arkisin ma–pe</span>.
-          Viimeinen annos tarjoillaan klo <span>15</span>, joten tule ajoissa.</p>
+          Viimeinen annos tarjoillaan klo 15, joten tule ajoissa.</p>
       </article>
 
       <article class="kortti">
@@ -49,15 +62,6 @@
         <p>Lounas on buffet — pöytävarausta ei tarvita. Isommalle porukalle kannattaa
           soittaa etukäteen, niin varaamme teille pöydän.</p>
         <a class="linkki" data-href="puhelin" href="#">Soita meille {{ikoni:nuoli}}</a>
-      </article>
-
-      <article class="kortti">
-        <p class="kortti__nro">Päivän lista</p>
-        <h3>Katso lounaslista</h3>
-        <p>Päivän ja viikon lounaslista päivittyy erikseen. Katso ajantasainen lista
-          ennen kuin lähdet liikkeelle.</p>
-        <a class="linkki" data-linkki="lounaslista" data-tyhjana="Soita ja kysy"
-           data-vara-href="puhelin" href="#"><span>Päivän lounaslista</span> {{ikoni:nuoli}}</a>
       </article>
     </div>
   </div>
@@ -93,10 +97,10 @@
         savun maku, nopeammassa tahdissa.</p>
       <p class="leipa">Kerrothan allergioista ja erikoisruokavalioista henkilökunnalle.</p>
       <div class="napit">
-        <a class="nappi" data-linkki="lounaslista" data-tyhjana="Soita ja kysy"
-           data-vara-href="puhelin" href="#"><span>Päivän lounaslista</span></a>
-        <a class="nappi nappi--ääriviiva" data-linkki="reittiohjeet" href="#">
+        <a class="nappi" data-linkki="reittiohjeet" href="#">
           {{ikoni:sijainti}}<span>Reittiohjeet</span></a>
+        <a class="nappi nappi--ääriviiva" data-href="puhelin" href="#">
+          {{ikoni:soita}}<span>Soita meille</span></a>
       </div>
     </div>
 

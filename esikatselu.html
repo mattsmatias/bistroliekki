@@ -1687,6 +1687,158 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 .menu-rivi__kuvaus { max-width: 62ch; }
 
+/* ------------------------------------------ VIIKON LOUNAS (Lounas) */
+.lounasviikko__ylä { margin-bottom: clamp(2.2rem, 4.5vw, 3.4rem); }
+.lounasviikko__ylä .otsikko-l { margin-top: .4rem; }
+
+/* Mitä lounaaseen kuuluu */
+.lounas-sisaltyy {
+  margin-top: clamp(1.6rem, 3vw, 2.2rem);
+  padding: clamp(1.2rem, 2.5vw, 1.7rem) clamp(1.2rem, 2.5vw, 1.8rem);
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-left: 2px solid var(--ember);
+  border-radius: 3px;
+}
+.lounas-sisaltyy__otsikko {
+  margin: 0 0 .9rem;
+  font-family: var(--sans);
+  font-size: .68rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ember-lit);
+}
+.lounas-sisaltyy ul {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: grid;
+  gap: .5rem clamp(1rem, 2.5vw, 2rem);
+}
+/* Kahteen sarakkeeseen jo kapealla ruudulla, jotta viikon lista ei jää
+   turhan kauas alas puhelimessa. */
+@media (min-width: 360px) { .lounas-sisaltyy ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem .9rem; } }
+@media (min-width: 1000px) { .lounas-sisaltyy ul { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.lounas-sisaltyy li {
+  position: relative;
+  padding-left: .95rem;
+  font-size: var(--step--1);
+  color: var(--bone-2);
+}
+.lounas-sisaltyy li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: .58em;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--ember-deep);
+}
+
+/* Hinnat */
+.lounas-hinnat {
+  list-style: none;
+  margin: clamp(1.2rem, 2.5vw, 1.8rem) 0 0;
+  padding: 0;
+  display: grid;
+  gap: .55rem clamp(1.2rem, 3vw, 2.4rem);
+}
+@media (min-width: 400px) { .lounas-hinnat { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .lounas-hinnat { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.lounas-hinnat li {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+  padding-block: .45rem;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: var(--step--1);
+}
+.lounas-hinnat__nimi { color: var(--bone-4); }
+.lounas-hinnat__hinta {
+  margin-left: auto;
+  color: var(--bone);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Viikonpäivät */
+.lounaspaivat {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.4rem);
+}
+/* minmax(0,…) jotta pitkät annosnimet eivät leventäisi sarakkeita.
+   Viisi saraketta olisi liian ahdas 14 annokselle, siksi enintään kolme. */
+@media (min-width: 620px)  { .lounaspaivat { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .lounaspaivat { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.lounaspaiva {
+  padding: clamp(1.2rem, 2.2vw, 1.5rem);
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-top: 2px solid var(--line);
+  border-radius: 3px;
+}
+/* Kuluva päivä erottuu hiilloksella */
+.lounaspaiva.on-tanaan {
+  background: var(--char-3);
+  border-top-color: var(--ember);
+  box-shadow: 0 0 0 1px rgba(201,85,42,.25), 0 14px 40px rgba(0,0,0,.35);
+}
+.lounaspaiva__ylä {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .5rem .7rem;
+  padding-bottom: .85rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+.lounaspaiva__nimi {
+  margin: 0;
+  font-size: var(--step-1);
+  letter-spacing: -.005em;
+  color: var(--bone);
+}
+.lounaspaiva__pvm {
+  font-family: var(--sans);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  color: var(--bone-4);
+}
+.lounaspaiva__merkki {
+  margin-left: auto;
+  flex: none;
+  padding: .22rem .5rem;
+  background: var(--ember);
+  border-radius: 2px;
+  font-family: var(--sans);
+  font-size: .58rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+}
+.lounaspaiva__lista {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: grid;
+  gap: .62rem;
+}
+.lounaspaiva__lista li { line-height: 1.4; overflow-wrap: anywhere; }
+.lounaspaiva__annos {
+  font-size: var(--step--1);
+  color: var(--bone-2);
+}
+.lounaspaiva .menu-rivi__merkit { margin-left: .4rem; }
+/* Huomautus annoksen alla — ei ruokavaliomerkintä, joten tavallista tekstiä */
+.lounaspaiva__lisa {
+  display: block;
+  margin-top: .12rem;
+  font-size: .72rem;
+  line-height: 1.4;
+  color: var(--bone-4);
+}
+
 /* --------------------------------------------- SAAVUTUKSET (Tarina) */
 .saavutukset__ylä { max-width: 60ch; margin-bottom: clamp(2.4rem, 5vw, 3.6rem); }
 .saavutukset {
@@ -2449,9 +2601,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
       <p class="leipa" data-lounastila></p>
       <div class="napit">
         <a class="nappi" href="#/lounas"><span>Katso lounas</span></a>
-        <a class="nappi nappi--ääriviiva" data-linkki="lounaslista"
-           data-tyhjana="Soita ja kysy" data-vara-href="puhelin" href="#">
-          <span>Päivän lounaslista</span></a>
       </div>
     </div>
 
@@ -2880,14 +3029,27 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   </div>
 </section>
 
-<section class="osio" style="padding-top:0">
+<!-- ===================================================================
+     VIIKON LOUNASLISTA
+
+     Sisältö tulee tiedostosta assets/js/content.js kohdasta "lounaslista".
+     Kuluva päivä korostuu automaattisesti, ja puhelimessa se nostetaan
+     listan ensimmäiseksi. Päivitä lista kerran viikossa content.js:ään.
+     =================================================================== -->
+<section class="osio" style="padding-top:0" id="sisalto">
   <div class="kuori">
-    <div class="kortit kortit--3" data-esiin>
+    <div class="lounasviikko" data-lounaslista></div>
+  </div>
+</section>
+
+<section class="osio osio--char viiva-ylä">
+  <div class="kuori">
+    <div class="kortit kortit--2" data-esiin>
       <article class="kortti">
         <p class="kortti__nro">Milloin</p>
         <h3><span data-teksti="lounas-aika">10:30–15:00</span></h3>
         <p>Lounasbuffet katetaan <span data-teksti="lounas-paivat-pieni">arkisin ma–pe</span>.
-          Viimeinen annos tarjoillaan klo <span>15</span>, joten tule ajoissa.</p>
+          Viimeinen annos tarjoillaan klo 15, joten tule ajoissa.</p>
       </article>
 
       <article class="kortti">
@@ -2896,15 +3058,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
         <p>Lounas on buffet — pöytävarausta ei tarvita. Isommalle porukalle kannattaa
           soittaa etukäteen, niin varaamme teille pöydän.</p>
         <a class="linkki" data-href="puhelin" href="#">Soita meille <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true"><path d="M9 1l4 4-4 4M13 5H0" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg></a>
-      </article>
-
-      <article class="kortti">
-        <p class="kortti__nro">Päivän lista</p>
-        <h3>Katso lounaslista</h3>
-        <p>Päivän ja viikon lounaslista päivittyy erikseen. Katso ajantasainen lista
-          ennen kuin lähdet liikkeelle.</p>
-        <a class="linkki" data-linkki="lounaslista" data-tyhjana="Soita ja kysy"
-           data-vara-href="puhelin" href="#"><span>Päivän lounaslista</span> <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true"><path d="M9 1l4 4-4 4M13 5H0" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg></a>
       </article>
     </div>
   </div>
@@ -2936,10 +3089,10 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
         savun maku, nopeammassa tahdissa.</p>
       <p class="leipa">Kerrothan allergioista ja erikoisruokavalioista henkilökunnalle.</p>
       <div class="napit">
-        <a class="nappi" data-linkki="lounaslista" data-tyhjana="Soita ja kysy"
-           data-vara-href="puhelin" href="#"><span>Päivän lounaslista</span></a>
-        <a class="nappi nappi--ääriviiva" data-linkki="reittiohjeet" href="#">
+        <a class="nappi" data-linkki="reittiohjeet" href="#">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1116 0z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.8" stroke="currentColor" stroke-width="1.6"/></svg><span>Reittiohjeet</span></a>
+        <a class="nappi nappi--ääriviiva" data-href="puhelin" href="#">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 16.4v2.6a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 011 3.2 2 2 0 013 1h2.6a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L6.7 8.9a16 16 0 006 6l1.3-1.1a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Soita meille</span></a>
       </div>
     </div>
 
@@ -3623,7 +3776,134 @@ window.LIEKKI = {
     /* Tarkista hinta ja päivitä tarvittaessa. Jätä tyhjäksi ("") jos et
        halua näyttää hintaa lainkaan. */
     hinta: '16,00 €',
-    hintaLisatieto: ''                // esim. 'Eläkeläiset ja opiskelijat 15,00 €'
+    hintaLisatieto: 'Eläkeläiset ja opiskelijat 15,00 €'
+  },
+
+  /* ------------------------------------------------------- lounaslista */
+  /* Viikon lounasbuffet. Näkyy Lounas-sivulla heti hero-kuvan alla, ja
+     kuluva päivä korostuu automaattisesti.
+
+     PÄIVITTÄMINEN JOKA VIIKKO:
+       1. Vaihda "viikko" ja "ajalla".
+       2. Vaihda jokaisen päivän "pvm" ja annokset.
+       3. Tallenna — muuta ei tarvita.
+
+     Annos kirjoitetaan näin:  { nimi: 'Annoksen nimi', merkit: 'L, G' }
+     Merkit voi jättää pois, jos niitä ei ole.
+
+     Jos jätät "paivat"-listan tyhjäksi, sivu näyttää kohteliaan
+     "lista päivittyy" -tilan ja ohjaa soittamaan. */
+  lounaslista: {
+    viikko: '37',
+    ajalla: '7.9.–11.9.',
+    merkkiselite: 'L = laktoositon · VL = vähälaktoosinen · G = gluteeniton · M = maidoton',
+    huomio: 'Pidätämme oikeuden kaikkiin muutoksiin.',
+
+    /* Mitä lounaaseen kuuluu — näkyy listan yläpuolella */
+    sisaltyy: [
+      'Lämpimät ruoat',
+      'Burgerit',
+      'Pizzat',
+      'Alkupala-leivät',
+      'Runsas salaattipöytä',
+      'Runsas jälkiruokapöytä',
+      'Kahvi ja tee',
+      'Vesi, sitrusvesi ja limu'
+    ],
+
+    hinnat: [
+      { nimi: 'Lounasbuffet',    hinta: '16,00 €' },
+      { nimi: 'Eläkeläiset',     hinta: '15,00 €' },
+      { nimi: 'Opiskelijat',     hinta: '15,00 €' },
+      { nimi: 'Lapset 0–9 v.',   hinta: '1,50 € / ikävuosi' }
+    ],
+
+    /* paiva: 1 = maanantai … 5 = perjantai */
+    paivat: [
+      { paiva: 1, nimi: 'Maanantai', pvm: '7.9.', annokset: [
+        { nimi: 'Pariloitua kanaa yrttikastikkeessa', merkit: 'L, G' },
+        { nimi: 'Hiiligrillattu lohta hummerikastikkeella', merkit: 'L, G' },
+        { nimi: 'Naudan maksaa dijon-sipulikastikkeessa', merkit: 'L, G' },
+        { nimi: 'Paistettu kebab tomaattikastikkeessa', merkit: 'M, G' },
+        { nimi: 'Täytetyt hodarit', merkit: 'L' },
+        { nimi: 'Rapeat wingsit', merkit: 'M, G' },
+        { nimi: 'Basmatiriisi', merkit: 'M, G' },
+        { nimi: 'Kermaperunat', merkit: 'L, G' },
+        { nimi: 'Grilliranskalaiset', merkit: 'M, G' },
+        { nimi: 'Päivän pannupizza' },
+        { nimi: 'Päivän smash-burgerit', lisa: 'Pyydettäessä L, G, kasvis tai vege' },
+        { nimi: 'Sriracha-pekoni smash' },
+        { nimi: 'Ranch kanaburger' },
+        { nimi: 'Pulledpork burger' }
+      ] },
+
+      { paiva: 2, nimi: 'Tiistai', pvm: '8.9.', annokset: [
+        { nimi: 'Hiiligrillistä Liekin Aura-lihapullat', merkit: 'L' },
+        { nimi: 'Pasta carbonara', merkit: 'L' },
+        { nimi: 'Mureaa kanaa teriyaki-kastikkeessa', merkit: 'M, G' },
+        { nimi: 'Paistettu kebab tomaattikastikkeessa', merkit: 'M, G' },
+        { nimi: 'Täytetyt hodarit', merkit: 'L' },
+        { nimi: 'Rapeat wingsit', merkit: 'M, G' },
+        { nimi: 'Yrttiperunat', merkit: 'L, G' },
+        { nimi: 'Grilliranskalaiset', merkit: 'M, G' },
+        { nimi: 'Basmatiriisi', merkit: 'M, G' },
+        { nimi: 'Päivän pannupizza' },
+        { nimi: 'Päivän smash-burgerit', lisa: 'Pyydettäessä L, G, kasvis tai vege' },
+        { nimi: 'Fire demon smash' },
+        { nimi: 'Ranch kanaburger' },
+        { nimi: 'Pulledpork burger' }
+      ] },
+
+      { paiva: 3, nimi: 'Keskiviikko', pvm: '9.9.', annokset: [
+        { nimi: 'Liekin buffalo-lasagne', merkit: 'L' },
+        { nimi: 'Pariloitua kuhaa ja kasviksia tillipestolla', merkit: 'L' },
+        { nimi: 'Mureaa kanaa salsakastikkeessa', merkit: 'L, G' },
+        { nimi: 'Paistettu kebab tomaattikastikkeessa', merkit: 'M, G' },
+        { nimi: 'Täytetyt hodarit', merkit: 'L' },
+        { nimi: 'Rapeat wingsit' },
+        { nimi: 'Muusi', merkit: 'L, G' },
+        { nimi: 'Basmatiriisi', merkit: 'M, G' },
+        { nimi: 'Grilliranskalaiset', merkit: 'M, G' },
+        { nimi: 'Päivän pannupizza' },
+        { nimi: 'Päivän smash-burgerit', lisa: 'Pyydettäessä L, G, kasvis tai vege' },
+        { nimi: 'Teriyaki smash' },
+        { nimi: 'Ranch kanaburger' },
+        { nimi: 'Pulledpork burger' }
+      ] },
+
+      { paiva: 4, nimi: 'Torstai', pvm: '10.9.', annokset: [
+        { nimi: 'Hiiligrillattua kanaa kreikkalaisessa kastikkeessa', merkit: 'L, G' },
+        { nimi: 'Uunilohta mäti-smetanakastikkeella', merkit: 'L, G' },
+        { nimi: 'Ylikypsä kassler Aura-kastikkeella', merkit: 'L, G' },
+        { nimi: 'Paistettu kebab tomaattikastikkeessa', merkit: 'M, G' },
+        { nimi: 'Täytetyt hodarit', merkit: 'L' },
+        { nimi: 'Rapeat wingsit', merkit: 'M, G' },
+        { nimi: 'Basmatiriisi', merkit: 'M, G' },
+        { nimi: 'Grilliranskalaiset', merkit: 'M, G' },
+        { nimi: 'Muusi', merkit: 'L, G' },
+        { nimi: 'Päivän pannupizza' },
+        { nimi: 'Päivän smash-burgerit', lisa: 'Pyydettäessä L, G, kasvis tai vege' },
+        { nimi: 'Salsa nacho smash' },
+        { nimi: 'Ranch kanaburger' },
+        { nimi: 'Pulledpork burger' }
+      ] },
+
+      { paiva: 5, nimi: 'Perjantai', pvm: '11.9.', annokset: [
+        { nimi: 'Liekin lihamureke chipotle-kastikkeella', merkit: 'L' },
+        { nimi: 'Hiiligrillatut kanavartaat curry-kastikkeella', merkit: 'L, G' },
+        { nimi: 'Ylikypsää härkää punaviinissä', merkit: 'M, G' },
+        { nimi: 'Paistettu kebab tomaattikastikkeessa', merkit: 'L, G' },
+        { nimi: 'Täytetyt hodarit', merkit: 'L' },
+        { nimi: 'Rapeat wingsit', merkit: 'M, G' },
+        { nimi: 'Ranskalaiset', merkit: 'L, G' },
+        { nimi: 'Valkosipuli-kermaperunat', merkit: 'L, G' },
+        { nimi: 'Päivän pannupizza' },
+        { nimi: 'Päivän smash-burgerit', lisa: 'Pyydettäessä L, G, kasvis tai vege' },
+        { nimi: 'Onion lover smash' },
+        { nimi: 'Ranch kanaburger' },
+        { nimi: 'Pulledpork burger' }
+      ] }
+    ]
   },
 
   /* ---------------------------------------------------------------- linkit */
@@ -3634,9 +3914,6 @@ window.LIEKKI = {
     /* À la carte -lista / verkkotilaus. Osoittaa toistaiseksi ravintolan
        nykyiseen tilausjärjestelmään — vaihda kun uusi on käytössä. */
     menuTilaus:  'https://bistroliekki.fi/talvikkitie/menu.php',
-
-    /* Päivän lounaslista */
-    lounaslista: 'https://bistroliekki.fi/talvikkitie/lunchmenu.php',
 
     /* Lahjakortin ostolinkki. Lisää osoite kun se on saatavilla. */
     lahjakortti: '',
@@ -5328,6 +5605,95 @@ window.LIEKKI = {
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  /* ------------------------------------------------ 10c1. VIIKON LOUNAS */
+  /* Koko viikon lounaslista Lounas-sivun alkuun. Kuluva arkipäivä
+     korostuu, jotta kävijä näkee heti mitä tänään on tarjolla. */
+  function viikonLounas() {
+    var kehys = $('[data-lounaslista]');
+    if (!kehys) return;
+
+    var lista = D.lounaslista || {};
+    var paivat = (lista.paivat || []).filter(function (p) {
+      return p && (p.annokset || []).length;
+    });
+
+    if (!paivat.length) {
+      kehys.innerHTML = '<div class="menu-tulossa">' +
+        '<p class="menu-tulossa__otsikko">Lista päivittyy</p>' +
+        '<p class="menu-tulossa__teksti">Tämän viikon lounaslista lisätään sivulle ' +
+        'pian. Kerromme mielellämme puhelimitse, mitä tänään on tarjolla.</p>' +
+        '<div class="napit"><a class="nappi nappi--hiljainen" href="tel:' +
+        (D.puhelinHref || '') + '"><span>Soita ja kysy</span></a></div></div>';
+      return;
+    }
+
+    var tanaan = ravintolanAika().paiva;
+
+    var html = '';
+
+    // Viikko, ajankohta ja mitä lounaaseen kuuluu
+    var otsikko = [];
+    if (lista.viikko) otsikko.push('Viikko ' + turva(lista.viikko));
+    if (lista.ajalla) otsikko.push(turva(lista.ajalla));
+    html += '<div class="lounasviikko__ylä">' +
+      (otsikko.length ? '<p class="etiketti">' + otsikko.join(' · ') + '</p>' : '') +
+      '<h2 class="otsikko-l" data-sanat>Viikon lounas</h2>';
+
+    var sisaltyy = (lista.sisaltyy || []).filter(Boolean);
+    if (sisaltyy.length) {
+      html += '<div class="lounas-sisaltyy">' +
+        '<p class="lounas-sisaltyy__otsikko">Lounaaseen kuuluu</p>' +
+        '<ul>' + sisaltyy.map(function (s) {
+          return '<li>' + turva(s) + '</li>';
+        }).join('') + '</ul></div>';
+    }
+
+    var hinnat = (lista.hinnat || []).filter(function (h) { return h && h.nimi; });
+    if (hinnat.length) {
+      html += '<ul class="lounas-hinnat">' + hinnat.map(function (h) {
+        return '<li><span class="lounas-hinnat__nimi">' + turva(h.nimi) + '</span>' +
+               '<span class="lounas-hinnat__hinta">' + turva(h.hinta || '') + '</span></li>';
+      }).join('') + '</ul>';
+    }
+    html += '</div>';
+
+    // Päiväkortit
+    html += '<div class="lounaspaivat">';
+    paivat.forEach(function (p, i) {
+      var on = p.paiva === tanaan;
+      html += '<article class="lounaspaiva' + (on ? ' on-tanaan' : '') +
+        '" data-esiin style="--viive:' + Math.min(i, 4) + '">' +
+        '<header class="lounaspaiva__ylä">' +
+        '<h3 class="lounaspaiva__nimi">' + turva(p.nimi) + '</h3>' +
+        (p.pvm ? '<span class="lounaspaiva__pvm">' + turva(p.pvm) + '</span>' : '') +
+        (on ? '<span class="lounaspaiva__merkki">Tänään</span>' : '') +
+        '</header><ul class="lounaspaiva__lista">' +
+        p.annokset.map(function (a) {
+          return '<li><span class="lounaspaiva__annos">' + turva(a.nimi) + '</span>' +
+            (a.merkit ? '<span class="menu-rivi__merkit">' + turva(a.merkit) + '</span>' : '') +
+            (a.lisa ? '<span class="lounaspaiva__lisa">' + turva(a.lisa) + '</span>' : '') +
+            '</li>';
+        }).join('') +
+        '</ul></article>';
+    });
+    html += '</div>';
+
+    // Merkkiselite ja muutosvarauma
+    var alaosa = [];
+    if (lista.merkkiselite) alaosa.push('<p class="menu-selite">' + turva(lista.merkkiselite) + '</p>');
+    if (lista.huomio) alaosa.push('<p>' + turva(lista.huomio) + '</p>');
+    if (alaosa.length) html += '<div class="menu-huomiot">' + alaosa.join('') + '</div>';
+
+    kehys.innerHTML = html;
+
+    // Puhelimessa kuluva päivä näkyviin ilman vierittämistä
+    var korostettu = $('.lounaspaiva.on-tanaan', kehys);
+    if (korostettu && window.matchMedia('(max-width: 899px)').matches) {
+      var rata = $('.lounaspaivat', kehys);
+      if (rata) rata.insertBefore(korostettu, rata.firstChild);
+    }
+  }
+
   /* --------------------------------------------------- 10c2. SAAVUTUKSET */
   /* Tarina-sivun tunnustukset content.js:n saavutukset-listasta,
      uusin vuosi ensin. Jos lista on tyhjä, koko osio jää pois. */
@@ -5438,6 +5804,7 @@ window.LIEKKI = {
     galleria();
     tiktok();
     menuOsiot();
+    viikonLounas();
     saavutukset();
     lomakeAihe();
     lomakkeet();

@@ -1197,6 +1197,95 @@
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  /* ------------------------------------------------ 10c1. VIIKON LOUNAS */
+  /* Koko viikon lounaslista Lounas-sivun alkuun. Kuluva arkipäivä
+     korostuu, jotta kävijä näkee heti mitä tänään on tarjolla. */
+  function viikonLounas() {
+    var kehys = $('[data-lounaslista]');
+    if (!kehys) return;
+
+    var lista = D.lounaslista || {};
+    var paivat = (lista.paivat || []).filter(function (p) {
+      return p && (p.annokset || []).length;
+    });
+
+    if (!paivat.length) {
+      kehys.innerHTML = '<div class="menu-tulossa">' +
+        '<p class="menu-tulossa__otsikko">Lista päivittyy</p>' +
+        '<p class="menu-tulossa__teksti">Tämän viikon lounaslista lisätään sivulle ' +
+        'pian. Kerromme mielellämme puhelimitse, mitä tänään on tarjolla.</p>' +
+        '<div class="napit"><a class="nappi nappi--hiljainen" href="tel:' +
+        (D.puhelinHref || '') + '"><span>Soita ja kysy</span></a></div></div>';
+      return;
+    }
+
+    var tanaan = ravintolanAika().paiva;
+
+    var html = '';
+
+    // Viikko, ajankohta ja mitä lounaaseen kuuluu
+    var otsikko = [];
+    if (lista.viikko) otsikko.push('Viikko ' + turva(lista.viikko));
+    if (lista.ajalla) otsikko.push(turva(lista.ajalla));
+    html += '<div class="lounasviikko__ylä">' +
+      (otsikko.length ? '<p class="etiketti">' + otsikko.join(' · ') + '</p>' : '') +
+      '<h2 class="otsikko-l" data-sanat>Viikon lounas</h2>';
+
+    var sisaltyy = (lista.sisaltyy || []).filter(Boolean);
+    if (sisaltyy.length) {
+      html += '<div class="lounas-sisaltyy">' +
+        '<p class="lounas-sisaltyy__otsikko">Lounaaseen kuuluu</p>' +
+        '<ul>' + sisaltyy.map(function (s) {
+          return '<li>' + turva(s) + '</li>';
+        }).join('') + '</ul></div>';
+    }
+
+    var hinnat = (lista.hinnat || []).filter(function (h) { return h && h.nimi; });
+    if (hinnat.length) {
+      html += '<ul class="lounas-hinnat">' + hinnat.map(function (h) {
+        return '<li><span class="lounas-hinnat__nimi">' + turva(h.nimi) + '</span>' +
+               '<span class="lounas-hinnat__hinta">' + turva(h.hinta || '') + '</span></li>';
+      }).join('') + '</ul>';
+    }
+    html += '</div>';
+
+    // Päiväkortit
+    html += '<div class="lounaspaivat">';
+    paivat.forEach(function (p, i) {
+      var on = p.paiva === tanaan;
+      html += '<article class="lounaspaiva' + (on ? ' on-tanaan' : '') +
+        '" data-esiin style="--viive:' + Math.min(i, 4) + '">' +
+        '<header class="lounaspaiva__ylä">' +
+        '<h3 class="lounaspaiva__nimi">' + turva(p.nimi) + '</h3>' +
+        (p.pvm ? '<span class="lounaspaiva__pvm">' + turva(p.pvm) + '</span>' : '') +
+        (on ? '<span class="lounaspaiva__merkki">Tänään</span>' : '') +
+        '</header><ul class="lounaspaiva__lista">' +
+        p.annokset.map(function (a) {
+          return '<li><span class="lounaspaiva__annos">' + turva(a.nimi) + '</span>' +
+            (a.merkit ? '<span class="menu-rivi__merkit">' + turva(a.merkit) + '</span>' : '') +
+            (a.lisa ? '<span class="lounaspaiva__lisa">' + turva(a.lisa) + '</span>' : '') +
+            '</li>';
+        }).join('') +
+        '</ul></article>';
+    });
+    html += '</div>';
+
+    // Merkkiselite ja muutosvarauma
+    var alaosa = [];
+    if (lista.merkkiselite) alaosa.push('<p class="menu-selite">' + turva(lista.merkkiselite) + '</p>');
+    if (lista.huomio) alaosa.push('<p>' + turva(lista.huomio) + '</p>');
+    if (alaosa.length) html += '<div class="menu-huomiot">' + alaosa.join('') + '</div>';
+
+    kehys.innerHTML = html;
+
+    // Puhelimessa kuluva päivä näkyviin ilman vierittämistä
+    var korostettu = $('.lounaspaiva.on-tanaan', kehys);
+    if (korostettu && window.matchMedia('(max-width: 899px)').matches) {
+      var rata = $('.lounaspaivat', kehys);
+      if (rata) rata.insertBefore(korostettu, rata.firstChild);
+    }
+  }
+
   /* --------------------------------------------------- 10c2. SAAVUTUKSET */
   /* Tarina-sivun tunnustukset content.js:n saavutukset-listasta,
      uusin vuosi ensin. Jos lista on tyhjä, koko osio jää pois. */
@@ -1307,6 +1396,7 @@
     galleria();
     tiktok();
     menuOsiot();
+    viikonLounas();
     saavutukset();
     lomakeAihe();
     lomakkeet();

@@ -53,7 +53,7 @@ PAGES = [
     dict(slug="lounas", file="lounas.html",
          title="Lounas Tikkurilassa — Bistro Liekki | Lounasbuffet arkisin 10:30–15",
          desc="Suosittu lounasbuffet arkisin klo 10:30–15 Tikkurilan keskustassa. "
-              "Katso päivän lounaslista ja tule syömään Talvikkitielle, Vantaalle.",
+              "Katso viikon lounaslista ja tule syömään Talvikkitielle, Vantaalle.",
          og="lounas-burgerit.webp"),
     dict(slug="catering", file="catering.html",
          title="Catering Vantaa — Bistro Liekki | Puuhiiligrillin maut juhliin",
