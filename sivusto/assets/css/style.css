@@ -1683,6 +1683,90 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 .menu-rivi__kuvaus { max-width: 62ch; }
 
+/* ------------------------------------------------- 404-VIRHESIVU */
+.virhesivu {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--header-h) + 3rem) var(--gutter) clamp(3rem, 8vw, 6rem);
+  overflow: hidden;
+  text-align: center;
+}
+.virhesivu__media { position: absolute; inset: 0; }
+.virhesivu__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: .3;
+  transform: scale(1.08);
+}
+.virhesivu__peite {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 80% at 50% 40%, rgba(201,85,42,.16), transparent 60%),
+    linear-gradient(180deg, rgba(8,7,7,.92), rgba(8,7,7,.7) 45%, var(--ink));
+}
+.virhesivu__sisus { position: relative; z-index: 2; max-width: 62ch; }
+
+/* Iso 404 taustalla — hehkuva, mutta ei vie huomiota otsikolta */
+.virhesivu__luku {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -58%);
+  z-index: -1;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(9rem, 34vw, 22rem);
+  line-height: .8;
+  letter-spacing: -.03em;
+  background: linear-gradient(180deg, rgba(233,116,59,.3), rgba(142,52,23,.05) 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+.virhesivu h1 { margin-top: .5rem; }
+.virhesivu .ingressi { margin-inline: auto; margin-top: 1.1rem; }
+.napit--keskellä { justify-content: center; }
+
+/* Muut sivut yhtenä rivinä alle */
+.virhesivu__linkit {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .4rem clamp(1rem, 3vw, 2rem);
+  margin-top: clamp(2.2rem, 5vw, 3.2rem);
+  padding-top: clamp(1.6rem, 3vw, 2.2rem);
+  border-top: 1px solid var(--line-soft);
+}
+.virhesivu__linkit a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: .74rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--bone-3);
+  transition: color .3s var(--ease);
+}
+.virhesivu__linkit a:hover { color: var(--ember-lit); }
+
+.virhesivu__apu {
+  margin-top: 1.6rem;
+  font-size: var(--step--1);
+  color: var(--bone-4);
+}
+.virhesivu__apu a { color: var(--bone-2); text-underline-offset: .22em; }
+.virhesivu__apu a:hover { color: var(--ember-lit); }
+
+@media (prefers-reduced-motion: reduce) {
+  .virhesivu__media img { transform: none; }
+}
+
 /* ------------------------------------------ VIIKON LOUNAS (Lounas) */
 .lounasviikko__ylä { margin-bottom: clamp(2.2rem, 4.5vw, 3.4rem); }
 .lounasviikko__ylä .otsikko-l { margin-top: .4rem; }

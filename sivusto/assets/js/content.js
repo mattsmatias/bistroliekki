@@ -193,15 +193,17 @@ window.LIEKKI = {
 
   /* ---------------------------------------------------------------- linkit */
   linkit: {
-    /* Pöytävaraus — ravintolan käytössä oleva varausjärjestelmä */
-    varaus:      'https://operox.fi/book/bistro-liekki',
+    /* Pöytävaraukset ja lahjakortit hoituvat Operoxin kautta. Sivustolla ei
+       ole omaa varaus- tai ostolomaketta, vaan kaikki painikkeet ohjaavat
+       tähän osoitteeseen. */
+    varaus:      'https://www.operox.fi/restaurants/bistro-liekki',
 
     /* À la carte -lista / verkkotilaus. Osoittaa toistaiseksi ravintolan
        nykyiseen tilausjärjestelmään — vaihda kun uusi on käytössä. */
     menuTilaus:  'https://bistroliekki.fi/talvikkitie/menu.php',
 
-    /* Lahjakortin ostolinkki. Lisää osoite kun se on saatavilla. */
-    lahjakortti: '',
+    /* Lahjakortin ostolinkki — sama Operox-sivu kuin pöytävaraus. */
+    lahjakortti: 'https://www.operox.fi/restaurants/bistro-liekki',
 
     /* Edenred — Paras lounas -äänestys. Tyhjennä kun kampanja päättyy. */
     edenred:     'https://paraslounas.edenred.fi/fi/aanesta',

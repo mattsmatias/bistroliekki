@@ -25,7 +25,8 @@ NAV = [
     ("lounas", "Lounas"),
     ("catering", "Catering"),
     ("galleria", "Galleria"),
-    ("lahjakortti", "Lahjakortti"),
+    # Lahjakortit myydään Operoxin kautta, joten valikko ohjaa suoraan sinne.
+    ("linkki:lahjakortti", "Lahjakortti"),
     ("yhteystiedot", "Yhteys"),
 ]
 
@@ -66,10 +67,9 @@ PAGES = [
               "Tikkurilassa, Vantaalla. Katso hiillos, pihvit, burgerit ja ravintolasali.",
          og="burgeri-chimichurri.webp"),
     dict(slug="lahjakortti", file="lahjakortti.html",
-         title="Lahjakortti — Bistro Liekki | Anna lahjaksi puuhiiligrillin maut",
-         desc="Bistro Liekin lahjakortti on lahja, joka maistuu. Anna lahjaksi illallinen "
-              "puuhiiligrillin äärellä Tikkurilassa.",
-         og="salaattipoyta.webp"),
+         title="Lahjakortti — Bistro Liekki",
+         desc="Bistro Liekin lahjakortit ostetaan varausjärjestelmän kautta.",
+         og="salaattipoyta.webp", noindex=True),
     dict(slug="yhteystiedot", file="yhteystiedot.html",
          title="Yhteys — Bistro Liekki | Palaute, tarjouspyyntö ja yhteystiedot",
          desc="Ota yhteyttä Bistro Liekkiin: anna palautetta tai pyydä tarjous. "
@@ -131,13 +131,25 @@ def nav_href(slug, depth):
     return f"{up}{slug}/"
 
 
+def nav_linkki(slug, label, luokka="", tyyli=""):
+    """Valikkolinkki. Slug muotoa "linkki:avain" ohjaa content.js:n
+    ulkoiseen osoitteeseen (esim. lahjakortti -> Operox)."""
+    l = f' class="{luokka}"' if luokka else ""
+    s = f' style="{tyyli}"' if tyyli else ""
+    if slug.startswith("linkki:"):
+        avain = slug.split(":", 1)[1]
+        return (f'<a{l}{s} data-linkki="{avain}" data-tyhjana="Soita ja kysy" '
+                f'data-vara-href="puhelin" href="#"><span>{label}</span></a>')
+    return f'<a{l}{s} href="{{HREF}}">{label}</a>'
+
+
 def build_header(current, depth):
     up = "../" * depth
     links = "".join(
-        f'<a href="{nav_href(s, depth)}">{t}</a>' for s, t in NAV
+        nav_linkki(s, t).replace("{HREF}", nav_href(s, depth)) for s, t in NAV
     )
     mob = "".join(
-        f'<a class="mob-linkki" href="{nav_href(s, depth)}" style="--i:{i}">{t}</a>'
+        nav_linkki(s, t, "mob-linkki", f"--i:{i}").replace("{HREF}", nav_href(s, depth))
         for i, (s, t) in enumerate(FOOTER_NAV)
     )
     esirippu = f"""<div class="esirippu" data-esirippu aria-hidden="true">

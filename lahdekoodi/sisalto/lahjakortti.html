@@ -1,60 +1,35 @@
-<section class="sivuhero" data-parallaksi>
-  <div class="sivuhero__media">
-    <img src="{{up}}assets/img/band-embers.webp" alt="" aria-hidden="true"
-         fetchpriority="high" decoding="async" width="1800" height="900">
-  </div>
-  <div class="sivuhero__peite"></div>
-  <div class="kuori">
-    <ol class="murupolku">
-      <li><a href="{{linkki:}}">Etusivu</a></li>
-      <li>Lahjakortti</li>
-    </ol>
-    <h1 data-sanat>Lahjakortti</h1>
-    <p class="ingressi">Anna lahjaksi Bistro Liekin maut ja tunnelma.</p>
-    <div class="napit" style="margin-top:2rem">
-      <a class="nappi" data-linkki="lahjakortti" data-tyhjana="Osta ravintolasta"
+<!-- ===================================================================
+     LAHJAKORTTI — OHJAUSSIVU
+
+     Lahjakortit myydään Operoxin kautta, joten sivustolla ei ole omaa
+     ostolomaketta. Valikon Lahjakortti-linkki vie suoraan Operoxiin;
+     tämä sivu jää paikoilleen, jottei vanhat linkit ja hakutulokset
+     johda virhesivulle.
+     =================================================================== -->
+<section class="osio" id="sisalto" style="min-height:62vh;display:grid;place-content:center">
+  <div class="kuori keskita">
+    <p class="etiketti etiketti--keskellä">Lahjakortti</p>
+    <h1 class="otsikko-m" style="margin-top:.6rem">Lahjakortit ostetaan Operoxista</h1>
+    <p class="leipa" style="margin-top:1rem;max-width:54ch;margin-inline:auto">
+      Bistro Liekin lahjakortin voi ostaa varausjärjestelmämme kautta.
+      Siirrämme sinut sinne hetkessä.</p>
+    <div class="napit" style="margin-top:2rem;justify-content:center">
+      <a class="nappi" data-linkki="lahjakortti" data-tyhjana="Soita ja kysy"
          data-vara-href="puhelin" href="#"><span>Osta lahjakortti</span></a>
+      <a class="nappi nappi--ääriviiva" data-href="puhelin" href="#">
+        {{ikoni:soita}}<span>Soita meille</span></a>
     </div>
   </div>
 </section>
 
-<section class="osio">
-  <div class="kuori split split--laaja-teksti">
-    <div class="split__teksti" data-esiin>
-      <h2 class="otsikko-m">Illallinen hiilloksen äärellä</h2>
-      <p class="leipa">Lahjakortti käy koko taloon: lounaaseen keskellä viikkoa tai
-        illalliseen à la carte -listalta. Vastaanottaja valitsee itse, milloin tulee.</p>
-      <p class="leipa">Lahjakortin saa ravintolasta paikan päältä. Soita tai poikkea
-        Talvikkitiellä, niin hoidamme asian.</p>
-
-      <ul class="tietolista" style="margin-top:1.6rem">
-        <li><span class="avain">Puhelin</span><span class="arvo"><a data-href="puhelin" href="#" data-teksti="puhelin"></a></span></li>
-        <li><span class="avain">Sähköposti</span><span class="arvo"><a data-href="sahkoposti" href="#" data-teksti="sahkoposti"></a></span></li>
-        <li><span class="avain">Osoite</span><span class="arvo"><span data-teksti="katu"></span>, <span data-teksti="postitoimi"></span></span></li>
-      </ul>
-
-      <div class="napit">
-        <a class="nappi" data-linkki="lahjakortti" data-tyhjana="Osta ravintolasta"
-           data-vara-href="puhelin" href="#"><span>Osta lahjakortti</span></a>
-        <a class="nappi nappi--ääriviiva" data-linkki="reittiohjeet" href="#">
-          {{ikoni:sijainti}}<span>Reittiohjeet</span></a>
-      </div>
-
-      <!-- Kun verkkokaupan tai lahjakorttipalvelun osoite on saatavilla, lisää se
-           tiedostoon assets/js/content.js kohtaan linkit.lahjakortti. Painikkeet
-           ohjaavat siihen automaattisesti. -->
-    </div>
-
-    <div class="split__media" data-esiin style="--viive:1">
-      <div class="media media--3-2 media--zoom" data-verho>
-      <picture>
-        <source media="(max-width: 700px)" srcset="{{up}}assets/img/burgeri-pekoni-sm.webp">
-        <img src="{{up}}assets/img/burgeri-pekoni.webp"
-             alt="Burgeri pekonilla ja cheddarilla, päällä punainen kastike, vieressä ranskalaiset"
-             loading="lazy" decoding="async">
-      </picture>
-      <span class="media__merkinta">Bistro Liekki · Tikkurila</span>
-    </div>
-    </div>
-  </div>
-</section>
+<script>
+  /* Ohjaus Operoxiin. Odotetaan hetki, jotta kävijä ehtii nähdä mihin
+     ollaan menossa, ja käytetään replace() jottei paluunappi jää jumiin. */
+  (function () {
+    setTimeout(function () {
+      var n = document.querySelector('.nappi[data-linkki="lahjakortti"]');
+      var url = n && n.getAttribute('href');
+      if (url && url.indexOf('http') === 0) location.replace(url);
+    }, 1400);
+  })();
+</script>

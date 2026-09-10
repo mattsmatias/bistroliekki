@@ -1687,6 +1687,90 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 .menu-rivi__kuvaus { max-width: 62ch; }
 
+/* ------------------------------------------------- 404-VIRHESIVU */
+.virhesivu {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--header-h) + 3rem) var(--gutter) clamp(3rem, 8vw, 6rem);
+  overflow: hidden;
+  text-align: center;
+}
+.virhesivu__media { position: absolute; inset: 0; }
+.virhesivu__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: .3;
+  transform: scale(1.08);
+}
+.virhesivu__peite {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 80% at 50% 40%, rgba(201,85,42,.16), transparent 60%),
+    linear-gradient(180deg, rgba(8,7,7,.92), rgba(8,7,7,.7) 45%, var(--ink));
+}
+.virhesivu__sisus { position: relative; z-index: 2; max-width: 62ch; }
+
+/* Iso 404 taustalla — hehkuva, mutta ei vie huomiota otsikolta */
+.virhesivu__luku {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -58%);
+  z-index: -1;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(9rem, 34vw, 22rem);
+  line-height: .8;
+  letter-spacing: -.03em;
+  background: linear-gradient(180deg, rgba(233,116,59,.3), rgba(142,52,23,.05) 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+.virhesivu h1 { margin-top: .5rem; }
+.virhesivu .ingressi { margin-inline: auto; margin-top: 1.1rem; }
+.napit--keskellä { justify-content: center; }
+
+/* Muut sivut yhtenä rivinä alle */
+.virhesivu__linkit {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .4rem clamp(1rem, 3vw, 2rem);
+  margin-top: clamp(2.2rem, 5vw, 3.2rem);
+  padding-top: clamp(1.6rem, 3vw, 2.2rem);
+  border-top: 1px solid var(--line-soft);
+}
+.virhesivu__linkit a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: .74rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--bone-3);
+  transition: color .3s var(--ease);
+}
+.virhesivu__linkit a:hover { color: var(--ember-lit); }
+
+.virhesivu__apu {
+  margin-top: 1.6rem;
+  font-size: var(--step--1);
+  color: var(--bone-4);
+}
+.virhesivu__apu a { color: var(--bone-2); text-underline-offset: .22em; }
+.virhesivu__apu a:hover { color: var(--ember-lit); }
+
+@media (prefers-reduced-motion: reduce) {
+  .virhesivu__media img { transform: none; }
+}
+
 /* ------------------------------------------ VIIKON LOUNAS (Lounas) */
 .lounasviikko__ylä { margin-bottom: clamp(2.2rem, 4.5vw, 3.4rem); }
 .lounasviikko__ylä .otsikko-l { margin-top: .4rem; }
@@ -2433,7 +2517,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
            decoding="async" fetchpriority="high">
     </a>
 
-    <nav class="navi" aria-label="Päävalikko"><a href="#/">Etusivu</a><a href="#/meista">Tarina</a><a href="#/menu">Menu</a><a href="#/lounas">Lounas</a><a href="#/catering">Catering</a><a href="#/galleria">Galleria</a><a href="#/lahjakortti">Lahjakortti</a><a href="#/yhteystiedot">Yhteys</a></nav>
+    <nav class="navi" aria-label="Päävalikko"><a href="#/">Etusivu</a><a href="#/meista">Tarina</a><a href="#/menu">Menu</a><a href="#/lounas">Lounas</a><a href="#/catering">Catering</a><a href="#/galleria">Galleria</a><a data-linkki="lahjakortti" data-tyhjana="Soita ja kysy" data-vara-href="puhelin" href="#"><span>Lahjakortti</span></a><a href="#/yhteystiedot">Yhteys</a></nav>
 
     <div class="headeri__oikea">
       <!-- Yhteystiedot valikon vieressä. Leveällä ruudulla numero ja osoite
@@ -2458,7 +2542,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 
 <div class="mobiilivalikko" id="mobiilivalikko" aria-hidden="true">
   <div class="mobiilivalikko__sisus">
-    <nav aria-label="Mobiilivalikko"><a class="mob-linkki" href="#/" style="--i:0">Etusivu</a><a class="mob-linkki" href="#/meista" style="--i:1">Tarina</a><a class="mob-linkki" href="#/menu" style="--i:2">Menu</a><a class="mob-linkki" href="#/lounas" style="--i:3">Lounas</a><a class="mob-linkki" href="#/catering" style="--i:4">Catering</a><a class="mob-linkki" href="#/galleria" style="--i:5">Galleria</a><a class="mob-linkki" href="#/lahjakortti" style="--i:6">Lahjakortti</a><a class="mob-linkki" href="#/yhteystiedot" style="--i:7">Yhteys</a></nav>
+    <nav aria-label="Mobiilivalikko"><a class="mob-linkki" style="--i:0" href="#/">Etusivu</a><a class="mob-linkki" style="--i:1" href="#/meista">Tarina</a><a class="mob-linkki" style="--i:2" href="#/menu">Menu</a><a class="mob-linkki" style="--i:3" href="#/lounas">Lounas</a><a class="mob-linkki" style="--i:4" href="#/catering">Catering</a><a class="mob-linkki" style="--i:5" href="#/galleria">Galleria</a><a class="mob-linkki" style="--i:6" data-linkki="lahjakortti" data-tyhjana="Soita ja kysy" data-vara-href="puhelin" href="#"><span>Lahjakortti</span></a><a class="mob-linkki" style="--i:7" href="#/yhteystiedot">Yhteys</a></nav>
     <div class="mobiilivalikko__jalki">
       <a class="mobiilivalikko__yhteys" data-href="puhelin" href="#">
         Puhelin <strong data-teksti="puhelin"></strong>
@@ -3281,65 +3365,42 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   </div>
 </section>
 
-</div><div class="sivu" data-sivu="lahjakortti" data-otsikko="Lahjakortti — Bistro Liekki | Anna lahjaksi puuhiiligrillin maut" hidden>
-<section class="sivuhero" data-parallaksi>
-  <div class="sivuhero__media">
-    <img data-img="band-embers.webp" alt="" aria-hidden="true"
-         fetchpriority="high" decoding="async" width="1800" height="900">
-  </div>
-  <div class="sivuhero__peite"></div>
-  <div class="kuori">
-    <ol class="murupolku">
-      <li><a href="#/">Etusivu</a></li>
-      <li>Lahjakortti</li>
-    </ol>
-    <h1 data-sanat>Lahjakortti</h1>
-    <p class="ingressi">Anna lahjaksi Bistro Liekin maut ja tunnelma.</p>
-    <div class="napit" style="margin-top:2rem">
-      <a class="nappi" data-linkki="lahjakortti" data-tyhjana="Osta ravintolasta"
+</div><div class="sivu" data-sivu="lahjakortti" data-otsikko="Lahjakortti — Bistro Liekki" hidden>
+<!-- ===================================================================
+     LAHJAKORTTI — OHJAUSSIVU
+
+     Lahjakortit myydään Operoxin kautta, joten sivustolla ei ole omaa
+     ostolomaketta. Valikon Lahjakortti-linkki vie suoraan Operoxiin;
+     tämä sivu jää paikoilleen, jottei vanhat linkit ja hakutulokset
+     johda virhesivulle.
+     =================================================================== -->
+<section class="osio" id="sisalto" style="min-height:62vh;display:grid;place-content:center">
+  <div class="kuori keskita">
+    <p class="etiketti etiketti--keskellä">Lahjakortti</p>
+    <h1 class="otsikko-m" style="margin-top:.6rem">Lahjakortit ostetaan Operoxista</h1>
+    <p class="leipa" style="margin-top:1rem;max-width:54ch;margin-inline:auto">
+      Bistro Liekin lahjakortin voi ostaa varausjärjestelmämme kautta.
+      Siirrämme sinut sinne hetkessä.</p>
+    <div class="napit" style="margin-top:2rem;justify-content:center">
+      <a class="nappi" data-linkki="lahjakortti" data-tyhjana="Soita ja kysy"
          data-vara-href="puhelin" href="#"><span>Osta lahjakortti</span></a>
+      <a class="nappi nappi--ääriviiva" data-href="puhelin" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 16.4v2.6a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 011 3.2 2 2 0 013 1h2.6a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L6.7 8.9a16 16 0 006 6l1.3-1.1a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Soita meille</span></a>
     </div>
   </div>
 </section>
 
-<section class="osio">
-  <div class="kuori split split--laaja-teksti">
-    <div class="split__teksti" data-esiin>
-      <h2 class="otsikko-m">Illallinen hiilloksen äärellä</h2>
-      <p class="leipa">Lahjakortti käy koko taloon: lounaaseen keskellä viikkoa tai
-        illalliseen à la carte -listalta. Vastaanottaja valitsee itse, milloin tulee.</p>
-      <p class="leipa">Lahjakortin saa ravintolasta paikan päältä. Soita tai poikkea
-        Talvikkitiellä, niin hoidamme asian.</p>
-
-      <ul class="tietolista" style="margin-top:1.6rem">
-        <li><span class="avain">Puhelin</span><span class="arvo"><a data-href="puhelin" href="#" data-teksti="puhelin"></a></span></li>
-        <li><span class="avain">Sähköposti</span><span class="arvo"><a data-href="sahkoposti" href="#" data-teksti="sahkoposti"></a></span></li>
-        <li><span class="avain">Osoite</span><span class="arvo"><span data-teksti="katu"></span>, <span data-teksti="postitoimi"></span></span></li>
-      </ul>
-
-      <div class="napit">
-        <a class="nappi" data-linkki="lahjakortti" data-tyhjana="Osta ravintolasta"
-           data-vara-href="puhelin" href="#"><span>Osta lahjakortti</span></a>
-        <a class="nappi nappi--ääriviiva" data-linkki="reittiohjeet" href="#">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1116 0z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.8" stroke="currentColor" stroke-width="1.6"/></svg><span>Reittiohjeet</span></a>
-      </div>
-
-      <!-- Kun verkkokaupan tai lahjakorttipalvelun osoite on saatavilla, lisää se
-           tiedostoon assets/js/content.js kohtaan linkit.lahjakortti. Painikkeet
-           ohjaavat siihen automaattisesti. -->
-    </div>
-
-    <div class="split__media" data-esiin style="--viive:1">
-      <div class="media media--3-2 media--zoom" data-verho>
-      <picture><img data-img="burgeri-pekoni.webp"
-             alt="Burgeri pekonilla ja cheddarilla, päällä punainen kastike, vieressä ranskalaiset"
-             loading="lazy" decoding="async">
-      </picture>
-      <span class="media__merkinta">Bistro Liekki · Tikkurila</span>
-    </div>
-    </div>
-  </div>
-</section>
+<script>
+  /* Ohjaus Operoxiin. Odotetaan hetki, jotta kävijä ehtii nähdä mihin
+     ollaan menossa, ja käytetään replace() jottei paluunappi jää jumiin. */
+  (function () {
+    setTimeout(function () {
+      var n = document.querySelector('.nappi[data-linkki="lahjakortti"]');
+      var url = n && n.getAttribute('href');
+      if (url && url.indexOf('http') === 0) location.replace(url);
+    }, 1400);
+  })();
+</script>
 
 </div><div class="sivu" data-sivu="yhteystiedot" data-otsikko="Yhteys — Bistro Liekki | Palaute, tarjouspyyntö ja yhteystiedot" hidden>
 <section class="sivuhero" data-parallaksi>
@@ -3908,15 +3969,17 @@ window.LIEKKI = {
 
   /* ---------------------------------------------------------------- linkit */
   linkit: {
-    /* Pöytävaraus — ravintolan käytössä oleva varausjärjestelmä */
-    varaus:      'https://operox.fi/book/bistro-liekki',
+    /* Pöytävaraukset ja lahjakortit hoituvat Operoxin kautta. Sivustolla ei
+       ole omaa varaus- tai ostolomaketta, vaan kaikki painikkeet ohjaavat
+       tähän osoitteeseen. */
+    varaus:      'https://www.operox.fi/restaurants/bistro-liekki',
 
     /* À la carte -lista / verkkotilaus. Osoittaa toistaiseksi ravintolan
        nykyiseen tilausjärjestelmään — vaihda kun uusi on käytössä. */
     menuTilaus:  'https://bistroliekki.fi/talvikkitie/menu.php',
 
-    /* Lahjakortin ostolinkki. Lisää osoite kun se on saatavilla. */
-    lahjakortti: '',
+    /* Lahjakortin ostolinkki — sama Operox-sivu kuin pöytävaraus. */
+    lahjakortti: 'https://www.operox.fi/restaurants/bistro-liekki',
 
     /* Edenred — Paras lounas -äänestys. Tyhjennä kun kampanja päättyy. */
     edenred:     'https://paraslounas.edenred.fi/fi/aanesta',

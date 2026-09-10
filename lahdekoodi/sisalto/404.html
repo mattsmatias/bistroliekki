@@ -1,44 +1,42 @@
-<section class="sivuhero" data-parallaksi>
-  <div class="sivuhero__media">
-    <picture>
-      <source media="(max-width: 700px)" srcset="{{up}}assets/img/burgeri-chimichurri-sm.webp">
-      <img src="{{up}}assets/img/burgeri-chimichurri.webp" alt="" aria-hidden="true"
-           fetchpriority="high" decoding="async">
-    </picture>
+<!-- ===================================================================
+     404 — SIVUA EI LÖYTYNYT
+
+     Oma virhesivu Bistro Liekin ilmeellä: hiillos taustalla, iso 404
+     hehkuvin kirjaimin ja suorat reitit takaisin. Vercel ja GitHub Pages
+     käyttävät tätä automaattisesti, kun osoitetta ei löydy.
+     =================================================================== -->
+<section class="virhesivu" id="sisalto">
+  <div class="virhesivu__media" aria-hidden="true">
+    <img src="{{up}}assets/img/band-embers.webp" alt=""
+         fetchpriority="high" decoding="async" width="1800" height="900">
   </div>
-  <div class="sivuhero__peite"></div>
-  <div class="kuori">
-    <p class="etiketti">Virhe 404</p>
-    <h1 data-sanat>Sivua ei löytynyt</h1>
-    <p class="ingressi">Etsimääsi sivua ei ole olemassa tai se on siirtynyt.
-      Hiillos palaa silti — tästä pääset takaisin.</p>
-    <div class="napit" style="margin-top:2rem">
+  <div class="virhesivu__peite" aria-hidden="true"></div>
+  <div class="hero__hiukkaset" data-kipinat aria-hidden="true"></div>
+
+  <div class="kuori virhesivu__sisus">
+    <span class="virhesivu__luku" aria-hidden="true">404</span>
+
+    <p class="etiketti etiketti--keskellä">Hiillos palaa, sivu ei</p>
+    <h1 data-sanat>Tätä sivua<br>ei löytynyt</h1>
+    <p class="ingressi">Osoite on saattanut muuttua tai sivu on poistettu.
+      Alta pääset sinne mihin olit menossa.</p>
+
+    <div class="napit napit--keskellä" style="margin-top:2.2rem">
       <a class="nappi" href="{{linkki:}}"><span>Etusivulle</span></a>
-      <a class="nappi nappi--ääriviiva" href="{{linkki:menu}}"><span>À la Carte</span></a>
+      <a class="nappi nappi--ääriviiva" href="{{linkki:menu}}"><span>Menu</span></a>
       <a class="nappi nappi--ääriviiva" href="{{linkki:lounas}}"><span>Lounas</span></a>
     </div>
-  </div>
-</section>
 
-<section class="osio osio--char viiva-ylä">
-  <div class="kuori split split--laaja-teksti">
-    <div data-esiin>
-      <p class="etiketti">Suoraan asiaan</p>
-      <h2 class="otsikko-m">Mitä olit etsimässä?</h2>
-      <p class="leipa" style="margin-top:1rem">Yleisimmät sivut löytyvät alta.
-        Jos etsit jotain muuta, soita meille — vastaamme mielellämme.</p>
-      <div class="napit" style="margin-top:1.6rem">
-        <a class="nappi nappi--hiljainen" data-href="puhelin" href="#">
-          {{ikoni:soita}}<span data-teksti="puhelin"></span></a>
-      </div>
-    </div>
+    <nav class="virhesivu__linkit" aria-label="Muut sivut">
+      <a href="{{linkki:meista}}">Tarina</a>
+      <a href="{{linkki:catering}}">Catering</a>
+      <a href="{{linkki:galleria}}">Galleria</a>
+      <a data-linkki="lahjakortti" data-tyhjana="Lahjakortti" data-vara-href="puhelin" href="#"><span>Lahjakortti</span></a>
+      <a href="{{linkki:yhteystiedot}}">Yhteys</a>
+    </nav>
 
-    <ul class="tietolista" data-esiin style="--viive:1">
-      <li><span class="avain">Varaus</span><span class="arvo"><a data-linkki="varaus" data-tyhjana="Varaa puhelimitse" data-vara-href="varaus-puhelin" href="#"><span>Varaa pöytä</span></a></span></li>
-      <li><span class="avain">Ruokalista</span><span class="arvo"><a href="{{linkki:menu}}">À la Carte</a></span></li>
-      <li><span class="avain">Lounas</span><span class="arvo"><a href="{{linkki:lounas}}">Lounas arkisin</a></span></li>
-      <li><span class="avain">Galleria</span><span class="arvo"><a href="{{linkki:galleria}}">Kuvat</a></span></li>
-      <li><span class="avain">Yhteys</span><span class="arvo"><a href="{{linkki:yhteystiedot}}">Löydä meidät</a></span></li>
-    </ul>
+    <p class="virhesivu__apu">Etkö löydä etsimääsi? Soita
+      <a data-href="puhelin" href="#" data-teksti="puhelin"></a> tai varaa pöytä
+      <a data-linkki="varaus" data-tyhjana="puhelimitse" data-vara-href="puhelin" href="#"><span>verkossa</span></a>.</p>
   </div>
 </section>
