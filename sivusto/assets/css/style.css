@@ -1346,12 +1346,29 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .some-kortti[data-some-kortti="tiktok"] .tiktok-kortti { aspect-ratio: 4 / 5; }
 .some-kortti[data-some-kortti="tiktok"] .karuselli__nappi { display: none; }
 
-/* Instagram: neljä kuvaa ruudukkona */
+/* Instagram: neljä kuvaa ruudukkona (varanäkymä) */
 .some-ig {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: .5rem;
 }
+/* Oikea Instagram-upotus (widget-palvelu tai nimetyt julkaisut): yksi
+   valkoinen kortti kuten TikTokilla, ei ruudukkoa. */
+.some-ig--upotus {
+  display: block;
+  gap: 0;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #fff;
+}
+.some-ig__upotus { display: block; width: 100%; height: 100%; min-height: 260px; border: 0; }
+.some-ig--upotus .karuselli { height: 100%; display: flex; flex-direction: column; }
+.some-ig--upotus .karuselli__rata { flex: 1 1 auto; min-height: 0; align-items: stretch; }
+.some-ig--upotus .karuselli__nappi { display: none; }
+.some-ig--upotus .karuselli::before,
+.some-ig--upotus .karuselli::after { content: none; }
+.some-ig__julkaisu { width: 100%; max-width: 100%; flex: none; }
+.some-ig__julkaisu iframe { display: block; width: 100%; height: 100%; min-height: 260px; border: 0; }
 .some-ig__kuva {
   display: block;
   aspect-ratio: 1;
@@ -1366,8 +1383,19 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .some-ig__kuva:hover img { transform: scale(1.06); opacity: .9; }
 
 /* Facebook-upotus ja varakortti */
-.some-fb { min-height: 200px; }
-.some-fb iframe { display: block; border-radius: 2px; }
+/* Upotus latautuu vasta kun kortti tulee näkyviin, joten tila varataan
+   etukäteen — muuten kortti nytkähtää auki. Valitsin on tarkempi kuin
+   .some-kortti__sisus > * -sääntö, joka muuten nollaisi min-heightin. */
+.some-kortti__sisus > .some-fb { min-height: 260px; }
+.some-fb__upotus {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  border: 0;
+  border-radius: 3px;
+  background: #fff;
+}
 .some-vara {
   display: flex;
   flex-direction: column;
@@ -1645,12 +1673,17 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   .some-kortti[data-some-kortti="tiktok"] .tiktok-vara-teksti { display: none; }
 
   /* Instagram: neljä kuvaa täyttää alueen kahtena rivinä */
-  .some-ig { grid-template-rows: 1fr 1fr; height: 100%; }
-  .some-ig__kuva { aspect-ratio: auto; min-height: 0; }
+  .some-ig:not(.some-ig--upotus) { grid-template-rows: 1fr 1fr; height: 100%; }
+  .some-ig:not(.some-ig--upotus) .some-ig__kuva { aspect-ratio: auto; min-height: 0; }
+  /* Upotus täyttää saman alueen yhtenä korttina */
+  .some-ig--upotus { height: 100%; }
+  .some-ig__upotus,
+  .some-ig__julkaisu iframe { min-height: 0; }
 
-  /* Facebook: varakortti venyy samaan mittaan */
-  .some-fb { display: flex; flex-direction: column; min-height: 0; }
+  /* Facebook: upotus ja varakortti venyvät samaan mittaan */
+  .some-kortti__sisus > .some-fb { display: flex; flex-direction: column; min-height: 0; }
   .some-fb .some-vara { flex: 1 1 auto; min-height: 0; }
+  .some-fb__upotus { flex: 1 1 auto; min-height: 0; }
 }
 
 /* ------------------------------------------------------------ 16 LOMAKKEET */

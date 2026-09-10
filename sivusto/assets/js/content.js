@@ -222,23 +222,41 @@ window.LIEKKI = {
   },
 
   /* ---------------------------------------------------- some-upotukset */
-  /* TikTokin videot tulevat suoraan TikTokista aina.
+  /* TikTokin ja Facebookin julkaisut tulevat suoraan kanavilta ja
+     päivittyvät itsestään — näihin ei tarvitse koskea.
 
-     Facebookin oma sivu-upotus renderöityy valkoisella taustalla eikä sitä
-     voi tyylitellä, joten se rikkoisi sivuston tumman ilmeen. Siksi
-     Facebook-kortissa on oletuksena talon oma kortti ja linkki sivulle.
-     Vaihda arvoksi true, jos haluat silti Facebookin oman upotuksen.
-
-     Instagram ei tarjoa ilmaista profiiliupotusta lainkaan, joten sen
-     kortissa näkyvät alla olevat kuvat. */
+     Kumpikin upotus piirtyy palvelun omassa vaaleassa ulkoasussa, jota ei
+     voi tyylitellä. Jos haluat Facebook-kortin tilalle talon oman tumman
+     kortin ja pelkän linkin, vaihda arvoksi false. */
   someUpotukset: {
-    facebook: false
+    facebook: true
   },
 
-  /* -------------------------------------------------- Instagram-nostot */
-  /* Instagram ei tarjoa ilmaista profiiliupotusta, joten etusivun
-     Instagram-kortissa näkyvät nämä kuvat. Ne linkittävät profiiliin.
-     Kuvat ovat samasta kansiosta kuin gallerian kuvat. */
+  /* -------------------------------------------------------- Instagram */
+  /* Instagram ei anna kenenkään upottaa koko profiilia ilmaiseksi, joten
+     Instagram-kortti täytetään jollakin näistä kolmesta tavasta. Ylin
+     täytetty voittaa.
+
+     1) instagramWidget — päivittyy itsestään, vaatii ilmaisen tilin
+        widget-palveluun (esim. lightwidget.com, behold.so, sociablekit.com).
+        Palvelu antaa iframe-koodin; liitä tähän vain sen src-osoite:
+          instagramWidget: 'https://cdn.lightwidget.com/widgets/xxxx.html'
+
+     2) instagramJulkaisut — näyttää nimetyt julkaisut oikeina
+        Instagram-postauksina. Kopioi julkaisun osoite Instagramista
+        (Jaa → Kopioi linkki) ja liitä se tähän listaan:
+          instagramJulkaisut: [
+            'https://www.instagram.com/p/XXXXXXXXXXX/',
+            'https://www.instagram.com/reel/YYYYYYYYYYY/'
+          ]
+        Nämä eivät päivity itsestään — lista on vaihdettava käsin, kun
+        haluat kortin näyttävän uudempia julkaisuja.
+
+     3) instagramKuvat — jos kumpikaan yllä ei ole käytössä, kortissa
+        näkyvät nämä talon omat kuvat, jotka linkittävät profiiliin. */
+  instagramWidget: '',
+  instagramJulkaisut: [],
+
   instagramKuvat: [
     { kuva: 'assets/img/pysty-burgeri.webp', alt: 'Burgeri puuhiiligrillistä' },
     { kuva: 'assets/img/pysty-buffet.webp',  alt: 'Lounasbuffetin lämpimät ruoat' },

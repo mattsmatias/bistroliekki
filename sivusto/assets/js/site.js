@@ -998,17 +998,32 @@
     if (ruudukko && !ruudukko.children.length) ruudukko.remove();
   }
 
-  /* Instagram ei tarjoa ilmaista profiiliupotusta, joten kortissa näkyvät
-     ravintolan omat kuvat ja linkki profiiliin. */
+  /* Instagram ei anna upottaa koko profiilia ilmaiseksi. Kortti täytetään
+     kolmella tavalla tärkeysjärjestyksessä: widget-palvelun upotus (päivittyy
+     itsestään), nimetyt julkaisut oikeina Instagram-postauksina, tai talon
+     omat kuvat. Katso content.js:n Instagram-osio. */
   function instagramKortti(osoite) {
     var kehys = $('[data-instagram]');
     if (!kehys) return;
-    var kuvat = (D.instagramKuvat || []).filter(function (k) { return k && k.kuva; }).slice(0, 4);
-    if (!kuvat.length || !osoite) {
+    if (!osoite) {
       var k = kehys.closest('[data-some-kortti]');
       if (k) k.remove();
       return;
     }
+
+    if (D.instagramWidget) { instagramWidget(kehys, D.instagramWidget); return; }
+
+    var julkaisut = (D.instagramJulkaisut || [])
+      .map(instagramTunnus).filter(Boolean).slice(0, 5);
+    if (julkaisut.length) { instagramJulkaisut(kehys, julkaisut); return; }
+
+    var kuvat = (D.instagramKuvat || []).filter(function (k) { return k && k.kuva; }).slice(0, 4);
+    if (!kuvat.length) {
+      var k2 = kehys.closest('[data-some-kortti]');
+      if (k2) k2.remove();
+      return;
+    }
+    kehys.classList.add('some-ig--kuvat');
     kehys.innerHTML = kuvat.map(function (k) {
       return '<a class="some-ig__kuva" href="' + turva(osoite) + '" target="_blank" rel="noopener">' +
         '<img src="' + turva(polku(k.kuva)) + '" alt="' + turva(k.alt || '') +
@@ -1016,10 +1031,55 @@
     }).join('');
   }
 
-  /* Facebook-kortti. Facebookin oma sivu-upotus renderöityy aina valkoisella
-     taustalla eikä sitä voi tyylitellä, joten se rikkoisi sivuston tumman
-     ilmeen. Oletuksena näytetään talon oma kortti; upotuksen saa käyttöön
-     content.js:stä (someUpotukset.facebook: true). */
+  /* Poimii julkaisun polun osoitteesta ja säilyttää tyypin (p / reel / tv),
+     koska reelit upotetaan omalla polullaan. Hyväksyy myös pelkän
+     tunnuksen, jolloin oletus on tavallinen julkaisu. */
+  function instagramTunnus(rivi) {
+    if (!rivi) return '';
+    var s = String(rivi).trim();
+    var m = s.match(/instagram\.com\/(p|reel|reels|tv)\/([A-Za-z0-9_-]+)/);
+    if (m) return (m[1] === 'reels' ? 'reel' : m[1]) + '/' + m[2];
+    return /^[A-Za-z0-9_-]{5,}$/.test(s) ? 'p/' + s : '';
+  }
+
+  function instagramWidget(kehys, osoite) {
+    kehys.classList.add('some-ig--upotus');
+    var f = document.createElement('iframe');
+    f.src = osoite;
+    f.title = 'Bistro Liekki Instagramissa';
+    f.loading = 'lazy';
+    f.className = 'some-ig__upotus';
+    f.setAttribute('scrolling', 'no');
+    f.setAttribute('allowtransparency', 'true');
+    kehys.appendChild(f);
+  }
+
+  /* Yksi julkaisu kerrallaan samassa karusellissa kuin TikTok-kortissa. */
+  function instagramJulkaisut(kehys, tunnukset) {
+    kehys.classList.add('some-ig--upotus');
+    kehys.innerHTML =
+      '<div class="karuselli">' +
+        '<div class="karuselli__rata">' +
+          tunnukset.map(function (t) {
+            var osat = t.split('/');
+            return '<div class="some-ig__julkaisu">' +
+              '<iframe src="https://www.instagram.com/' + encodeURIComponent(osat[0]) + '/' +
+              encodeURIComponent(osat[1]) + '/embed/" ' +
+              'title="Bistro Liekin julkaisu Instagramissa" loading="lazy" ' +
+              'scrolling="no" allowtransparency="true"></iframe></div>';
+          }).join('') +
+        '</div>' +
+        '<div class="karuselli__pisteet" aria-hidden="true"></div>' +
+      '</div>';
+    var kehykset = $$('.karuselli', kehys);
+    if (kehykset.length) karuselli(kehykset[0]);
+  }
+
+  /* Facebook-kortti näyttää sivun oikean aikajanan Facebookin omalla
+     upotuksella, joka päivittyy itsestään. Upotus piirtyy Facebookin
+     vaaleassa ulkoasussa, jota ei voi tyylitellä. Sen saa halutessaan pois
+     content.js:stä (someUpotukset.facebook: false), jolloin tilalle tulee
+     talon oma tumma kortti ja linkki sivulle. */
   function facebookKortti(osoite) {
     var kehys = $('[data-facebook]');
     if (!kehys) return;
@@ -1043,13 +1103,17 @@
     if (!((D.someUpotukset || {}).facebook)) { omaKortti(); return; }
 
     function lataa() {
+      // Upotuksen korkeus pyydetään kortin mittojen mukaan, jotta
+      // Facebook-kortti on samankokoinen kuin TikTok- ja Instagram-kortit.
+      var korkeus = Math.max(220, Math.round(kehys.clientHeight || 0) || 520);
       var f = document.createElement('iframe');
       f.src = 'https://www.facebook.com/plugins/page.php?href=' + encodeURIComponent(osoite) +
-              '&tabs=timeline&width=400&height=520&small_header=true&adapt_container_width=true' +
-              '&hide_cover=false&show_facepile=false&locale=fi_FI';
+              '&tabs=timeline&width=500&height=' + korkeus +
+              '&small_header=true&adapt_container_width=true' +
+              '&hide_cover=true&show_facepile=false&locale=fi_FI';
       f.title = 'Bistro Liekki Facebookissa';
       f.loading = 'lazy';
-      f.style.cssText = 'border:0;overflow:hidden;width:100%;height:520px';
+      f.className = 'some-fb__upotus';
       f.setAttribute('scrolling', 'no');
       f.setAttribute('allow', 'encrypted-media');
       f.onerror = omaKortti;
