@@ -205,9 +205,6 @@ window.LIEKKI = {
     /* Lahjakortin ostolinkki — Operoxin oma lahjakorttisivu. */
     lahjakortti: 'https://www.operox.fi/gift-cards/bistro-liekki',
 
-    /* Edenred — Paras lounas -äänestys. Tyhjennä kun kampanja päättyy. */
-    edenred:     'https://paraslounas.edenred.fi/fi/aanesta',
-
     /* Reittiohjeet ja kartta */
     reittiohjeet: 'https://www.google.com/maps/dir/?api=1&destination=Talvikkitie+30%2C+01300+Vantaa',
     kartta:       'https://www.google.com/maps?q=Talvikkitie+30,+01300+Vantaa&output=embed'
