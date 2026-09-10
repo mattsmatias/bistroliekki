@@ -1544,6 +1544,39 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .sivuhero--tiivis .ingressi { font-size: var(--step-0); }
 .sivuhero--tiivis .murupolku { margin-bottom: 1rem; }
 
+/* Elävä lounastilanne heron alla: onko buffet nyt tarjolla */
+.lounas-tila {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  margin: 0;
+  padding: .5rem .9rem .5rem .75rem;
+  background: rgba(23,20,15,.72);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line-soft);
+  border-radius: 2px;
+  font-size: var(--step--1);
+  color: var(--bone-2);
+}
+.lounas-tila::before {
+  content: '';
+  flex: none;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--ember-lit);
+}
+.lounas-tila:empty { display: none; }
+
+/* Äänestysnosto: otsikko vasemmalle, painike oikealle */
+.aanestys {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
+
 .murupolku { display: flex; flex-wrap: wrap; gap: .5rem; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--bone-4); margin-bottom: 1.5rem; list-style: none; padding: 0; }
 .murupolku a { text-decoration: none; color: var(--bone-4); transition: color .3s var(--ease); }
 .murupolku a:hover { color: var(--ember-lit); }

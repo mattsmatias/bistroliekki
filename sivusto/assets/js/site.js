@@ -113,6 +113,37 @@
   }
 
   /* ---------------------------------------------- 2. AUKIOLO — ELÄVÄ TILA */
+  /* Lounastilanne on oma funktionsa, koska se näkyy myös sivuilla joilla ei
+     ole aukiolopalkkia lainkaan (esim. Lounas-sivun hero). */
+  function lounastila() {
+    var kentat = $$('[data-lounastila]');
+    if (!kentat.length) return;
+
+    var t = ravintolanAika();
+    var l = D.lounas || {};
+    var arkena = l.paivat && l.paivat.indexOf(t.paiva) !== -1;
+    var nyt = arkena && t.min >= minuutit(l.auki) && t.min < minuutit(l.kiinni);
+
+    kentat.forEach(function (el) {
+      // "elava" = näytetään vain kun tieto on tuoreempi kuin aikataulu, joka
+      // lukee jo sivulla. Muuten kenttä jää tyhjäksi ja piiloutuu.
+      var vainElava = el.getAttribute('data-lounastila') === 'elava';
+
+      if (nyt) {
+        el.textContent = 'Lounasbuffet on tarjolla juuri nyt — klo ' + l.kiinni + ' asti.';
+      } else if (arkena && t.min < minuutit(l.auki)) {
+        el.textContent = 'Lounas alkaa tänään klo ' + l.auki + '.';
+      } else if (vainElava) {
+        el.textContent = '';
+      } else {
+        el.textContent = 'Lounasta tarjoillaan ' + (l.paivatTeksti || 'arkisin').toLowerCase() +
+                         ' klo ' + l.auki + '–' + l.kiinni + '.';
+      }
+      el.classList.toggle('korostus', nyt);
+      el.classList.toggle('on-nyt', nyt);
+    });
+  }
+
   function aukiolotila() {
     var laatikot = $$('[data-tila]');
     if (!laatikot.length) return;
@@ -163,18 +194,6 @@
       li.classList.toggle('on-tanaan', parseInt(li.getAttribute('data-paiva'), 10) === t.paiva);
     });
 
-    // Onko lounas juuri nyt tarjolla?
-    var l = D.lounas || {};
-    var lounasNyt = l.paivat && l.paivat.indexOf(t.paiva) !== -1 &&
-                    t.min >= minuutit(l.auki) && t.min < minuutit(l.kiinni);
-    $$('[data-lounastila]').forEach(function (el) {
-      el.textContent = lounasNyt
-        ? 'Lounasbuffet on tarjolla juuri nyt — klo ' + l.kiinni + ' asti.'
-        : (l.paivat && l.paivat.indexOf(t.paiva) !== -1 && t.min < minuutit(l.auki)
-            ? 'Lounas alkaa tänään klo ' + l.auki + '.'
-            : 'Lounasta tarjoillaan ' + (l.paivatTeksti || 'arkisin').toLowerCase() + ' klo ' + l.auki + '–' + l.kiinni + '.');
-      el.classList.toggle('korostus', lounasNyt);
-    });
   }
 
   /* ---------------------------------------- 3. SISÄLLÖN SIJOITUS SIVUILLE */
@@ -1398,6 +1417,7 @@
     taytaTiedot();
     aukiololista();
     aukiolotila();
+    lounastila();
     ajankohtaista();
     galleria();
     tiktok();
@@ -1415,7 +1435,7 @@
     vierityssilmukka();
     kursorihehku();
     laskurit();
-    setInterval(aukiolotila, 60000);   // tila pysyy ajan tasalla
+    setInterval(function () { aukiolotila(); lounastila(); }, 60000);   // tila pysyy ajan tasalla
   }
 
   if (document.readyState === 'loading') {

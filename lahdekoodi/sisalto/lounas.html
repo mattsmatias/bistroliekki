@@ -14,6 +14,9 @@
     </ol>
     <p class="etiketti">Arkisin ma–pe klo 10:30–15</p>
     <h1 data-sanat>Lounas</h1>
+    <!-- Elävä tieto: näkyy vain kun lounas on käynnissä tai alkaa tänään.
+         Muuten aikataulu lukee jo yllä, eikä sitä toisteta. -->
+    <p class="lounas-tila" data-lounastila="elava"></p>
   </div>
 </section>
 
@@ -30,118 +33,53 @@
   </div>
 </section>
 
-<!-- Selkeä tieto: milloin alkaa, milloin päättyy, miten tilataan, mistä lista löytyy -->
-<section class="osio osio--tiivis">
-  <div class="kuori">
-    <div class="tila" data-tila style="border-radius:2px;border:1px solid var(--line-soft);background:var(--char-2)">
-      <div class="kuori tila__rivi">
-        <span class="tila__nyt"><span class="tila__piste" aria-hidden="true"></span><span data-tila-otsikko></span></span>
-        <span class="tila__erotin" aria-hidden="true"></span>
-        <span class="tila__aika" data-tila-aika></span>
-        <span class="tila__huomio" data-lounastila></span>
-      </div>
-    </div>
-  </div>
-</section>
-
-
+<!-- Käytännön tiedot yhdessä paikassa: miten lounas toimii ja mistä meidät
+     löytää. Aika, hinnat ja päivät kerrotaan jo listan yhteydessä, joten
+     niitä ei toisteta tässä. -->
 <section class="osio osio--char viiva-ylä">
-  <div class="kuori">
-    <div class="kortit kortit--2" data-esiin>
-      <article class="kortti">
-        <p class="kortti__nro">Milloin</p>
-        <h3><span data-teksti="lounas-aika">10:30–15:00</span></h3>
-        <p>Lounasbuffet katetaan <span data-teksti="lounas-paivat-pieni">arkisin ma–pe</span>.
-          Viimeinen annos tarjoillaan klo 15, joten tule ajoissa.</p>
-      </article>
-
-      <article class="kortti">
-        <p class="kortti__nro">Miten tilaat</p>
-        <h3>Tule paikalle</h3>
-        <p>Lounas on buffet — pöytävarausta ei tarvita. Isommalle porukalle kannattaa
-          soittaa etukäteen, niin varaamme teille pöydän.</p>
-        <a class="linkki" data-href="puhelin" href="#">Soita meille {{ikoni:nuoli}}</a>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="osio osio--tiivis" style="padding-top:0">
-  <div class="kuori">
-    <div class="kuvapari" data-esiin>
-      <div class="media media--3-2 media--zoom" data-verho>
-      <picture>
-      <source media="(max-width: 700px)" srcset="{{up}}assets/img/lammin-poyta-sm.webp">
-        <img src="{{up}}assets/img/lammin-poyta.webp" alt="Lämpimiä ruokia lounasbuffetin hauteissa"
-             loading="lazy" decoding="async">
-      </picture>
-    </div>
-      <div class="media media--3-2 media--zoom" data-verho>
-      <picture>
-      <source media="(max-width: 700px)" srcset="{{up}}assets/img/salaattipoyta-sm.webp">
-        <img src="{{up}}assets/img/salaattipoyta.webp" alt="Salaattipöydän antimia lounasbuffetissa"
-             loading="lazy" decoding="async">
-      </picture>
-    </div>
-    </div>
-  </div>
-</section>
-
-<section class="osio hiili-tausta">
   <div class="kuori split">
-    <div class="split__teksti" data-esiin>
-      <p class="etiketti">Lounasbuffet</p>
-      <h2 class="otsikko-l">Sama grilli,<br>keskellä työpäivää</h2>
-      <p class="leipa">Lounas on Bistro Liekin arjen ydin: sama puuhiiligrilli, sama
-        savun maku, nopeammassa tahdissa.</p>
-      <p class="leipa">Kerrothan allergioista ja erikoisruokavalioista henkilökunnalle.</p>
-      <div class="napit">
-        <a class="nappi" data-linkki="reittiohjeet" href="#">
-          {{ikoni:sijainti}}<span>Reittiohjeet</span></a>
-        <a class="nappi nappi--ääriviiva" data-href="puhelin" href="#">
-          {{ikoni:soita}}<span>Soita meille</span></a>
+    <div class="split__media" data-esiin>
+      <div class="media media--3-2 media--zoom" data-verho>
+        <picture>
+          <source media="(max-width: 700px)" srcset="{{up}}assets/img/lammin-poyta-sm.webp">
+          <img src="{{up}}assets/img/lammin-poyta.webp" alt="Lämpimiä ruokia lounasbuffetin hauteissa"
+               loading="lazy" decoding="async">
+        </picture>
       </div>
     </div>
 
-    <div class="lounas-kortti" data-esiin style="--viive:1">
-      <p class="lounas-aika"><span data-teksti="lounas-aika">10:30–15:00</span>
-        <small data-teksti="lounas-paivat">Arkisin ma–pe</small></p>
-      <ul class="tietolista" style="margin-top:1.2rem">
-        <li><span class="avain">Päivät</span><span class="arvo" data-teksti="lounas-paivat"></span></li>
-        <li><span class="avain">Hinta</span><span class="arvo"><strong data-teksti="lounas-hinta" data-piilota-tyhjana></strong></span></li>
-        <li><span class="avain">Osoite</span><span class="arvo"><span data-teksti="katu"></span>, <span data-teksti="postitoimi"></span></span></li>
+    <div class="split__teksti" data-esiin style="--viive:1">
+      <h2 class="otsikko-m">Näin lounas toimii</h2>
+      <p class="leipa">Lounas on buffet — pöytävarausta ei tarvita, tule vain paikalle.
+        Isommalle porukalle kannattaa soittaa etukäteen, niin varaamme teille pöydän.</p>
+      <p class="leipa">Kerrothan allergioista ja erikoisruokavalioista henkilökunnalle,
+        niin katsotaan yhdessä sopiva vaihtoehto.</p>
+
+      <ul class="tietolista" style="margin-top:1.6rem">
+        <li><span class="avain">Osoite</span><span class="arvo"><strong data-teksti="katu"></strong>, <span data-teksti="postitoimi"></span></span></li>
         <li><span class="avain">Puhelin</span><span class="arvo"><a data-href="puhelin" href="#" data-teksti="puhelin"></a></span></li>
       </ul>
-      <p class="leipa" style="font-size:.82rem;color:var(--bone-4);margin-top:1.2rem"
-         data-teksti="keittio"></p>
+
+      <div class="napit" style="margin-top:1.8rem">
+        <a class="nappi" data-linkki="reittiohjeet" href="#">
+          {{ikoni:sijainti}}<span>Reittiohjeet</span></a>
+        <a class="nappi nappi--ääriviiva" href="{{linkki:menu}}"><span>Illan à la carte</span></a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Edenred: pieni mutta tyylikäs nosto, ei sivun pääasia -->
-<section class="osio osio--tiivis osio--char viiva-ylä" data-linkkilaatikko>
+<!-- Edenred-äänestys. Katoaa itsestään, kun content.js:n edenred-linkki
+     tyhjennetään kampanjan päätyttyä. -->
+<section class="osio osio--tiivis viiva-ylä" data-linkkilaatikko>
   <div class="kuori">
-    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem"
-         data-esiin>
+    <div class="aanestys" data-esiin>
       <div>
-          <h2 class="otsikko-s">Äänestä Bistro Liekkiä</h2>
+        <p class="etiketti">Paras lounas -äänestys</p>
+        <h2 class="otsikko-s">Äänestä Bistro Liekkiä</h2>
       </div>
       <a class="nappi nappi--ääriviiva nappi--pieni" data-linkki="edenred"
          data-piilota-tyhjana href="#"><span>Äänestä</span></a>
-    </div>
-  </div>
-</section>
-
-<section class="osio viiva-ylä">
-  <div class="kuori keskita">
-    <p class="etiketti etiketti--keskellä" data-esiin>Illalla</p>
-    <h2 class="otsikko-m" data-esiin>Lounaan jälkeen jatkuu à la carte</h2>
-    <p class="leipa" data-esiin style="margin-top:1rem">Kun lounas päättyy klo 15, siirrytään
-      à la carte -listaan — puuhiiligrillin inspiroimiin annoksiin.</p>
-    <div class="napit" data-esiin style="margin-top:1.8rem">
-      <a class="nappi nappi--hiljainen" href="{{linkki:menu}}"><span>Katso à la carte</span></a>
-      <a class="nappi nappi--hiljainen" data-linkki="varaus" data-tyhjana="Varaa puhelimitse"
-         data-vara-href="varaus-puhelin" href="#"><span>Varaa pöytä</span></a>
     </div>
   </div>
 </section>
