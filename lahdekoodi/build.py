@@ -11,6 +11,21 @@ import os
 import re
 import shutil
 import datetime
+import hashlib
+
+
+def versio():
+    """Lyhyt tunniste tyyli- ja skriptitiedostojen sisällöstä. Liitetään
+    osoitteisiin (?v=...), jotta selain hakee muuttuneet tiedostot heti
+    eikä näytä välimuistista vanhaa versiota — tärkeää etenkin viikoittain
+    vaihtuvalle lounaslistalle."""
+    h = hashlib.sha1()
+    for polku in ("assets/css/style.css", "assets/js/site.js", "assets/js/content.js"):
+        tied = os.path.join(os.path.dirname(os.path.abspath(__file__)), "site", polku)
+        if os.path.isfile(tied):
+            with open(tied, "rb") as f:
+                h.update(f.read())
+    return h.hexdigest()[:8]
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "sisalto")
@@ -391,7 +406,7 @@ SHELL = """<!doctype html>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Instrument+Sans:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Instrument+Sans:wght@400;500;600&display=swap"></noscript>
 
-<link rel="stylesheet" href="{up}assets/css/style.css">
+<link rel="stylesheet" href="{up}assets/css/style.css?v={ver}">
 {preload}
 {jsonld}
 </head>
@@ -401,8 +416,8 @@ SHELL = """<!doctype html>
 {body}
 </main>
 {footer}
-<script src="{up}assets/js/content.js"></script>
-<script src="{up}assets/js/site.js" defer></script>
+<script src="{up}assets/js/content.js?v={ver}"></script>
+<script src="{up}assets/js/site.js?v={ver}" defer></script>
 </body>
 </html>
 """
@@ -423,6 +438,8 @@ def build():
     if os.path.isdir(staattiset):
         for name in sorted(os.listdir(staattiset)):
             shutil.copy2(os.path.join(staattiset, name), os.path.join(OUT, name))
+
+    VER = versio()
 
     for page in PAGES:
         slug = page["slug"]
@@ -451,6 +468,7 @@ def build():
             ogtype="website" if slug == "" else "article",
             ogimage=DOMAIN + "/assets/img/" + page["og"],
             up=up,
+            ver=VER,
             preload=preload,
             jsonld=structured_data(page),
             header=build_header(slug, depth),
@@ -479,6 +497,7 @@ def build():
         desc="Etsimääsi sivua ei löytynyt. Bistro Liekki, puuhiiligrilli Tikkurilan "
              "sydämessä. Talvikkitie 30, Vantaa. Katso ruokalista, lounas ja yhteystiedot.",
         canonical=DOMAIN + "/404.html",
+        ver=VER,
         robots='<meta name="robots" content="noindex, follow">',
         ogtype="website",
         ogimage=DOMAIN + "/assets/img/hero.webp",

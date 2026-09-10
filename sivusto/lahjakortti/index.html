@@ -40,7 +40,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Instrument+Sans:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Instrument+Sans:wght@400;500;600&display=swap"></noscript>
 
-<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/style.css?v=585897c5">
 
 
 </head>
@@ -148,8 +148,13 @@
 
 <script>
   /* Ohjaus Operoxiin. Odotetaan hetki, jotta kävijä ehtii nähdä mihin
-     ollaan menossa, ja käytetään replace() jottei paluunappi jää jumiin. */
+     ollaan menossa, ja käytetään replace() jottei paluunappi jää jumiin.
+
+     Ohjaus tehdään VAIN kun ollaan oikeasti tällä sivulla. Yhden tiedoston
+     esikatselussa kaikkien sivujen skriptit ajetaan samaan aikaan, ja ilman
+     tätä tarkistusta koko esikatselu hyppäisi Operoxiin. */
   (function () {
+    if (location.pathname.indexOf('/lahjakortti') === -1) return;
     setTimeout(function () {
       var n = document.querySelector('.nappi[data-linkki="lahjakortti"]');
       var url = n && n.getAttribute('href');
@@ -213,7 +218,7 @@
     <figcaption class="valolaatikko__teksti" data-valolaatikko-teksti></figcaption>
   </figure>
 </div>
-<script src="../assets/js/content.js"></script>
-<script src="../assets/js/site.js" defer></script>
+<script src="../assets/js/content.js?v=585897c5"></script>
+<script src="../assets/js/site.js?v=585897c5" defer></script>
 </body>
 </html>

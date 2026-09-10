@@ -23,6 +23,9 @@
 <script>
   /* Ohjaus Yhteys-sivulle. replace() jottei paluunappi jää jumiin tälle sivulle. */
   (function () {
+    /* Vain oikealla /palaute/-sivulla — ei yhden tiedoston esikatselussa,
+       jossa kaikkien sivujen skriptit ajetaan yhtä aikaa. */
+    if (location.pathname.indexOf('/palaute') === -1) return;
     var kohde = document.querySelector('.nappi[href*="yhteystiedot"]');
     if (kohde) setTimeout(function () { location.replace(kohde.href); }, 900);
   })();

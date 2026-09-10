@@ -14,7 +14,9 @@
      content.js:n kuvapolut toimivat sekä etusivulla että alasivuilla. */
   var PERUSTA = (function () {
     var l = document.querySelector('link[rel="stylesheet"][href*="assets/css/style.css"]');
-    return l ? l.getAttribute('href').replace('assets/css/style.css', '') : '';
+    if (!l) return '';
+    // Osoitteessa on versiotunniste (?v=...), joka pitää katkaista pois
+    return l.getAttribute('href').split('?')[0].replace('assets/css/style.css', '');
   })();
   function polku(p) {
     if (!p) return p;
@@ -1155,12 +1157,17 @@
     setTimeout(reunahaivy, 900);
 
     // Suora linkki osioon: /menu/#brunssi
-    var kohde = (location.hash || '').replace('#', '');
-    if (kohde) {
+    function osoitteesta() {
+      var kohde = (location.hash || '').replace('#', '');
+      if (!kohde) return;
       var loytyi = -1;
       osiot.forEach(function (o, i) { if (o.avain === kohde) loytyi = i; });
       if (loytyi > 0) valitse(loytyi);
     }
+    osoitteesta();
+    // Samalla sivulla oleva linkki vaihtaa vain osoitteen tunnisteen, jolloin
+    // sivu ei lataudu uudelleen — välilehti pitää vaihtaa käsin.
+    window.addEventListener('hashchange', osoitteesta);
   }
 
   function paneelinSisalto(osio) {
