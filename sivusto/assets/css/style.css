@@ -1367,8 +1367,17 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .some-ig--upotus .karuselli__nappi { display: none; }
 .some-ig--upotus .karuselli::before,
 .some-ig--upotus .karuselli::after { content: none; }
-.some-ig__julkaisu { width: 100%; max-width: 100%; flex: none; }
-.some-ig__julkaisu iframe { display: block; width: 100%; height: 100%; min-height: 260px; border: 0; }
+/* Reelit ovat pystyvideoita, joten Instagramin upotus on aina korttia
+   korkeampi. Näytetään kortin verran ylhäältä — tekijän nimi ja video
+   näkyvät, loppu rajautuu siististi pois. "Avaa" vie koko julkaisuun. */
+.some-ig__julkaisu { width: 100%; max-width: 100%; flex: none; overflow: hidden; }
+.some-ig__julkaisu iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  border: 0;
+}
 .some-ig__kuva {
   display: block;
   aspect-ratio: 1;
@@ -1386,7 +1395,7 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 /* Upotus latautuu vasta kun kortti tulee näkyviin, joten tila varataan
    etukäteen — muuten kortti nytkähtää auki. Valitsin on tarkempi kuin
    .some-kortti__sisus > * -sääntö, joka muuten nollaisi min-heightin. */
-.some-kortti__sisus > .some-fb { min-height: 260px; }
+.some-kortti__sisus > .some-fb { min-height: 420px; }
 .some-fb__upotus {
   display: block;
   width: 100%;
@@ -1644,7 +1653,7 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
    JÄLKEEN, jotta se voittaa kaskadissa. */
 @media (min-width: 720px) {
   .some-kortti__sisus {
-    height: clamp(320px, 30vw, 420px);
+    height: clamp(360px, 33vw, 470px);
     flex: 0 0 auto;
     overflow: hidden;
   }

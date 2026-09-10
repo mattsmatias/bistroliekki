@@ -255,7 +255,16 @@ window.LIEKKI = {
      3) instagramKuvat — jos kumpikaan yllä ei ole käytössä, kortissa
         näkyvät nämä talon omat kuvat, jotka linkittävät profiiliin. */
   instagramWidget: '',
-  instagramJulkaisut: [],
+
+  /* Poimittu Bistro Liekin omalta profiililta 10.9.2026, uusin ensin.
+     Vaihda linkit, kun haluat kortin näyttävän tuoreempia julkaisuja. */
+  instagramJulkaisut: [
+    'https://www.instagram.com/reel/DdHJxRONjOr/',
+    'https://www.instagram.com/reel/DdGehd4N-Ob/',
+    'https://www.instagram.com/reel/DdEjP0ZNWKc/',
+    'https://www.instagram.com/reel/DdCANJ8tPAH/',
+    'https://www.instagram.com/reel/Dc_Hru5NuLi/'
+  ],
 
   instagramKuvat: [
     { kuva: 'assets/img/pysty-burgeri.webp', alt: 'Burgeri puuhiiligrillistä' },
