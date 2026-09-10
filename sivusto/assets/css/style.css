@@ -466,16 +466,122 @@ a { color: inherit; }
   .headeri__sisus { gap: 1rem; }
 }
 
-/* ------------------------------------ ILMOITUS: SIVUSTO TYÖN ALLA */
-/* Kelluu sivun alalaidassa, ei vie tilaa sisällöltä eikä peitä navigaatiota.
-   Sulkeminen muistetaan istunnon ajan. */
-.tyonalla {
+/* ------------------------------------------- ILMOITUKSET ALALAIDASSA */
+/* Yksi pino, jotta ilmoitukset eivät mene päällekkäin. Ei vie tilaa
+   sisällöltä eikä peitä navigaatiota; sulkeminen muistetaan istunnon ajan. */
+.ilmoituspino {
   position: fixed;
   left: var(--gutter); right: var(--gutter);
   bottom: 1rem;
   z-index: 750;
   max-width: 640px;
   margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  pointer-events: none;
+}
+.ilmoituspino > * { pointer-events: auto; }
+.ilmoituspino:empty { display: none; }
+/* Puhelimessa kiinteä toimintopalkki on jo alalaidassa — ilmoitus sen päälle */
+@media (max-width: 719px) {
+  .ilmoituspino { bottom: calc(4.6rem + env(safe-area-inset-bottom, 0px)); }
+}
+/* Työpöydällä oikeaan yläkulmaan headerin alle: näkyy heti eikä peitä
+   heron painikkeita, jotka ovat ruudun alaosassa. */
+@media (min-width: 900px) {
+  .ilmoituspino {
+    left: auto;
+    right: clamp(1.5rem, 3vw, 2.5rem);
+    top: calc(var(--header-h) + 1rem);
+    bottom: auto;
+    max-width: 400px;
+    margin-inline: 0;
+  }
+  /* Liuku sivusta, koska laatikko tulee nyt ylhäältä */
+  .aanestyslaatikko,
+  .tyonalla { transform: translateX(calc(100% + 3rem)); }
+  .aanestyslaatikko.on-poistuu,
+  .tyonalla.on-poistuu { transform: translateX(calc(100% + 3rem)); }
+}
+
+/* --------------------------------- ÄÄNESTYS: SUOMEN PARAS LOUNAS */
+/* Edenredin punainen aksenttina, muuten talon hiillospinta — laatikko
+   näyttää kampanjalta mutta kuuluu sivustolle. */
+.aanestyslaatikko {
+  --edenred: #F72717;
+  position: relative;
+  padding: clamp(1.1rem, 2.5vw, 1.5rem) clamp(1.1rem, 2.5vw, 1.6rem);
+  padding-right: 3rem;
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(247,39,23,.16), transparent 62%),
+    rgba(20,16,14,.96);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--edenred);
+  border-radius: 3px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.55);
+  transform: translateY(150%);
+  transition: transform .65s var(--ease-out), opacity .4s var(--ease);
+}
+.aanestyslaatikko.on-nakyvissa { transform: none; }
+.aanestyslaatikko.on-poistuu { transform: translateY(150%); opacity: 0; }
+.aanestyslaatikko__sulje { position: absolute; top: .5rem; right: .5rem; margin: 0; }
+
+.aanestyslaatikko__ylatunnus {
+  margin: 0 0 .35rem;
+  font-family: var(--sans);
+  font-size: .62rem;
+  font-weight: 600;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--edenred);
+}
+.aanestyslaatikko__otsikko {
+  margin: 0 0 .45rem;
+  font-family: var(--display);
+  font-size: clamp(1.15rem, 1rem + .7vw, 1.45rem);
+  font-variation-settings: 'opsz' 32, 'SOFT' 16, 'WONK' 0;
+  line-height: 1.2;
+  color: var(--bone);
+}
+.aanestyslaatikko__teksti {
+  margin: 0 0 1.05rem;
+  font-size: .8rem;
+  line-height: 1.55;
+  color: var(--bone-3);
+  max-width: 46ch;
+}
+.aanestyslaatikko__nappi {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  min-height: 44px;
+  padding: .6rem 1.2rem;
+  background: var(--edenred);
+  border-radius: 2px;
+  font-family: var(--sans);
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fff;
+  transition: background-color .3s var(--ease), transform .3s var(--ease-out);
+}
+.aanestyslaatikko__nappi:hover { background: #D91E10; transform: translateY(-1px); }
+.aanestyslaatikko__nappi svg { transition: transform .3s var(--ease-out); }
+.aanestyslaatikko__nappi:hover svg { transform: translateX(3px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .aanestyslaatikko { transition: none; }
+  .aanestyslaatikko__nappi, .aanestyslaatikko__nappi svg { transition: none; }
+}
+
+/* ------------------------------------ ILMOITUS: SIVUSTO TYÖN ALLA */
+.tyonalla {
+  position: relative;
   background: rgba(20,16,14,.94);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   backdrop-filter: blur(14px) saturate(140%);
@@ -526,13 +632,13 @@ a { color: inherit; }
   transition: color .3s var(--ease), background-color .3s var(--ease);
 }
 .tyonalla__sulje:hover { color: var(--bone); background: rgba(255,255,255,.06); }
-/* Puhelimessa kiinteä alapalkki on jo alalaidassa — ilmoitus sen yläpuolelle */
 @media (max-width: 719px) {
-  .tyonalla { bottom: calc(4.6rem + env(safe-area-inset-bottom, 0px)); }
   .tyonalla__teksti { font-size: .76rem; }
+  .aanestyslaatikko__teksti { font-size: .78rem; }
 }
 @media (hover: none) and (pointer: coarse) {
   .tyonalla__sulje { width: 44px; height: 44px; margin: -.5rem -.5rem 0 0; }
+  .aanestyslaatikko__sulje { top: .25rem; right: .25rem; margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .tyonalla { transition: none; }

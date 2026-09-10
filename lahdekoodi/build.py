@@ -47,9 +47,9 @@ PAGES = [
               "Tikkurilan keskustassa vuodesta 2016. Ravintolan ylpeys on puuhiiligrilli.",
          og="lounasbuffet.webp"),
     dict(slug="menu", file="menu.html",
-         title="Menu — Bistro Liekki | À la carte, pikkujoulu, brunssi ja juomat",
-         desc="Bistro Liekin ruokalistat yhdessä paikassa: à la carte, pikkujoulu, brunssi "
-              "ja juomat. Puuhiiligrilli Tikkurilan keskustassa, Vantaalla.",
+         title="Menu — Bistro Liekki | À la carte, brunssi ja juomat",
+         desc="Bistro Liekin ruokalistat yhdessä paikassa: à la carte, brunssi ja juomat. "
+              "Puuhiiligrilli Tikkurilan keskustassa, Vantaalla.",
          og="burgeri-pekoni.webp"),
     dict(slug="lounas", file="lounas.html",
          title="Lounas Tikkurilassa — Bistro Liekki | Lounasbuffet arkisin 10:30–15",
@@ -164,14 +164,32 @@ def build_header(current, depth):
 
     return f"""{esirippu}<a class="ohita" href="#sisalto">Siirry sisältöön</a>
 
-<!-- Ilmoitus keskeneräisestä sivustosta. Poistuu näkyvistä kun content.js:n
-     tyonAlla-asetus muutetaan arvoon false. -->
-<div class="tyonalla" data-tyonalla hidden>
-  <div class="kuori tyonalla__rivi">
-    <span class="tyonalla__merkki" aria-hidden="true"></span>
-    <p class="tyonalla__teksti" data-tyonalla-teksti></p>
-    <button class="tyonalla__sulje" type="button" data-tyonalla-sulje
-            aria-label="Sulje ilmoitus">{ICONS['sulje']}</button>
+<!-- Ilmoitukset pinossa sivun alalaidassa. Molemmat suljettavissa, ja
+     sulkeminen muistetaan käynnin ajan. Sisältö tulee content.js:stä. -->
+<div class="ilmoituspino">
+
+  <!-- Edenredin Suomen Paras Lounas -äänestys. Katoaa kun content.js:n
+       aanestys.naytetaan on false. -->
+  <aside class="aanestyslaatikko" data-aanestys hidden aria-label="Äänestys">
+    <button class="tyonalla__sulje aanestyslaatikko__sulje" type="button"
+            data-aanestys-sulje aria-label="Sulje ilmoitus">{ICONS['sulje']}</button>
+    <p class="aanestyslaatikko__ylatunnus" data-aanestys-ylatunnus></p>
+    <p class="aanestyslaatikko__otsikko" data-aanestys-otsikko></p>
+    <p class="aanestyslaatikko__teksti" data-aanestys-teksti></p>
+    <a class="aanestyslaatikko__nappi" data-aanestys-linkki href="#"
+       target="_blank" rel="noopener"><span data-aanestys-painike>Äänestä</span>
+      {ICONS['nuoli']}</a>
+  </aside>
+
+  <!-- Ilmoitus keskeneräisestä sivustosta. Poistuu näkyvistä kun content.js:n
+       tyonAlla-asetus muutetaan arvoon false. -->
+  <div class="tyonalla" data-tyonalla hidden>
+    <div class="tyonalla__rivi">
+      <span class="tyonalla__merkki" aria-hidden="true"></span>
+      <p class="tyonalla__teksti" data-tyonalla-teksti></p>
+      <button class="tyonalla__sulje" type="button" data-tyonalla-sulje
+              aria-label="Sulje ilmoitus">{ICONS['sulje']}</button>
+    </div>
   </div>
 </div>
 

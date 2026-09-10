@@ -91,14 +91,32 @@
   </div>
 </div><a class="ohita" href="#sisalto">Siirry sisältöön</a>
 
-<!-- Ilmoitus keskeneräisestä sivustosta. Poistuu näkyvistä kun content.js:n
-     tyonAlla-asetus muutetaan arvoon false. -->
-<div class="tyonalla" data-tyonalla hidden>
-  <div class="kuori tyonalla__rivi">
-    <span class="tyonalla__merkki" aria-hidden="true"></span>
-    <p class="tyonalla__teksti" data-tyonalla-teksti></p>
-    <button class="tyonalla__sulje" type="button" data-tyonalla-sulje
-            aria-label="Sulje ilmoitus"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5"/></svg></button>
+<!-- Ilmoitukset pinossa sivun alalaidassa. Molemmat suljettavissa, ja
+     sulkeminen muistetaan käynnin ajan. Sisältö tulee content.js:stä. -->
+<div class="ilmoituspino">
+
+  <!-- Edenredin Suomen Paras Lounas -äänestys. Katoaa kun content.js:n
+       aanestys.naytetaan on false. -->
+  <aside class="aanestyslaatikko" data-aanestys hidden aria-label="Äänestys">
+    <button class="tyonalla__sulje aanestyslaatikko__sulje" type="button"
+            data-aanestys-sulje aria-label="Sulje ilmoitus"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5"/></svg></button>
+    <p class="aanestyslaatikko__ylatunnus" data-aanestys-ylatunnus></p>
+    <p class="aanestyslaatikko__otsikko" data-aanestys-otsikko></p>
+    <p class="aanestyslaatikko__teksti" data-aanestys-teksti></p>
+    <a class="aanestyslaatikko__nappi" data-aanestys-linkki href="#"
+       target="_blank" rel="noopener"><span data-aanestys-painike>Äänestä</span>
+      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true"><path d="M9 1l4 4-4 4M13 5H0" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg></a>
+  </aside>
+
+  <!-- Ilmoitus keskeneräisestä sivustosta. Poistuu näkyvistä kun content.js:n
+       tyonAlla-asetus muutetaan arvoon false. -->
+  <div class="tyonalla" data-tyonalla hidden>
+    <div class="tyonalla__rivi">
+      <span class="tyonalla__merkki" aria-hidden="true"></span>
+      <p class="tyonalla__teksti" data-tyonalla-teksti></p>
+      <button class="tyonalla__sulje" type="button" data-tyonalla-sulje
+              aria-label="Sulje ilmoitus"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5"/></svg></button>
+    </div>
   </div>
 </div>
 

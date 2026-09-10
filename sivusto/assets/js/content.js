@@ -237,6 +237,20 @@ window.LIEKKI = {
      Tarkistettu 8.9.2026: 43,2 t. seuraajaa. */
   tiktokSeuraajat: '43 000',
 
+  /* --------------------------------------------------------- äänestys */
+  /* Edenredin Suomen Paras Lounas -äänestys. Laatikko näkyy sivun
+     alalaidassa heti kun kävijä saapuu, ja hän voi sulkea sen.
+     Kun kampanja päättyy, vaihda naytetaan: false. */
+  aanestys: {
+    naytetaan: true,
+    ylatunnus: 'Edenred',
+    otsikko: 'Suomen Paras Lounas',
+    teksti: 'Olemme mukana äänestyksessä. Käy antamassa äänesi Bistro Liekille — ' +
+            'se vie vain hetken.',
+    painike: 'Äänestä meitä',
+    linkki: 'https://paraslounas.edenred.fi/fi/aanesta'
+  },
+
   /* ------------------------------------------------------ sivusto työn alla */
   /* Ilmoitus, joka kertoo kävijälle että sivusto on vielä kesken.
      Kun sivusto on valmis, vaihda naytetaan: false — ilmoitus katoaa

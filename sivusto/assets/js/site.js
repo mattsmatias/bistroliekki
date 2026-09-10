@@ -970,12 +970,61 @@
     });
   }
 
+  /* ------------------------------------------ 10a. ILMOITUS: ÄÄNESTYS */
+  /* Edenredin Suomen Paras Lounas -äänestys. Nousee esiin heti sivulle
+     tultaessa; sulkeminen muistetaan käynnin ajan. */
+  function aanestys() {
+    var laatikko = $('[data-aanestys]');
+    if (!laatikko) return;
+
+    var a = D.aanestys || {};
+    if (!a.naytetaan || !a.linkki) { laatikko.remove(); return; }
+
+    var suljettu = false;
+    try { suljettu = sessionStorage.getItem('liekki-aanestys') === 'kiinni'; } catch (e) {}
+    if (suljettu) { laatikko.remove(); return; }
+
+    function aseta(valitsin, teksti) {
+      var el = $(valitsin, laatikko);
+      if (!el) return;
+      if (teksti) el.textContent = teksti; else el.remove();
+    }
+    aseta('[data-aanestys-ylatunnus]', a.ylatunnus);
+    aseta('[data-aanestys-otsikko]', a.otsikko);
+    aseta('[data-aanestys-teksti]', a.teksti);
+    aseta('[data-aanestys-painike]', a.painike || 'Äänestä');
+
+    var linkki = $('[data-aanestys-linkki]', laatikko);
+    if (linkki) linkki.href = a.linkki;
+
+    laatikko.hidden = false;
+    setTimeout(function () { laatikko.classList.add('on-nakyvissa'); }, kevyt ? 0 : 700);
+
+    var nappi = $('[data-aanestys-sulje]', laatikko);
+    if (nappi) {
+      nappi.addEventListener('click', function () {
+        laatikko.classList.add('on-poistuu');
+        try { sessionStorage.setItem('liekki-aanestys', 'kiinni'); } catch (e) {}
+        setTimeout(function () {
+          if (laatikko.parentNode) laatikko.remove();
+          // Vuoro seuraavalle ilmoitukselle
+          tyonAlla();
+        }, 700);
+      });
+    }
+    return true;   // äänestys vie ilmoituspaikan juuri nyt
+  }
+
   /* -------------------------------------------- 10b. ILMOITUS: TYÖN ALLA */
   /* Kertoo kävijälle että sivusto on kesken. Sulkeminen muistetaan istunnon
      ajan, jottei ilmoitus toistu joka sivunvaihdossa. */
   function tyonAlla() {
     var laatikko = $('[data-tyonalla]');
     if (!laatikko) return;
+
+    // Vain yksi ilmoitus kerrallaan: äänestys on etusijalla. Tämä nousee
+    // esiin vasta kun äänestyslaatikko on suljettu.
+    if ($('[data-aanestys]')) return;
 
     var asetus = D.tyonAlla || {};
     if (!asetus.naytetaan) { laatikko.remove(); return; }
@@ -1426,6 +1475,7 @@
     saavutukset();
     lomakeAihe();
     lomakkeet();
+    aanestys();
     tyonAlla();
     aktiivinenNavi();
     jaaSanoiksi();
