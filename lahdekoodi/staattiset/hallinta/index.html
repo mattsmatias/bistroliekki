@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Sisällönhallinta — Bistro Liekki</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="hallinta.css">
+</head>
+<body>
+
+<!-- ====================================================== KIRJAUTUMINEN -->
+<div class="kirjaudu" id="kirjaudu">
+  <form class="kirjaudu__kortti" id="kirjautumislomake" autocomplete="on">
+    <img class="kirjaudu__logo" src="../assets/img/logo.webp" alt="Bistro Liekki">
+    <h1>Sisällönhallinta</h1>
+    <p class="kirjaudu__alaotsikko">Kirjaudu muokataksesi sivuston sisältöä</p>
+
+    <p class="viesti viesti--virhe" id="kirjautumisvirhe" hidden></p>
+
+    <label class="kentta">
+      <span>Sähköposti</span>
+      <input type="email" id="sposti" name="email" autocomplete="username" required>
+    </label>
+    <label class="kentta">
+      <span>Salasana</span>
+      <input type="password" id="salasana" name="password" autocomplete="current-password" required>
+    </label>
+    <button class="nappi" type="submit" id="kirjaudu-nappi" style="width:100%;margin-top:.6rem">
+      Kirjaudu sisään
+    </button>
+  </form>
+</div>
+
+<!-- ============================================================= KEHYS -->
+<div class="kehys" id="kehys">
+
+  <header class="ylapalkki">
+    <img class="ylapalkki__logo" src="../assets/img/logo.webp" alt="">
+    <span class="ylapalkki__nimi">Bistro Liekki · sisällönhallinta</span>
+    <div class="ylapalkki__oikea">
+      <span class="ylapalkki__tunnus" id="tunnus"></span>
+      <a class="nappi nappi--hiljainen nappi--pieni" href="../" target="_blank" rel="noopener">Avaa sivusto</a>
+      <button class="nappi nappi--hiljainen nappi--pieni" type="button" id="ulos">Kirjaudu ulos</button>
+    </div>
+  </header>
+
+  <nav class="valilehdet" id="valilehdet" role="tablist" aria-label="Sisällön osiot"></nav>
+
+  <main class="sisus" id="sisus">
+    <div class="lataus" id="lataus">Haetaan sisältöä…</div>
+  </main>
+
+  <div class="tallennuspalkki" id="tallennuspalkki" hidden>
+    <span class="tallennuspalkki__tila" id="tila"></span>
+    <div class="tallennuspalkki__napit">
+      <button class="nappi nappi--hiljainen" type="button" id="peru">Peru muutokset</button>
+      <button class="nappi" type="button" id="tallenna">Tallenna</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="../assets/js/asetukset.js"></script>
+<script src="../assets/js/content.js"></script>
+<script src="hallinta.js"></script>
+</body>
+</html>

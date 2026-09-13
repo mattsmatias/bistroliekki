@@ -1,0 +1,364 @@
+/* ==========================================================================
+   BISTRO LIEKKI — hallintapaneelin tyylit
+   Sama tumma hiillosilme kuin sivustolla, mutta tiiviimpi ja työkalumaisempi.
+   Erillinen tiedosto: hallintapaneeli ei saa rikkoutua, vaikka sivuston
+   tyylejä muutettaisiin.
+   ========================================================================== */
+
+:root {
+  --ink: #080707;
+  --char: #100E0C;
+  --char-2: #17140F;
+  --char-3: #201B15;
+  --bone: #F4EFE6;
+  --bone-2: #D8D0C2;
+  --bone-3: #A79C8C;
+  --bone-4: #6F675C;
+  --ember: #C9552A;
+  --ember-lit: #E9743B;
+  --viiva: rgba(244, 239, 230, .12);
+  --viiva-vahva: rgba(244, 239, 230, .22);
+  --onnistui: #4E9A5F;
+  --virhe: #D8503C;
+  --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --pyoristys: 3px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--bone-2);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: var(--display); font-weight: 500; color: var(--bone); margin: 0; }
+
+/* --------------------------------------------------------- KIRJAUTUMINEN */
+.kirjaudu {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.2rem;
+}
+.kirjaudu__kortti {
+  width: 100%;
+  max-width: 380px;
+  padding: clamp(1.6rem, 5vw, 2.4rem);
+  background: var(--char);
+  border: 1px solid var(--viiva);
+  border-radius: var(--pyoristys);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .5);
+}
+.kirjaudu__logo { display: block; width: 84px; margin: 0 auto 1.4rem; }
+.kirjaudu h1 { font-size: 1.4rem; text-align: center; margin-bottom: .3rem; }
+.kirjaudu__alaotsikko {
+  margin: 0 0 1.8rem;
+  text-align: center;
+  font-size: 13px;
+  color: var(--bone-4);
+}
+
+/* ----------------------------------------------------------------- KEHYS */
+.kehys { display: none; min-height: 100vh; flex-direction: column; }
+.kehys.on-auki { display: flex; }
+
+.ylapalkki {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: .8rem clamp(1rem, 3vw, 2rem);
+  background: rgba(16, 14, 12, .96);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--viiva);
+}
+.ylapalkki__logo { width: 42px; flex: none; }
+.ylapalkki__nimi {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--bone-3);
+}
+.ylapalkki__oikea { margin-left: auto; display: flex; align-items: center; gap: .5rem; }
+.ylapalkki__tunnus { font-size: 12px; color: var(--bone-4); }
+
+/* ------------------------------------------------------------ VÄLILEHDET */
+.valilehdet {
+  display: flex;
+  gap: .2rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  border-bottom: 1px solid var(--viiva);
+  background: var(--char);
+  position: sticky;
+  top: 63px;
+  z-index: 15;
+}
+.valilehdet::-webkit-scrollbar { display: none; }
+.valilehti {
+  flex: none;
+  min-height: 48px;
+  padding: .85rem 1rem;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--bone-4);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .25s ease, border-color .25s ease;
+}
+.valilehti:hover { color: var(--bone-2); }
+.valilehti[aria-selected='true'] { color: var(--bone); border-bottom-color: var(--ember); }
+
+/* ---------------------------------------------------------------- SISÄLTÖ */
+.sisus {
+  flex: 1;
+  width: 100%;
+  max-width: 940px;
+  margin-inline: auto;
+  padding: clamp(1.4rem, 4vw, 2.6rem) clamp(1rem, 3vw, 2rem) 8rem;
+}
+.paneeli[hidden] { display: none; }
+.paneeli__otsikko { font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: .4rem; }
+.paneeli__ohje {
+  margin: 0 0 2rem;
+  max-width: 62ch;
+  font-size: 14px;
+  color: var(--bone-4);
+}
+
+.lohko {
+  margin-bottom: 1.6rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  background: var(--char);
+  border: 1px solid var(--viiva);
+  border-radius: var(--pyoristys);
+}
+.lohko__otsikko {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-bottom: 1rem;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ember-lit);
+}
+.lohko__vihje { font-size: 12px; letter-spacing: 0; text-transform: none; color: var(--bone-4); }
+
+/* ----------------------------------------------------------------- KENTÄT */
+.kentta { display: block; margin-bottom: 1rem; }
+.kentta:last-child { margin-bottom: 0; }
+.kentta > span {
+  display: block;
+  margin-bottom: .35rem;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  color: var(--bone-3);
+}
+input[type='text'], input[type='email'], input[type='password'],
+input[type='time'], input[type='url'], textarea, select {
+  width: 100%;
+  min-height: 46px;
+  padding: .65rem .8rem;
+  background: var(--char-2);
+  border: 1px solid var(--viiva);
+  border-radius: var(--pyoristys);
+  color: var(--bone);
+  font-family: var(--sans);
+  font-size: 16px;              /* 16px estää iOS:n zoomauksen kenttään */
+  line-height: 1.5;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+textarea { min-height: 96px; resize: vertical; }
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--ember);
+  background: var(--char-3);
+}
+input::placeholder, textarea::placeholder { color: var(--bone-4); }
+select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--bone-3) 50%),
+                    linear-gradient(135deg, var(--bone-3) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 21px, calc(100% - 14px) 21px;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 2.6rem;
+}
+
+.rivi { display: grid; gap: .8rem; margin-bottom: 1rem; }
+.rivi:last-child { margin-bottom: 0; }
+@media (min-width: 620px) {
+  .rivi--2 { grid-template-columns: 1fr 1fr; }
+  .rivi--3 { grid-template-columns: 1fr 1fr 1fr; }
+  .rivi--kapea-loppu { grid-template-columns: 1fr auto; align-items: end; }
+}
+
+/* --------------------------------------------------------------- NAPIT */
+.nappi {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-height: 46px;
+  padding: .7rem 1.3rem;
+  background: var(--ember);
+  border: 1px solid transparent;
+  border-radius: var(--pyoristys);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color .25s ease, border-color .25s ease, opacity .2s ease;
+}
+.nappi:hover { background: var(--ember-lit); }
+.nappi:disabled { opacity: .5; cursor: default; }
+.nappi--hiljainen { background: none; border-color: var(--viiva-vahva); color: var(--bone-2); }
+.nappi--hiljainen:hover { background: var(--char-3); border-color: var(--bone-4); }
+.nappi--pieni { min-height: 40px; padding: .5rem .9rem; font-size: 11.5px; }
+.nappi--vaara { border-color: rgba(216, 80, 60, .5); color: #E58877; }
+.nappi--vaara:hover { background: rgba(216, 80, 60, .12); border-color: var(--virhe); }
+
+/* -------------------------------------------------------- TOISTUVAT RIVIT */
+.lista { display: grid; gap: .7rem; }
+.lista__rivi {
+  display: grid;
+  gap: .6rem;
+  padding: .8rem;
+  background: var(--char-2);
+  border: 1px solid var(--viiva);
+  border-radius: var(--pyoristys);
+}
+.lista__rivi--tiivis { padding: .55rem .7rem; }
+.lista__tyokalut { display: flex; gap: .35rem; justify-content: flex-end; }
+.lista__nappi {
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  background: none;
+  border: 1px solid var(--viiva);
+  border-radius: var(--pyoristys);
+  color: var(--bone-4);
+  font-size: 15px;
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.lista__nappi:hover { color: var(--bone); border-color: var(--bone-4); background: var(--char-3); }
+.lista__nappi:disabled { opacity: .3; cursor: default; }
+.lista__nappi--poista:hover { color: #E58877; border-color: rgba(216, 80, 60, .5); }
+.lista__tyhja {
+  padding: 1.2rem;
+  text-align: center;
+  font-size: 13px;
+  color: var(--bone-4);
+  border: 1px dashed var(--viiva);
+  border-radius: var(--pyoristys);
+}
+
+/* ------------------------------------------------------------ TALLENNUS */
+.tallennuspalkki {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: .8rem clamp(1rem, 3vw, 2rem) calc(.8rem + env(safe-area-inset-bottom, 0px));
+  background: rgba(16, 14, 12, .97);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--viiva);
+}
+.tallennuspalkki__tila { font-size: 12.5px; color: var(--bone-4); flex: 1; min-width: 140px; }
+.tallennuspalkki__tila.on-muutoksia { color: var(--ember-lit); }
+.tallennuspalkki__tila.on-onnistui { color: var(--onnistui); }
+.tallennuspalkki__tila.on-virhe { color: #E58877; }
+.tallennuspalkki__napit { display: flex; gap: .5rem; margin-left: auto; }
+
+/* ------------------------------------------------------------- VIESTIT */
+.viesti {
+  margin-bottom: 1.2rem;
+  padding: .8rem 1rem;
+  border-radius: var(--pyoristys);
+  font-size: 13.5px;
+  border: 1px solid var(--viiva);
+  background: var(--char-2);
+}
+.viesti--virhe { border-color: rgba(216, 80, 60, .45); color: #E58877; }
+.viesti--onnistui { border-color: rgba(78, 154, 95, .45); color: #8FCB9B; }
+.viesti[hidden] { display: none; }
+
+.lataus {
+  display: grid;
+  place-items: center;
+  min-height: 50vh;
+  color: var(--bone-4);
+  font-size: 13px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------- OHJE */
+details.ohje {
+  margin-bottom: 1.6rem;
+  border: 1px solid var(--viiva);
+  border-radius: var(--pyoristys);
+  background: var(--char);
+}
+details.ohje > summary {
+  padding: .9rem 1rem;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--bone-3);
+  cursor: pointer;
+}
+details.ohje > summary::marker { color: var(--ember); }
+details.ohje > div { padding: 0 1rem 1rem; font-size: 13.5px; color: var(--bone-4); }
+details.ohje ul { margin: .4rem 0; padding-left: 1.2rem; }
+details.ohje li { margin-bottom: .3rem; }
+
+/* ------------------------------------------------------------ PIENI RUUTU */
+@media (max-width: 560px) {
+  .valilehdet { top: 59px; }
+  .ylapalkki { padding-block: .6rem; }
+  .ylapalkki__oikea { width: 100%; margin-left: 0; }
+  .tallennuspalkki__napit { width: 100%; margin-left: 0; }
+  .tallennuspalkki__napit .nappi { flex: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: .001ms !important; animation-duration: .001ms !important; }
+}

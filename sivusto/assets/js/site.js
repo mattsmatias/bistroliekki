@@ -1,6 +1,13 @@
 /* ==========================================================================
    BISTRO LIEKKI — sivuston toiminnallisuus
-   Ei riippuvuuksia. Kaikki sisältö tulee tiedostosta content.js.
+   Ei riippuvuuksia.
+
+   Sisältö tulee kahdesta paikasta:
+     1. content.js         sisäänrakennettu varasisältö, aina mukana
+     2. hallintapaneeli    ravintolan itse tallentamat muutokset tietokannasta
+
+   Tietokannan sisältö voittaa, mutta jos yhteyttä ei ole, sivusto näyttää
+   content.js:n sisällön eikä mikään jää tyhjäksi.
    ========================================================================== */
 (function () {
   'use strict';
@@ -199,6 +206,24 @@
   }
 
   /* ---------------------------------------- 3. SISÄLLÖN SIJOITUS SIVUILLE */
+  /* Hallintapaneelista muokatut tekstit. HTML:ssä oleva teksti on oletus —
+     se näkyy hakukoneille ja silloinkin, kun tietokantaa ei tavoiteta.
+     Tietokannan teksti korvaa sen vasta jos se on todella kirjoitettu. */
+  function merkit(t) {
+    return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function tekstit() {
+    var t = D.tekstit || {};
+    $$('[data-muokattava]').forEach(function (el) {
+      var arvo = t[el.getAttribute('data-muokattava')];
+      if (typeof arvo !== 'string' || !arvo.trim()) return;
+      // Rivinvaihto tarkoittaa rivinvaihtoa. Muu merkintä siivotaan pois,
+      // jottei tekstikenttään voi livahtaa sivua rikkovaa koodia.
+      el.innerHTML = arvo.split('\n').map(merkit).join('<br>');
+    });
+  }
+
   function taytaTiedot() {
     var kartta = {
       nimi: D.nimi,
@@ -1632,6 +1657,7 @@
   /* ------------------------------------------------------------ KÄYNNISTYS */
   function kaynnista() {
     headeri();
+    tekstit();          // ennen jaaSanoiksi-animaatiota, joka pilkkoo otsikot
     taytaTiedot();
     aukiololista();
     aukiolotila();
@@ -1658,9 +1684,97 @@
     setInterval(function () { aukiolotila(); lounastila(); }, 60000);   // tila pysyy ajan tasalla
   }
 
+  /* ------------------------------------------ T. SISÄLTÖ TIETOKANNASTA */
+  /* Hallintapaneelissa tehdyt muutokset haetaan tietokannasta ja sulautetaan
+     content.js:n päälle ennen kuin sivu piirretään. Näin näkyvissä on aina
+     tuorein sisältö ilman vilkkumista.
+
+     Nopeus hoidetaan kahdella tavalla:
+       - Edellisellä käynnillä haettu sisältö on selaimen muistissa, joten
+         se on käytössä heti eikä piirtoa tarvitse odottaa lainkaan.
+       - Ensimmäisellä käynnillä odotetaan hakua korkeintaan hetki. Jos verkko
+         takkuaa, sivu piirretään content.js:stä ja tuore sisältö tallentuu
+         muistiin seuraavaa käyntiä varten. */
+
+  var MUISTIAVAIN = 'liekki-sisalto';
+  var ODOTUS_MS = 1200;
+
+  function sulauta(rivit) {
+    if (!rivit || !rivit.length) return false;
+    var muuttui = false;
+    rivit.forEach(function (rivi) {
+      var data = rivi && rivi.data;
+      if (!data || typeof data !== 'object') return;
+      Object.keys(data).forEach(function (avain) {
+        D[avain] = data[avain];
+        muuttui = true;
+      });
+    });
+    return muuttui;
+  }
+
+  function muistista() {
+    try {
+      var teksti = localStorage.getItem(MUISTIAVAIN);
+      if (!teksti) return null;
+      var paketti = JSON.parse(teksti);
+      // Yli viikon vanha muistikopio ohitetaan: parempi näyttää content.js
+      // kuin sisältöä, joka on voinut muuttua moneen kertaan.
+      if (!paketti || !paketti.aika || Date.now() - paketti.aika > 7 * 864e5) return null;
+      return paketti.rivit || null;
+    } catch (e) { return null; }
+  }
+
+  function muistiin(rivit) {
+    try {
+      localStorage.setItem(MUISTIAVAIN, JSON.stringify({ aika: Date.now(), rivit: rivit }));
+    } catch (e) { /* yksityinen selaus tai täysi muisti — ei haittaa */ }
+  }
+
+  function hae() {
+    var y = window.LIEKKI_YHTEYS || {};
+    if (!y.osoite || !y.avain || typeof fetch !== 'function') return null;
+    return fetch(y.osoite.replace(/\/+$/, '') + '/rest/v1/sisalto?select=avain,data', {
+      headers: { apikey: y.avain, Authorization: 'Bearer ' + y.avain },
+      cache: 'no-store'
+    }).then(function (v) {
+      if (!v.ok) throw new Error('sisallon haku ' + v.status);
+      return v.json();
+    });
+  }
+
+  function kaynnistaSisallolla() {
+    var haku = null;
+    try { haku = hae(); } catch (e) { haku = null; }
+
+    var muistettu = muistista();
+    if (muistettu) sulauta(muistettu);
+
+    // Muisti riitti tai tietokantaa ei ole: piirretään heti.
+    if (muistettu || !haku) {
+      kaynnista();
+      if (haku) haku.then(muistiin).catch(function () {});
+      return;
+    }
+
+    // Ensimmäinen käynti: odotetaan hakua hetki, muttei loputtomiin.
+    var valmis = false;
+    function aloita() {
+      if (valmis) return;
+      valmis = true;
+      kaynnista();
+    }
+    haku.then(function (rivit) {
+      if (!valmis) sulauta(rivit);
+      muistiin(rivit);
+      aloita();
+    }).catch(aloita);
+    setTimeout(aloita, ODOTUS_MS);
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', kaynnista);
+    document.addEventListener('DOMContentLoaded', kaynnistaSisallolla);
   } else {
-    kaynnista();
+    kaynnistaSisallolla();
   }
 })();

@@ -20,7 +20,8 @@ def versio():
     eikä näytä välimuistista vanhaa versiota — tärkeää etenkin viikoittain
     vaihtuvalle lounaslistalle."""
     h = hashlib.sha1()
-    for polku in ("assets/css/style.css", "assets/js/site.js", "assets/js/content.js"):
+    for polku in ("assets/css/style.css", "assets/js/site.js",
+                  "assets/js/content.js", "assets/js/asetukset.js"):
         tied = os.path.join(os.path.dirname(os.path.abspath(__file__)), "site", polku)
         if os.path.isfile(tied):
             with open(tied, "rb") as f:
@@ -419,6 +420,7 @@ SHELL = """<!doctype html>
 {body}
 </main>
 {footer}
+<script src="{up}assets/js/asetukset.js?v={ver}"></script>
 <script src="{up}assets/js/content.js?v={ver}"></script>
 <script src="{up}assets/js/site.js?v={ver}" defer></script>
 </body>
@@ -440,7 +442,11 @@ def build():
     staattiset = os.path.join(ROOT, "staattiset")
     if os.path.isdir(staattiset):
         for name in sorted(os.listdir(staattiset)):
-            shutil.copy2(os.path.join(staattiset, name), os.path.join(OUT, name))
+            lahde = os.path.join(staattiset, name)
+            if os.path.isdir(lahde):
+                shutil.copytree(lahde, os.path.join(OUT, name), dirs_exist_ok=True)
+            else:
+                shutil.copy2(lahde, os.path.join(OUT, name))
 
     VER = versio()
 
@@ -547,7 +553,8 @@ def build():
                 + urls + "\n</urlset>\n")
 
     with open(os.path.join(OUT, "robots.txt"), "w", encoding="utf-8") as f:
-        f.write(f"User-agent: *\nAllow: /\nDisallow: /vahvista-poytavaraus/\n\n"
+        f.write(f"User-agent: *\nAllow: /\n"
+                f"Disallow: /vahvista-poytavaraus/\nDisallow: /hallinta/\n\n"
                 f"Sitemap: {DOMAIN}/sitemap.xml\n")
 
     print("\n  ✓ sitemap.xml, robots.txt")
