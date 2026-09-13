@@ -152,7 +152,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; color: var(--bone); 
   width: 100%;
   max-width: 940px;
   margin-inline: auto;
-  padding: clamp(1.4rem, 4vw, 2.6rem) clamp(1rem, 3vw, 2rem) 8rem;
+  padding: clamp(1.4rem, 4vw, 2.6rem) clamp(1rem, 3vw, 2rem) 2.5rem;
 }
 .paneeli[hidden] { display: none; }
 .paneeli__otsikko { font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: .4rem; }
@@ -309,6 +309,18 @@ input[type='checkbox'] {
   color: var(--bone-4);
   border: 1px dashed var(--viiva);
   border-radius: var(--pyoristys);
+}
+
+/* ------------------------------------------------------------ ALATUNNISTE */
+/* Alatunniste kantaa tallennuspalkin vaatiman tyhjan tilan, jotta palkki ei
+   peita sita. Tilan maara mitataan ajossa, koska palkki voi rivittya. */
+.alatunniste {
+  padding: 1.4rem clamp(1rem, 3vw, 2rem) 2rem;
+  border-top: 1px solid var(--viiva);
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: .08em;
+  color: var(--bone-4);
 }
 
 /* ------------------------------------------------------------ TALLENNUS */

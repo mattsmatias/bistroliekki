@@ -192,10 +192,10 @@
      tilaa kuin palkki vie, jottei viimeinen kenttä jää sen alle. */
   function varaaTilaaPalkille() {
     var palkki = $('#tallennuspalkki');
-    var sisus = $('#sisus');
-    if (!palkki || !sisus || palkki.hidden) return;
+    var kohde = $('#alatunniste') || $('#sisus');
+    if (!palkki || !kohde || palkki.hidden) return;
     var korkeus = Math.round(palkki.getBoundingClientRect().height);
-    if (korkeus > 0) sisus.style.paddingBottom = (korkeus + 32) + 'px';
+    if (korkeus > 0) kohde.style.paddingBottom = (korkeus + 32) + 'px';
   }
 
   function naytaTila(viesti, luokka) {
