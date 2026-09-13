@@ -174,6 +174,30 @@
     naytaTila();
   }
 
+  /* Välilehtirivi tarttuu yläpalkin alareunaan. Yläpalkki rivittyy ruudun
+     leveyden mukaan yhdestä kolmeen riviin, joten sen korkeutta ei voi
+     kirjoittaa tyyleihin kiinteänä lukuna — se mitataan tässä. Puhelimessa
+     yläpalkki ei ole tarttuva vaan vierii pois, jolloin siirtymä on nolla. */
+  function mittaaYlapalkki() {
+    var palkki = $('.ylapalkki');
+    var kehys = $('#kehys');
+    if (!palkki || !kehys) return;
+    var tarttuva = getComputedStyle(palkki).position === 'sticky';
+    var korkeus = tarttuva ? Math.round(palkki.getBoundingClientRect().height) : 0;
+    kehys.style.setProperty('--ylapalkki-h', korkeus + 'px');
+  }
+
+  /* Tallennuspalkki on kiinni ruudun alareunassa ja voi rivittyä kapealla
+     ruudulla kahdelle riville. Varataan sisällön alle täsmälleen sen verran
+     tilaa kuin palkki vie, jottei viimeinen kenttä jää sen alle. */
+  function varaaTilaaPalkille() {
+    var palkki = $('#tallennuspalkki');
+    var sisus = $('#sisus');
+    if (!palkki || !sisus || palkki.hidden) return;
+    var korkeus = Math.round(palkki.getBoundingClientRect().height);
+    if (korkeus > 0) sisus.style.paddingBottom = (korkeus + 32) + 'px';
+  }
+
   function naytaTila(viesti, luokka) {
     var palkki = $('#tallennuspalkki');
     var tila = $('#tila');
@@ -188,6 +212,8 @@
     }
     $('#tallenna').disabled = !muutoksia;
     $('#peru').disabled = !muutoksia;
+    varaaTilaaPalkille();
+    mittaaYlapalkki();
   }
 
   /* ==================================================== KENTTÄRAKENTAJAT */
@@ -228,10 +254,6 @@
     var i = document.createElement('input');
     i.type = 'checkbox';
     i.checked = !!kohde[kentta];
-    i.style.width = '20px';
-    i.style.height = '20px';
-    i.style.minHeight = '20px';
-    i.style.flex = 'none';
     i.addEventListener('change', function () { kohde[kentta] = i.checked; muutos(); });
     var sp = tee('span', null, nimike);
     sp.style.margin = '0';
@@ -842,8 +864,6 @@
       var ruutu = document.createElement('input');
       ruutu.type = 'checkbox';
       ruutu.checked = suljettu;
-      ruutu.style.width = '20px'; ruutu.style.height = '20px';
-      ruutu.style.minHeight = '20px'; ruutu.style.flex = 'none';
       function paivitaTila() {
         var kiinniNyt = ruutu.checked;
         aukiLab.querySelector('input').disabled = kiinniNyt;
@@ -1272,6 +1292,7 @@
     $('#kirjaudu').style.display = 'none';
     $('#kehys').classList.add('on-auki');
     $('#tunnus').textContent = istunto.sposti || '';
+    mittaaYlapalkki();
     lataaSisalto().then(function () {
       piirraValilehdet();
       piirraPaneelit();
@@ -1353,6 +1374,21 @@
       e.preventDefault();
       e.returnValue = '';
     });
+
+    function mitat() { varaaTilaaPalkille(); mittaaYlapalkki(); }
+    var ajastin = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(ajastin);
+      ajastin = setTimeout(mitat, 120);
+    }, { passive: true });
+    window.addEventListener('orientationchange', function () { setTimeout(mitat, 250); });
+
+    // Yläpalkki voi muuttua myös ilman ruudun koon muutosta, esimerkiksi kun
+    // kirjautuneen sähköposti ilmestyy siihen.
+    if (typeof ResizeObserver === 'function') {
+      var palkki = $('.ylapalkki');
+      if (palkki) new ResizeObserver(mittaaYlapalkki).observe(palkki);
+    }
 
     if (istunto.token) naytaHallinta(); else naytaKirjautuminen();
   }

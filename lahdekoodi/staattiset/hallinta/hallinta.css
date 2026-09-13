@@ -69,10 +69,13 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; color: var(--bone); 
 .kehys { display: none; min-height: 100vh; flex-direction: column; }
 .kehys.on-auki { display: flex; }
 
+/* Ylapalkki ja valilehdet ovat molemmat tarttuvia, mutta valilehtien
+   siirtyma ei ole kiintea luku: ylapalkki rivittyy ruudun leveyden mukaan,
+   joten sen korkeus mitataan ajossa muuttujaan --ylapalkki-h. */
 .ylapalkki {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 21;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -92,11 +95,27 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; color: var(--bone); 
   text-transform: uppercase;
   color: var(--bone-3);
 }
-.ylapalkki__oikea { margin-left: auto; display: flex; align-items: center; gap: .5rem; }
-.ylapalkki__tunnus { font-size: 12px; color: var(--bone-4); }
+.ylapalkki__oikea {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+  min-width: 0;
+}
+.ylapalkki__tunnus {
+  font-size: 12px;
+  color: var(--bone-4);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.ylapalkki__oikea .nappi { min-width: 0; }
 
 /* ------------------------------------------------------------ VÄLILEHDET */
 .valilehdet {
+  position: sticky;
+  top: var(--ylapalkki-h, 0px);
+  z-index: 20;
   display: flex;
   gap: .2rem;
   overflow-x: auto;
@@ -104,9 +123,6 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; color: var(--bone); 
   padding: 0 clamp(1rem, 3vw, 2rem);
   border-bottom: 1px solid var(--viiva);
   background: var(--char);
-  position: sticky;
-  top: 63px;
-  z-index: 15;
 }
 .valilehdet::-webkit-scrollbar { display: none; }
 .valilehti {
@@ -210,6 +226,19 @@ select {
   padding-right: 2.6rem;
 }
 
+/* Valintaruutu piirretaan 24 pikselin kokoisena, mutta varsinainen
+   kosketuskohde on koko nimike, joka on vahintaan 46 px korkea ja
+   napautettavissa mista kohdasta tahansa. */
+input[type='checkbox'] {
+  width: 24px;
+  height: 24px;
+  min-height: 24px;
+  margin: 0;
+  flex: none;
+  accent-color: var(--ember);
+  cursor: pointer;
+}
+
 .rivi { display: grid; gap: .8rem; margin-bottom: 1rem; }
 .rivi:last-child { margin-bottom: 0; }
 @media (min-width: 620px) {
@@ -297,11 +326,18 @@ select {
   backdrop-filter: blur(12px);
   border-top: 1px solid var(--viiva);
 }
-.tallennuspalkki__tila { font-size: 12.5px; color: var(--bone-4); flex: 1; min-width: 140px; }
+.tallennuspalkki__tila {
+  font-size: 12.5px;
+  color: var(--bone-4);
+  flex: 1 1 140px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 .tallennuspalkki__tila.on-muutoksia { color: var(--ember-lit); }
 .tallennuspalkki__tila.on-onnistui { color: var(--onnistui); }
 .tallennuspalkki__tila.on-virhe { color: #E58877; }
-.tallennuspalkki__napit { display: flex; gap: .5rem; margin-left: auto; }
+.tallennuspalkki__napit { display: flex; gap: .5rem; margin-left: auto; min-width: 0; }
+.tallennuspalkki__napit .nappi { min-width: 0; }
 
 /* ------------------------------------------------------------- VIESTIT */
 .viesti {
@@ -352,11 +388,48 @@ details.ohje li { margin-bottom: .3rem; }
 
 /* ------------------------------------------------------------ PIENI RUUTU */
 @media (max-width: 560px) {
-  .valilehdet { top: 59px; }
   .ylapalkki { padding-block: .6rem; }
   .ylapalkki__oikea { width: 100%; margin-left: 0; }
+  .tallennuspalkki { gap: .5rem; }
+  .tallennuspalkki__tila { flex: 1 1 100%; }
   .tallennuspalkki__napit { width: 100%; margin-left: 0; }
-  .tallennuspalkki__napit .nappi { flex: 1; }
+  .tallennuspalkki__napit .nappi { flex: 1 1 0; }
+}
+
+/* Puhelimessa ylapalkki rivittyy kahdelle-kolmelle riville, eika se saa
+   syoda kolmannesta ruudusta koko ajan. Annetaan sen vierita pois ja
+   pidetaan vain valilehdet kiinni ylareunassa. Tama ei tarvitse kiintean
+   siirtyman laskemista, koska valilehdet ovat itse tarttuvat. */
+@media (max-width: 720px) {
+  .ylapalkki { position: static; }
+}
+
+/* Kaikkein kapeimmat ruudut, esimerkiksi taittuva puhelin suljettuna.
+   Nappien harvennus ja sisennykset kevenevat, jottei mikaan tyonna sivua
+   leveammaksi kuin ruutu. */
+@media (max-width: 400px) {
+  .nappi {
+    padding: .7rem .7rem;
+    letter-spacing: .06em;
+    font-size: 12px;
+  }
+  .nappi--pieni { padding: .5rem .6rem; }
+  .ylapalkki { gap: .6rem; }
+  .ylapalkki__nimi { font-size: 11px; letter-spacing: .1em; }
+  .valilehti { padding-inline: .75rem; }
+  .lohko { padding: .9rem .8rem; }
+  .sisus { padding-inline: .8rem; }
+}
+
+/* Matala vaakaruutu: ylaosa ei saa syoda puolta ruudusta, joten se vierii
+   pois nakyvista. Tallennuspalkki pysyy paikallaan, koska sita tarvitaan. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .ylapalkki { position: static; }
+  .ylapalkki { padding-block: .45rem; }
+  .ylapalkki__logo { width: 32px; }
+  .valilehti { min-height: 44px; padding-block: .6rem; }
+  .sisus { padding-top: 1rem; }
+  .paneeli__ohje { margin-bottom: 1.2rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
