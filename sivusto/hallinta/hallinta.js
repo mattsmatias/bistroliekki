@@ -102,10 +102,12 @@
       var j = null;
       try { j = t ? JSON.parse(t) : null; } catch (e) { j = null; }
       if (!v.ok) {
-        var viesti = (j && (j.error_description || j.msg || j.message || j.error)) ||
+        var viesti = (j && (j.virhe || j.error_description || j.msg || j.message || j.error)) ||
                      ('Palvelin vastasi ' + v.status);
         var e2 = new Error(viesti);
         e2.status = v.status;
+        // Palvelin voi kertoa tarkemman syyn — se auttaa vian paikantamisessa.
+        if (j && j.lisatieto) e2.lisatieto = String(j.lisatieto);
         throw e2;
       }
       return j;
@@ -480,7 +482,8 @@
       }).then(function (tulos) {
         naytaTuonti(L, tulos, yhteenveto, kerro);
       }).catch(function (e) {
-        kerro('Lukeminen ei onnistunut: ' + e.message, 'virhe');
+        kerro('Lukeminen ei onnistunut: ' + e.message +
+              (e.lisatieto ? '  (' + e.lisatieto + ')' : ''), 'virhe');
       }).then(function () {
         nappi.disabled = false;
         valitsin.value = '';
