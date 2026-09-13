@@ -1,0 +1,7 @@
+Edge Function "lue-lounaslista" on julkaistu suoraan Supabaseen.
+Lähdekoodi on nähtävissä ja muokattavissa Supabasen hallintanäkymästä:
+  Edge Functions -> lue-lounaslista
+
+Tarvittavat salaisuudet (Edge Functions -> Secrets):
+  ANTHROPIC_API_KEY   pakollinen
+  MALLI               vapaaehtoinen, oletus claude-sonnet-5

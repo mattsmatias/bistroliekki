@@ -330,18 +330,259 @@
     }).filter(Boolean);
   }
 
+  /* ================================= CANVA-PDF:N TUONTI LOUNASLISTAAN */
+  /* PDF luetaan selaimessa. Jos tiedostossa on oikea tekstikerros — kuten
+     Canvan viennissä yleensä on — lähetämme pelkän tekstin: se on tarkka ja
+     halpa. Jos teksti on litistetty kuvaksi, renderöimme ensimmäisen sivun
+     kuvaksi ja lähetämme sen luettavaksi.
+
+     Luettu lista EI mene suoraan käyttöön. Se näytetään ensin yhteenvetona,
+     ja vasta erillinen painallus täyttää kentät. Mitään ei tallenneta ennen
+     kuin käyttäjä painaa Tallenna. */
+
+  var PDFJS_VER = '6.3.289';
+  var pdfjsLupaus = null;
+
+  function lataaPdfjs() {
+    if (pdfjsLupaus) return pdfjsLupaus;
+    pdfjsLupaus = import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VER + '/pdf.min.mjs')
+      .then(function (kirjasto) {
+        kirjasto.GlobalWorkerOptions.workerSrc =
+          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VER + '/pdf.worker.min.mjs';
+        return kirjasto;
+      });
+    return pdfjsLupaus;
+  }
+
+  function lueTiedosto(tiedosto) {
+    return new Promise(function (onnistui, epaonnistui) {
+      var lukija = new FileReader();
+      lukija.onload = function () { onnistui(lukija.result); };
+      lukija.onerror = function () { epaonnistui(new Error('Tiedostoa ei voitu lukea')); };
+      lukija.readAsArrayBuffer(tiedosto);
+    });
+  }
+
+  function kuvaksi(tiedosto) {
+    return new Promise(function (onnistui, epaonnistui) {
+      var lukija = new FileReader();
+      lukija.onload = function () {
+        var osat = String(lukija.result).split(',');
+        onnistui({ kuva: osat[1], tyyppi: tiedosto.type || 'image/jpeg' });
+      };
+      lukija.onerror = function () { epaonnistui(new Error('Kuvaa ei voitu lukea')); };
+      lukija.readAsDataURL(tiedosto);
+    });
+  }
+
+  /* PDF -> { teksti } tai { kuva, tyyppi } */
+  function pdfSisalto(tiedosto, kerro) {
+    return lueTiedosto(tiedosto).then(function (puskuri) {
+      kerro('Avataan PDF…');
+      return lataaPdfjs().then(function (pdfjs) {
+        return pdfjs.getDocument({ data: new Uint8Array(puskuri) }).promise;
+      });
+    }).then(function (pdf) {
+      var sivuja = Math.min(pdf.numPages, 3);
+      var tekstit = [];
+      var ketju = Promise.resolve();
+      for (var i = 1; i <= sivuja; i++) {
+        (function (nro) {
+          ketju = ketju.then(function () {
+            return pdf.getPage(nro).then(function (sivu) {
+              return sivu.getTextContent().then(function (sisalto) {
+                // Rivitetään y-koordinaatin mukaan, jotta palstat eivät sekoitu
+                var rivit = {};
+                sisalto.items.forEach(function (kohde) {
+                  if (!kohde.str || !kohde.str.trim()) return;
+                  var y = Math.round(kohde.transform[5]);
+                  var x = Math.round(kohde.transform[4]);
+                  (rivit[y] = rivit[y] || []).push({ x: x, t: kohde.str });
+                });
+                var jarjestys = Object.keys(rivit).map(Number).sort(function (a, b) { return b - a; });
+                jarjestys.forEach(function (y) {
+                  rivit[y].sort(function (a, b) { return a.x - b.x; });
+                  tekstit.push(rivit[y].map(function (o) { return o.t; }).join(' ').trim());
+                });
+              });
+            });
+          });
+        })(i);
+      }
+      return ketju.then(function () {
+        var teksti = tekstit.join('\n').trim();
+        if (teksti.length > 120) return { teksti: teksti };
+        // Ei tekstikerrosta: renderöidään ensimmäinen sivu kuvaksi
+        kerro('PDF:ssä ei ole tekstiä — luetaan se kuvana…');
+        return pdf.getPage(1).then(function (sivu) {
+          var perus = sivu.getViewport({ scale: 1 });
+          var skaala = Math.min(2.2, 1600 / perus.width);
+          var nakyma = sivu.getViewport({ scale: skaala });
+          var kangas = document.createElement('canvas');
+          kangas.width = Math.round(nakyma.width);
+          kangas.height = Math.round(nakyma.height);
+          return sivu.render({ canvasContext: kangas.getContext('2d'), viewport: nakyma })
+            .promise.then(function () {
+              return { kuva: kangas.toDataURL('image/jpeg', 0.85).split(',')[1],
+                       tyyppi: 'image/jpeg' };
+            });
+        });
+      });
+    });
+  }
+
+  function tuontilaatikko(L) {
+    var lb = lohko('Tuo Canva-PDF', 'Lista luetaan tiedostosta kenttiin');
+    var viesti = tee('p', 'viesti');
+    viesti.hidden = true;
+    var yhteenveto = tee('div');
+    yhteenveto.hidden = true;
+
+    var selite = tee('p', 'lohko__vihje',
+      'Vie lista Canvasta PDF-muodossa ja valitse tiedosto tästä. ' +
+      'Kelpaa myös PNG- tai JPG-kuva. Luettu lista näytetään ensin tarkistettavaksi — ' +
+      'mitään ei tallenneta ennen kuin painat Tallenna.');
+    selite.style.margin = '0 0 1rem';
+    lisaa(lb, selite, viesti, yhteenveto);
+
+    var valitsin = document.createElement('input');
+    valitsin.type = 'file';
+    valitsin.accept = '.pdf,application/pdf,image/png,image/jpeg';
+    valitsin.style.display = 'none';
+
+    var nappi = tee('button', 'nappi nappi--hiljainen', 'Valitse tiedosto');
+    nappi.type = 'button';
+    nappi.addEventListener('click', function () { valitsin.click(); });
+
+    function kerro(teksti, luokka) {
+      viesti.hidden = false;
+      viesti.className = 'viesti' + (luokka ? ' viesti--' + luokka : '');
+      viesti.textContent = teksti;
+    }
+
+    valitsin.addEventListener('change', function () {
+      var tiedosto = valitsin.files && valitsin.files[0];
+      if (!tiedosto) return;
+      yhteenveto.hidden = true;
+      yhteenveto.innerHTML = '';
+      nappi.disabled = true;
+      kerro('Luetaan tiedostoa…');
+
+      var sisalto = /pdf/i.test(tiedosto.type) || /\.pdf$/i.test(tiedosto.name)
+        ? pdfSisalto(tiedosto, kerro)
+        : kuvaksi(tiedosto);
+
+      sisalto.then(function (runko) {
+        kerro('Tulkitaan listaa…');
+        return pyynto('/functions/v1/lue-lounaslista', {
+          method: 'POST', body: JSON.stringify(runko)
+        });
+      }).then(function (tulos) {
+        naytaTuonti(L, tulos, yhteenveto, kerro);
+      }).catch(function (e) {
+        kerro('Lukeminen ei onnistunut: ' + e.message, 'virhe');
+      }).then(function () {
+        nappi.disabled = false;
+        valitsin.value = '';
+      });
+    });
+
+    lisaa(lb, nappi, valitsin);
+    return lb;
+  }
+
+  function naytaTuonti(L, tulos, kehys, kerro) {
+    var paivat = (tulos && tulos.paivat || []).filter(function (p) {
+      return p && p.paiva >= 1 && p.paiva <= 5 && (p.annokset || []).length;
+    });
+    if (!paivat.length) {
+      kerro('Tiedostosta ei löytynyt päiväkohtaisia annoksia. ' +
+            'Tarkista että kyseessä on viikon lounaslista, tai kirjoita lista käsin.', 'virhe');
+      return;
+    }
+
+    var annoksia = 0;
+    paivat.forEach(function (p) { annoksia += p.annokset.length; });
+    kerro('Luettu: ' + paivat.length + ' päivää, ' + annoksia + ' annosta. ' +
+          'Tarkista alta ja täytä kentät.', 'onnistui');
+
+    kehys.hidden = false;
+    kehys.innerHTML = '';
+
+    var lista = tee('div', 'lista');
+    paivat.forEach(function (p) {
+      var rivi = tee('div', 'lista__rivi lista__rivi--tiivis');
+      lisaa(rivi, tee('div', 'lohko__otsikko', PAIVAT[p.paiva] + (p.pvm ? ' · ' + p.pvm : '')));
+      var ul = tee('div');
+      ul.style.fontSize = '13px';
+      ul.style.color = 'var(--bone-3)';
+      p.annokset.forEach(function (a) {
+        var t = a.nimi + (a.merkit ? '  ' + a.merkit : '') + (a.lisa ? '  (' + a.lisa + ')' : '');
+        lisaa(ul, tee('div', null, t));
+      });
+      lisaa(rivi, ul);
+      lisaa(lista, rivi);
+    });
+    lisaa(kehys, lista);
+
+    var epavarmat = (tulos.epavarmat || []).filter(Boolean);
+    if (epavarmat.length) {
+      var varoitus = tee('div', 'viesti viesti--virhe');
+      varoitus.style.marginTop = '1rem';
+      lisaa(varoitus, tee('strong', null, 'Tarkista nämä kohdat erikseen:'));
+      var ul2 = tee('ul');
+      ul2.style.margin = '.4rem 0 0';
+      ul2.style.paddingLeft = '1.2rem';
+      epavarmat.forEach(function (e) { lisaa(ul2, tee('li', null, String(e))); });
+      lisaa(varoitus, ul2);
+      lisaa(kehys, varoitus);
+    }
+
+    var muistutus = tee('p', 'lohko__vihje',
+      'Ruokavaliomerkinnät (L, VL, G, M, V) kannattaa aina tarkistaa alkuperäisestä ' +
+      'listasta. Puuttuva merkintä on turvallisempi kuin väärä.');
+    muistutus.style.margin = '1rem 0';
+    lisaa(kehys, muistutus);
+
+    var tayta = tee('button', 'nappi', 'Täytä kentät tällä listalla');
+    tayta.type = 'button';
+    tayta.addEventListener('click', function () {
+      if (!window.confirm('Korvataanko nykyiset päiväkohtaiset annokset luetulla listalla?')) return;
+      if (tulos.viikko) L.viikko = String(tulos.viikko);
+      if (tulos.ajalla) L.ajalla = String(tulos.ajalla);
+      L.paivat.forEach(function (p) {
+        var luettu = null;
+        paivat.forEach(function (x) { if (x.paiva === p.paiva) luettu = x; });
+        if (!luettu) return;
+        if (luettu.pvm) p.pvm = String(luettu.pvm);
+        p.annokset = luettu.annokset.map(function (a) {
+          var uusi = { nimi: String(a.nimi || '').trim() };
+          if (a.merkit) uusi.merkit = String(a.merkit).trim();
+          if (a.lisa) uusi.lisa = String(a.lisa).trim();
+          return uusi;
+        }).filter(function (a) { return a.nimi; });
+      });
+      muutos();
+      piirraPaneelit();
+      naytaTila('Lista tuotu — tarkista kentät ja paina Tallenna', 'on-muutoksia');
+    });
+    lisaa(kehys, tayta);
+  }
+
   function paneeliLounas() {
     var k = tee('div');
     var L = T.lounaslista;
 
     lisaa(k, ohjelaatikko('Näin päivität viikon lounaslistan', [
-      'Vaihda ensin viikon numero ja päivämäärät.',
-      'Kirjoita jokaisen päivän annokset omalle riville. Yksi rivi = yksi annos.',
+      'Nopein tapa: tuo Canvasta viety PDF alla olevasta laatikosta. Lista luetaan tiedostosta kenttiin, ja tarkistat sen ennen tallennusta.',
+      'Voit myös kirjoittaa listan käsin: jokaisen päivän annokset omalle riville, yksi rivi = yksi annos.',
       'Merkinnät kirjoitetaan pystyviivan jälkeen, esimerkiksi: Kermaperunat | L, G',
       'Jos annoksella on vielä lisäselite, se tulee toisen pystyviivan jälkeen: Päivän smash-burgerit |  | Pyydettäessä L, G, kasvis tai vege',
       'Tyhjäksi jätetty päivä katoaa sivulta kokonaan.',
       'Muista painaa Tallenna sivun alalaidasta.'
     ]));
+
+    lisaa(k, tuontilaatikko(L));
 
     var perus = lohko('Viikko');
     var r1 = tee('div', 'rivi rivi--2');

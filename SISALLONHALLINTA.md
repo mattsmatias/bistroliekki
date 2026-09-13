@@ -30,7 +30,32 @@ Yläreunan välilehdet jakavat sisällön neljään osaan.
 
 ### Lounaslista
 
-Tämä on se, joka vaihtuu joka viikko.
+Tämä on se, joka vaihtuu joka viikko. Listan saa kahdella tavalla: tuomalla
+Canvasta tai kirjoittamalla käsin.
+
+#### Nopein tapa: tuo Canva-lista
+
+1. Vie viikon lista Canvasta **PDF-muodossa** (Share → Download → PDF).
+2. Paina hallintapaneelissa **Valitse tiedosto** ja valitse PDF.
+3. Lista luetaan tiedostosta ja näytetään yhteenvetona: montako päivää ja
+   annosta löytyi, ja mitä kussakin päivässä lukee.
+4. Tarkista yhteenveto. Jos lukemisessa oli epävarmuutta, ne kohdat
+   luetellaan punaisella erikseen.
+5. Paina **Täytä kentät tällä listalla**. Kentät täyttyvät, mutta mitään ei
+   vielä tallenneta.
+6. Käy kentät läpi ja paina **Tallenna**.
+
+PNG- ja JPG-kuvat kelpaavat myös, mutta PDF on tarkin: siinä teksti on
+yleensä oikeana tekstinä eikä vain kuvana, jolloin lukeminen ei voi mennä
+väärin.
+
+> **Tarkista aina ruokavaliomerkinnät.** Kone lukee listan puolestasi, mutta
+> se voi lukea väärin tai pudottaa merkinnän. Merkintöjä (L, VL, G, M, V)
+> lukevat ihmiset, joilla on allergioita, joten vilkaise ne alkuperäisestä
+> listasta ennen tallennusta. Kone on ohjeistettu jättämään epäselvä merkintä
+> mieluummin pois kuin arvaamaan sen.
+
+#### Käsin kirjoittaen
 
 1. Vaihda **viikon numero** ja **päivämäärät**.
 2. Vaihda jokaisen päivän **päivämäärä**.
@@ -134,6 +159,8 @@ olisi hetken pois käytöstä** — silloin näkyy vain hieman vanhempi sisält�
 | Käyttäjätunnukset | Supabase → Authentication → Users |
 | Yhteysasetukset | `sivusto/assets/js/asetukset.js` |
 | Hallintapaneeli | `lahdekoodi/staattiset/hallinta/` |
+| Canva-listan luku | Edge Function `lue-lounaslista` |
+| Tekoälyavain | Supabase → Edge Functions → Secrets → `ANTHROPIC_API_KEY` |
 | Varasisältö | `sivusto/assets/js/content.js` |
 
 **Tärkeä huomio:** kun osio on kerran tallennettu hallintapaneelista,
@@ -144,3 +171,18 @@ paneelista. Sisältömuutokset kannattaa tehdä paneelin kautta.
 Oikeudet: kuka tahansa saa lukea sisällön (sivusto tarvitsee sen), mutta
 kirjoittaminen vaatii kirjautumisen. Tämä on varmistettu tietokannan omalla
 rivitason suojauksella, ei pelkällä käyttöliittymällä.
+
+### Canva-listan luku
+
+PDF avataan selaimessa. Jos tiedostossa on oikea tekstikerros, lähetetään
+palvelimelle pelkkä teksti — se on tarkka ja halpa. Jos teksti on litistetty
+kuvaksi, ensimmäinen sivu renderöidään kuvaksi ja lähetetään sellaisena.
+
+Edge Function `lue-lounaslista` kysyy tekoälyltä, mitä listassa lukee, ja
+palauttaa sen jäsenneltynä. Funktio tarkistaa itse, että kutsuja on
+kirjautunut käyttäjä — pelkkä julkinen avain ei riitä.
+
+Avain asetetaan Supabasen hallintanäkymässä kohdassa Edge Functions →
+Secrets, nimellä `ANTHROPIC_API_KEY`. Mallin voi vaihtaa `MALLI`-nimisellä
+salaisuudella; oletus on `claude-sonnet-5`. Kustannus on muutamia senttejä
+viikossa, koska kutsuja tulee yksi viikossa.
