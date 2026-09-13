@@ -487,7 +487,27 @@
       });
     });
 
-    lisaa(lb, nappi, valitsin);
+    /* Pikatesti: kertoo onko tekoälyavain paikallaan ilman, että tarvitsee
+       etsiä PDF:ää kokeilua varten. */
+    var testi = tee('button', 'nappi nappi--hiljainen nappi--pieni', 'Testaa yhteys');
+    testi.type = 'button';
+    testi.style.marginLeft = '.5rem';
+    testi.addEventListener('click', function () {
+      testi.disabled = true;
+      kerro('Testataan…');
+      pyynto('/functions/v1/lue-lounaslista', {
+        method: 'POST', body: JSON.stringify({ testi: true })
+      }).then(function (v) {
+        kerro('Yhteys kunnossa. Käytössä oleva malli: ' + (v && v.malli || 'tuntematon') +
+              '. Voit tuoda Canva-listan.', 'onnistui');
+      }).catch(function (e) {
+        kerro('Yhteys ei toimi: ' + e.message, 'virhe');
+      }).then(function () { testi.disabled = false; });
+    });
+
+    var napit = tee('div');
+    lisaa(napit, nappi, testi, valitsin);
+    lisaa(lb, napit);
     return lb;
   }
 
