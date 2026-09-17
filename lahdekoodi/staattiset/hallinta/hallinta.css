@@ -311,6 +311,38 @@ input[type='checkbox'] {
   border-radius: var(--pyoristys);
 }
 
+/* ------------------------------------------------------------- KUVAKENTTÄ */
+.kuvakentta {
+  padding: .8rem;
+  background: var(--char-2);
+  border: 1px solid var(--viiva);
+  border-radius: var(--pyoristys);
+}
+.kuvakentta__kuva {
+  display: block;
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 2px;
+  background: var(--char-3);
+}
+.kuvakentta__tyhja {
+  display: grid;
+  place-items: center;
+  min-height: 96px;
+  border: 1px dashed var(--viiva);
+  border-radius: 2px;
+  font-size: 13px;
+  color: var(--bone-4);
+}
+.kuvakentta__napit {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: .7rem;
+}
+.kuvakentta__napit .nappi { flex: 1 1 auto; min-width: 0; }
+
 /* ------------------------------------------------------------ ALATUNNISTE */
 /* Alatunniste kantaa tallennuspalkin vaatiman tyhjan tilan, jotta palkki ei
    peita sita. Tilan maara mitataan ajossa, koska palkki voi rivittya. */

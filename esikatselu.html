@@ -955,12 +955,84 @@ body.is-locked .mobiilipalkki { transform: translateY(115%); }
 .ilmoituspalkki strong { letter-spacing: .1em; text-transform: uppercase; font-weight: 700; }
 .ilmoituspalkki a { color: #fff; }
 
-.uutiset { display: grid; gap: 1px; background: var(--line-soft); border-block: 1px solid var(--line-soft); }
-@media (min-width: 760px) { .uutiset { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); } }
-.uutinen { background: var(--char); padding: clamp(1.6rem, 3vw, 2.4rem); }
-.uutinen h3 { font-size: var(--step-1); margin-bottom: .5rem; }
-.uutinen time { display: block; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ember-lit); margin-bottom: .9rem; }
-.uutinen p { color: var(--bone-3); font-size: var(--step--1); margin: 0; }
+/* Ilmoitukset ovat omia kortteja, eivat yhtenaista palkkia: yksi ilmoitus
+   ei saa jattaa viereensa tyhjaa saraketta. Maara ohjaa asettelua. */
+.uutiset {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.4rem);
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
+}
+@media (min-width: 760px) {
+  .uutiset[data-maara="2"] { grid-template-columns: 1fr 1fr; }
+  .uutiset[data-maara="3"] { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+}
+
+.uutinen {
+  display: flex;
+  flex-direction: column;
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.uutinen__sisus { padding: clamp(1.3rem, 2.6vw, 2rem); }
+/* Kortit venyvat samaan korkeuteen. Kuvattomassa kortissa teksti asettuu
+   keskelle, jottei sen alle jaa isoa tyhjaa. */
+.uutinen:not(.uutinen--kuvallinen) .uutinen__sisus { margin-block: auto; }
+.uutinen h3 { font-size: var(--step-1); margin: 0 0 .5rem; }
+.uutinen time {
+  display: block;
+  margin-bottom: .8rem;
+  font-family: var(--sans);
+  font-size: max(11px, .7rem);
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ember-lit);
+}
+.uutinen p { color: var(--bone-3); font-size: var(--step--1); margin: 0; line-height: 1.6; }
+
+/* Korostettu ilmoitus erottuu hiillosreunuksella */
+.uutinen--korostettu { border-left: 3px solid var(--ember); }
+
+/* Kuva */
+.uutinen__kuva { overflow: hidden; background: var(--char-3); }
+.uutinen__kuva img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+/* Yksi ilmoitus kuvan kanssa: kuva ja teksti rinnakkain, ei tyhjaa palstaa */
+@media (min-width: 760px) {
+  .uutiset[data-maara="1"] .uutinen--kuvallinen {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .uutiset[data-maara="1"] .uutinen--kuvallinen .uutinen__kuva {
+    flex: 0 0 38%;
+    max-width: 38%;
+  }
+  /* Kuva tayttaa palstan, mutta lyhyt teksti ei saa litistaa sita
+     nauhaksi eika pitka teksti venyttaa sita seinaksi. */
+  .uutiset[data-maara="1"] .uutinen--kuvallinen .uutinen__kuva img {
+    aspect-ratio: auto;
+    height: 100%;
+    min-height: 240px;
+    max-height: 380px;
+  }
+  .uutiset[data-maara="1"] .uutinen--kuvallinen .uutinen__sisus {
+    flex: 1 1 auto;
+    align-self: center;
+  }
+  /* Yksi ilmoitus ilman kuvaa: ei venyteta tekstia koko leveydelle */
+  .uutiset[data-maara="1"] .uutinen:not(.uutinen--kuvallinen) .uutinen__sisus p,
+  .uutiset[data-maara="1"] .uutinen:not(.uutinen--kuvallinen) .uutinen__sisus h3 {
+    max-width: 62ch;
+  }
+}
 
 .tyhja-tila {
   border: 1px dashed var(--line);
@@ -2995,6 +3067,22 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   .tyhja-tila { padding: 1.4rem 1rem; }
 }
 
+/* Pitkä sähköpostiosoite napissa ei mahdu kapealle ruudulle versaalina ja
+   harvennettuna. Kevennetään reunukset ja sallitaan tekstin rivittyä, niin
+   nappi kutistuu ruudun mukana sen sijaan että työntäisi sivua leveämmäksi. */
+@media (max-width: 420px) {
+  .nappi {
+    min-width: 0;
+    max-width: 100%;
+    padding-inline: 1.15rem;
+    letter-spacing: .08em;
+  }
+  .nappi > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
 /* Grid- ja flex-lapset saavat oletuksena vähimmäisleveydekseen sisältönsä
    min-content-leveyden, mikä työntää kapealla ruudulla koko sivua
    leveämmäksi. Sallitaan kutistuminen ja rivitetään pitkät parit. */
@@ -3156,10 +3244,8 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 
     <div class="split__teksti" data-esiin style="--viive:1">
       <h2 class="otsikko-l" id="tervetuloa" data-sanat data-muokattava="etusivu-tervetuloa-otsikko">Tervetuloa<br>Bistro Liekkiin</h2>
-      <p class="ingressi" data-muokattava="etusivu-tervetuloa-ingressi">Vuodesta 2016 lähtien Bistro Liekki Puuhiiligrilli on tarjonnut
-        kodikkaan ja rennon ruokailuhetken Tikkurilan keskustassa.</p>
-      <p class="leipa" data-muokattava="etusivu-tervetuloa-teksti">Ravintolan ylpeys on puuhiiligrilli, joka huokuu aitoa savun
-        makua jokaiseen annokseen.</p>
+      <p class="ingressi" data-muokattava="etusivu-tervetuloa-ingressi">Kodikas ja rento ruokailuhetki
+        keskellä Tikkurilaa, hiilloksen äärellä.</p>
       <div class="napit">
         <a class="nappi nappi--hiljainen" href="#/meista"><span>Tutustu meihin</span></a>
       </div>
@@ -3207,8 +3293,8 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     </div>
     <div class="split__teksti" data-esiin style="--viive:1">
       <h2 class="otsikko-l" id="alacarte" data-sanat>À la Carte</h2>
-      <p class="leipa" data-muokattava="etusivu-alacarte-teksti">Laajalta à la carte -listaltamme löydät puuhiiligrillin inspiroimia
-        annoksia, burgereita, pihvejä ja muita Bistro Liekin suosikkeja.</p>
+      <p class="leipa" data-muokattava="etusivu-alacarte-teksti">Burgerit, pihvit ja muut talon suosikit
+        löytyvät laajalta à la carte -listalta.</p>
       <div class="napit">
         <a class="nappi" href="#/menu"><span>Katso à la carte</span></a>
       </div>
@@ -3250,8 +3336,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   <div class="kuori">
     <div class="band__sisus" data-esiin>
       <h2 class="otsikko-l" id="varaus" data-sanat>Varaa pöytä</h2>
-      <p class="ingressi" style="margin-top:1.4rem">Tervetuloa viettämään aikaa Bistro Liekkiin.
-        Varaukset onnistuvat helposti verkossa tai puhelimitse.</p>
+      <p class="ingressi" style="margin-top:1.4rem">Varaukset onnistuvat verkossa tai puhelimitse.</p>
       <div class="napit" style="margin-top:2rem">
         <a class="nappi" data-linkki="varaus" data-tyhjana="Varaa puhelimitse"
            data-vara-href="varaus-puhelin" href="#"><span>Varaa verkossa</span></a>
@@ -3268,15 +3353,13 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
     <div class="kortit kortit--2" data-esiin>
       <article class="kortti">
         <h3>Puuhiilen maut<br>juhliin</h3>
-        <p>Bistro Liekki tuo puuhiiligrillin maut myös juhliin ja tapahtumiin. Kerro
-          tilaisuudestasi, niin suunnitellaan sopiva kokonaisuus yhdessä.</p>
+        <p>Kerro tilaisuudestasi, niin suunnitellaan sopiva kokonaisuus yhdessä.</p>
         <a class="linkki" href="#/catering">Kysy cateringista <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true"><path d="M9 1l4 4-4 4M13 5H0" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg></a>
       </article>
 
       <article class="kortti">
         <h3>Anna lahjaksi<br>maut ja tunnelma</h3>
-        <p>Bistro Liekin lahjakortti sopii lahjaksi, joka jää mieleen — illallinen
-          puuhiiligrillin äärellä tai lounas keskellä viikkoa.</p>
+        <p>Lahjakortti käy illalliseen hiilloksen äärellä tai lounaaseen keskellä viikkoa.</p>
         <a class="linkki" href="#/lahjakortti">Lahjakortti <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true"><path d="M9 1l4 4-4 4M13 5H0" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg></a>
       </article>
     </div>
@@ -3355,7 +3438,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
                 <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
                   <img data-img="pysty-burgeri.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
                   <span class="tiktok-kortti__soita" aria-hidden="true"><svg width="17" height="19" viewBox="0 0 17 19" fill="currentColor" aria-hidden="true"><path d="M16 8.6a1 1 0 010 1.8L2 18.8A1 1 0 010 18V1a1 1 0 011.5-.9L16 8.6z"/></svg></span>
-                  <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Puuhiiligrilli</span></span>
+                  <span class="tiktok-kortti__paalle"><span class="tiktok-kortti__teksti">Hiilloksesta</span></span>
                 </a>
                 <a class="tiktok-kortti" data-some="tiktok" href="#" aria-label="Bistro Liekki TikTokissa">
                   <img data-img="pysty-buffet.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
@@ -3408,10 +3491,9 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 <!-- ====================================================== AJANKOHTAISTA -->
 <!-- Näkyy vain kun content.js:ssä on ilmoituksia. Muuten koko osio jää pois. -->
 <section class="osio osio--tiivis" aria-labelledby="ajankohtaista" data-uutisosio hidden>
-  <div class="kuori" style="margin-bottom:2rem">
-    <h2 class="otsikko-m" id="ajankohtaista">Uutiset ja poikkeukset</h2>
-  </div>
   <div class="kuori">
+    <p class="etiketti">Ajankohtaista</p>
+    <h2 class="otsikko-m" id="ajankohtaista">Uutiset ja poikkeukset</h2>
     <div class="uutiset" data-uutiset></div>
   </div>
 </section>
@@ -3456,7 +3538,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   <div class="kuori">
     <p class="etiketti">Vuodesta 2016</p>
     <h1 data-sanat>Tervetuloa Bistro Liekki<br>Talvikkitie</h1>
-    <p class="ingressi">Puuhiiligrilli Tikkurilan sydämessä — kodikas ja rento paikka syödä hyvin.</p>
+    <p class="ingressi">Puuhiiligrilli Tikkurilan sydämessä.</p>
   </div>
 </section>
 
@@ -3490,7 +3572,7 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   <span class="taustateksti" aria-hidden="true">LIEKKI</span>
   <div class="kuori">
     <div class="band__sisus" data-esiin>
-      <p class="etiketti">Puuhiiligrilli</p>
+      <p class="etiketti">Hiillos</p>
       <h2 class="otsikko-l" id="hiillos" data-sanat data-muokattava="tarina-hiillos-otsikko">Savun maku<br>ei ole lisäaine</h2>
       <p class="leipa" style="margin-top:1.4rem" data-muokattava="tarina-hiillos-teksti">Puuhiili palaa kuumempana kuin kaasu. Siitä
         syntyy pinta, joka rapsahtaa, ja aromi, joka jää mieleen. Se on syy, miksi grilli on
@@ -3615,11 +3697,11 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   <div class="kuori split">
     <div class="split__teksti" data-esiin>
       <h2 class="otsikko-m">Ruoka syntyy hiilloksen päällä</h2>
-      <p class="leipa">Puuhiili palaa kuumempana kuin kaasu. Siitä syntyy pinta, joka
-        rapsahtaa, ja aromi, joka jää mieleen. Sama grilli antaa luonteen niin pihveille,
-        burgereille kuin illan muillekin annoksille.</p>
-      <p class="leipa">Kerrothan allergioista ja erikoisruokavalioista henkilökunnalle,
-        niin katsotaan yhdessä sopiva vaihtoehto.</p>
+      <p class="leipa">Hiillos on kuumempi kuin kaasuliekki, ja se näkyy lautasella asti.
+        Sama grilli antaa luonteen niin pihveille, burgereille kuin illan muillekin
+        annoksille.</p>
+      <p class="leipa">Allergiat ja erikoisruokavaliot kannattaa kertoa henkilökunnalle
+        tilauksen yhteydessä, niin katsotaan sopiva vaihtoehto.</p>
     </div>
 
     <div class="split__media" data-esiin style="--viive:1">
@@ -5374,16 +5456,30 @@ window.LIEKKI = {
     if (!lista.length) return;
     var osio = kehys.closest('[data-uutisosio]');
     if (osio) osio.hidden = false;
+
+    // Ilmoitusten määrä ohjaa asettelua: yksi ilmoitus levittäytyy koko
+    // leveydelle kuvan kanssa, useampi asettuu korteiksi rinnakkain.
+    kehys.setAttribute('data-maara', lista.length === 1 ? '1' : (lista.length === 2 ? '2' : '3'));
+
     kehys.innerHTML = lista.map(function (i) {
       var pvm = '';
       if (i.alkaa) {
         try {
-          pvm = new Intl.DateTimeFormat('fi-FI', { day: 'numeric', month: 'long' }).format(new Date(i.alkaa + 'T00:00:00'));
+          pvm = new Intl.DateTimeFormat('fi-FI', { day: 'numeric', month: 'long' })
+                  .format(new Date(i.alkaa + 'T00:00:00'));
         } catch (e) { pvm = i.alkaa; }
       }
-      return '<article class="uutinen">' +
-        (pvm ? '<time datetime="' + i.alkaa + '">' + pvm + '</time>' : '') +
-        '<h3>' + i.otsikko + '</h3><p>' + i.teksti + '</p></article>';
+      var kuva = i.kuva
+        ? '<div class="uutinen__kuva"><img src="' + turva(polku(i.kuva)) + '" alt="' +
+          merkit(i.kuvaAlt || '') + '" loading="lazy" decoding="async"></div>'
+        : '';
+      return '<article class="uutinen' + (i.kuva ? ' uutinen--kuvallinen' : '') +
+        (i.korosta ? ' uutinen--korostettu' : '') + '">' + kuva +
+        '<div class="uutinen__sisus">' +
+        (pvm ? '<time datetime="' + merkit(i.alkaa) + '">' + merkit(pvm) + '</time>' : '') +
+        '<h3>' + merkit(i.otsikko || '') + '</h3>' +
+        '<p>' + merkit(i.teksti || '').replace(/\n/g, '<br>') + '</p>' +
+        '</div></article>';
     }).join('');
   }
 

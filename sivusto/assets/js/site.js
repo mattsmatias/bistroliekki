@@ -355,16 +355,30 @@
     if (!lista.length) return;
     var osio = kehys.closest('[data-uutisosio]');
     if (osio) osio.hidden = false;
+
+    // Ilmoitusten määrä ohjaa asettelua: yksi ilmoitus levittäytyy koko
+    // leveydelle kuvan kanssa, useampi asettuu korteiksi rinnakkain.
+    kehys.setAttribute('data-maara', lista.length === 1 ? '1' : (lista.length === 2 ? '2' : '3'));
+
     kehys.innerHTML = lista.map(function (i) {
       var pvm = '';
       if (i.alkaa) {
         try {
-          pvm = new Intl.DateTimeFormat('fi-FI', { day: 'numeric', month: 'long' }).format(new Date(i.alkaa + 'T00:00:00'));
+          pvm = new Intl.DateTimeFormat('fi-FI', { day: 'numeric', month: 'long' })
+                  .format(new Date(i.alkaa + 'T00:00:00'));
         } catch (e) { pvm = i.alkaa; }
       }
-      return '<article class="uutinen">' +
-        (pvm ? '<time datetime="' + i.alkaa + '">' + pvm + '</time>' : '') +
-        '<h3>' + i.otsikko + '</h3><p>' + i.teksti + '</p></article>';
+      var kuva = i.kuva
+        ? '<div class="uutinen__kuva"><img src="' + turva(polku(i.kuva)) + '" alt="' +
+          merkit(i.kuvaAlt || '') + '" loading="lazy" decoding="async"></div>'
+        : '';
+      return '<article class="uutinen' + (i.kuva ? ' uutinen--kuvallinen' : '') +
+        (i.korosta ? ' uutinen--korostettu' : '') + '">' + kuva +
+        '<div class="uutinen__sisus">' +
+        (pvm ? '<time datetime="' + merkit(i.alkaa) + '">' + merkit(pvm) + '</time>' : '') +
+        '<h3>' + merkit(i.otsikko || '') + '</h3>' +
+        '<p>' + merkit(i.teksti || '').replace(/\n/g, '<br>') + '</p>' +
+        '</div></article>';
     }).join('');
   }
 

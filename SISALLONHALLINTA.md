@@ -101,6 +101,15 @@ nuolinapeilla ja poistaa ruksista.
 - **Ajankohtaiset ilmoitukset.** Esimerkiksi poikkeusaukiolo jouluna.
   Kirjoita alkamis- ja päättymispäivä muodossa `2026-12-24`, niin ilmoitus
   katoaa sivustolta itsestään päättymispäivän jälkeen.
+  - **Kuva (vapaaehtoinen).** Paina "Valitse kuva" ja poimi kuva puhelimen tai
+    koneen kuvista. Kuva pienennetään automaattisesti, joten isokin
+    puhelinkuva kelpaa sellaisenaan. Kirjoita vielä "Mitä kuvassa näkyy"
+    -kenttään lyhyt kuvaus — se näkyy näkövammaisille ja silloin, jos kuva ei
+    lataudu. Ilman kuvaa ilmoitus näkyy sivustolla pelkkänä tekstinä; se on
+    ihan yhtä hyvä tapa.
+  - **Korosta ilmoitus.** Nostaa ilmoituksen esiin oranssilla reunaviivalla.
+    Kannattaa käyttää säästeliäästi, korkeintaan yhteen ilmoitukseen
+    kerrallaan.
 - **Äänestyslaatikko.** Poista valinta "Näytetään sivustolla", kun äänestys
   on ohi.
 - **Työn alla -ilmoitus.** Poista valinta, kun sivusto on valmis.

@@ -35,7 +35,6 @@
   var TEKSTIKENTAT = [
     { avain: 'etusivu-tervetuloa-otsikko',  nimike: 'Etusivu · otsikko',            rivit: 2 },
     { avain: 'etusivu-tervetuloa-ingressi', nimike: 'Etusivu · ingressi',           rivit: 3 },
-    { avain: 'etusivu-tervetuloa-teksti',   nimike: 'Etusivu · kappale',            rivit: 3 },
     { avain: 'etusivu-alacarte-teksti',     nimike: 'Etusivu · à la carte -teksti', rivit: 3 },
     { avain: 'etusivu-some-otsikko',        nimike: 'Etusivu · some-otsikko',       rivit: 2 },
     { avain: 'etusivu-some-teksti',         nimike: 'Etusivu · some-teksti',        rivit: 3 },
@@ -352,6 +351,159 @@
       if (osat[2]) a.lisa = osat[2];
       return a;
     }).filter(Boolean);
+  }
+
+  /* ========================================================= KUVAKENTTÄ */
+  /* Kuva pienennetään selaimessa ennen lähetystä. Puhelimen kamerakuva on
+     helposti 5 megatavua, mikä olisi sivustolla raskas ja turha — 1600
+     pikseliä leveä riittää kaikkiin näyttöihin. */
+
+  var KUVA_LEVEYS = 1600;
+
+  function pienennaKuva(tiedosto) {
+    return new Promise(function (onnistui, epaonnistui) {
+      var url = URL.createObjectURL(tiedosto);
+      var kuva = new Image();
+      kuva.onload = function () {
+        var skaala = Math.min(1, KUVA_LEVEYS / kuva.naturalWidth);
+        var leveys = Math.round(kuva.naturalWidth * skaala);
+        var korkeus = Math.round(kuva.naturalHeight * skaala);
+        var kangas = document.createElement('canvas');
+        kangas.width = leveys;
+        kangas.height = korkeus;
+        kangas.getContext('2d').drawImage(kuva, 0, 0, leveys, korkeus);
+        URL.revokeObjectURL(url);
+        kangas.toBlob(function (pala) {
+          if (!pala) { epaonnistui(new Error('Kuvaa ei voitu käsitellä')); return; }
+          onnistui({ pala: pala, tyyppi: 'image/jpeg', leveys: leveys, korkeus: korkeus });
+        }, 'image/jpeg', 0.84);
+      };
+      kuva.onerror = function () {
+        URL.revokeObjectURL(url);
+        epaonnistui(new Error('Tiedosto ei ole kuva'));
+      };
+      kuva.src = url;
+    });
+  }
+
+  function lahetaKuva(pala, tyyppi) {
+    var nimi = 'ilmoitus/' + Date.now() + '-' +
+               Math.random().toString(36).slice(2, 8) + '.jpg';
+    return fetch(API + '/storage/v1/object/kuvat/' + nimi, {
+      method: 'POST',
+      headers: {
+        apikey: Y.avain,
+        Authorization: 'Bearer ' + istunto.token,
+        'Content-Type': tyyppi,
+        'x-upsert': 'true'
+      },
+      body: pala
+    }).then(function (v) {
+      if (!v.ok) {
+        return v.text().then(function (t) {
+          throw new Error('Lähetys epäonnistui (' + v.status + ') ' + t.slice(0, 120));
+        });
+      }
+      return API + '/storage/v1/object/public/kuvat/' + nimi;
+    });
+  }
+
+  /* Kuvakenttä: esikatselu, vaihto, poisto ja vaihtoehtoinen teksti. */
+  function kuvakentta(kohde) {
+    var lb = tee('div');
+    lb.style.marginBottom = '1rem';
+    var otsikko = tee('span', 'lohko__vihje', 'Kuva (vapaaehtoinen)');
+    otsikko.style.display = 'block';
+    otsikko.style.marginBottom = '.45rem';
+    lisaa(lb, otsikko);
+
+    var viesti = tee('p', 'viesti');
+    viesti.hidden = true;
+    viesti.style.marginBottom = '.7rem';
+    lisaa(lb, viesti);
+
+    var esikatselu = tee('div', 'kuvakentta');
+    var valitsin = document.createElement('input');
+    valitsin.type = 'file';
+    valitsin.accept = 'image/*';
+    valitsin.style.display = 'none';
+
+    var altKentta = null;
+
+    function kerro(teksti, luokka) {
+      viesti.hidden = !teksti;
+      viesti.className = 'viesti' + (luokka ? ' viesti--' + luokka : '');
+      viesti.textContent = teksti || '';
+    }
+
+    function piirra() {
+      esikatselu.innerHTML = '';
+      if (kohde.kuva) {
+        var kuva = document.createElement('img');
+        kuva.src = kohde.kuva;
+        kuva.alt = '';
+        kuva.className = 'kuvakentta__kuva';
+        kuva.addEventListener('error', function () {
+          if (kuva.parentNode) {
+            kuva.parentNode.replaceChild(
+              tee('div', 'kuvakentta__tyhja', 'Kuvaa ei voi näyttää'), kuva);
+          }
+        });
+        lisaa(esikatselu, kuva);
+      } else {
+        lisaa(esikatselu, tee('div', 'kuvakentta__tyhja', 'Ei kuvaa'));
+      }
+
+      var napit = tee('div', 'kuvakentta__napit');
+      var vaihda = tee('button', 'nappi nappi--hiljainen nappi--pieni',
+                       kohde.kuva ? 'Vaihda kuva' : 'Valitse kuva');
+      vaihda.type = 'button';
+      vaihda.addEventListener('click', function () { valitsin.click(); });
+      lisaa(napit, vaihda);
+
+      if (kohde.kuva) {
+        var pois = tee('button', 'nappi nappi--hiljainen nappi--pieni nappi--vaara', 'Poista kuva');
+        pois.type = 'button';
+        pois.addEventListener('click', function () {
+          delete kohde.kuva;
+          delete kohde.kuvaAlt;
+          piirra();
+          muutos();
+        });
+        lisaa(napit, pois);
+      }
+      lisaa(esikatselu, napit);
+
+      if (kohde.kuva) {
+        altKentta = syote('Mitä kuvassa näkyy', kohde, 'kuvaAlt', {
+          vihje: 'Joulukuusi ravintolasalissa',
+          apu: 'Näkyy näkövammaisille ja jos kuva ei lataudu.'
+        });
+        altKentta.style.marginTop = '.8rem';
+        lisaa(esikatselu, altKentta);
+      }
+    }
+
+    valitsin.addEventListener('change', function () {
+      var tiedosto = valitsin.files && valitsin.files[0];
+      if (!tiedosto) return;
+      kerro('Käsitellään kuvaa…');
+      pienennaKuva(tiedosto).then(function (tulos) {
+        kerro('Lähetetään…');
+        return lahetaKuva(tulos.pala, tulos.tyyppi).then(function (osoite) {
+          kohde.kuva = osoite;
+          piirra();
+          muutos();
+          kerro('Kuva lisätty. Muista tallentaa.', 'onnistui');
+        });
+      }).catch(function (e) {
+        kerro('Kuvan lisääminen ei onnistunut: ' + e.message, 'virhe');
+      }).then(function () { valitsin.value = ''; });
+    });
+
+    piirra();
+    lisaa(lb, esikatselu, valitsin);
+    return lb;
   }
 
   /* ================================= CANVA-PDF:N TUONTI LOUNASLISTAAN */
@@ -910,11 +1062,11 @@
     lisaa(jb, toistuva(T.ajankohtaista, function (i) {
       var kehys = tee('div');
       lisaa(kehys, syote('Otsikko', i, 'otsikko', { vihje: 'Poikkeava aukiolo' }));
-      lisaa(kehys, syote('Teksti', i, 'teksti', { alue: true, rivit: 2 }));
+      lisaa(kehys, syote('Teksti', i, 'teksti', { alue: true, rivit: 3 }));
       var r = tee('div', 'rivi rivi--2');
       lisaa(r, syote('Alkaa', i, 'alkaa', { vihje: '2026-12-24' }),
                syote('Päättyy', i, 'paattyy', { vihje: '2026-12-26' }));
-      lisaa(kehys, r, valinta('Korosta ilmoitus', i, 'korosta'));
+      lisaa(kehys, r, kuvakentta(i), valinta('Korosta ilmoitus', i, 'korosta'));
       return kehys;
     }, function () { return { otsikko: '', teksti: '', alkaa: '', paattyy: '', korosta: false }; },
        'Ei ajankohtaisia ilmoituksia.', '+ Lisää ilmoitus'));
