@@ -1007,16 +1007,21 @@ body.is-locked .mobiilipalkki { transform: translateY(115%); }
    joten kuva sovitetaan kehykseen. Vaakakuva tayttaa kortin reunasta reunaan,
    pystykuva asettuu keskelle tummaa taustaa. */
 .uutinen__kuva {
+  display: flex;
+  justify-content: center;
+  padding: clamp(1rem, 2.2vw, 1.4rem);
   background: var(--char-3);
   border-bottom: 1px solid var(--line-soft);
 }
+/* Kuva on ilmoituksen tukena, ei sen paaosassa: korkeus on katkaistu niin,
+   ettei pystyjuliste tayta puolta ruudusta. Kuva sailyy kokonaisena. */
 .uutinen__kuva img {
   display: block;
-  width: 100%;
-  height: auto;
-  max-height: min(560px, 78vh);
+  width: auto;
+  max-width: 100%;
+  max-height: 230px;
   object-fit: contain;
-  object-position: center;
+  border-radius: 2px;
 }
 
 /* Pelkka kuva ilman otsikkoa ja tekstia: ei alareunan viivaa */
