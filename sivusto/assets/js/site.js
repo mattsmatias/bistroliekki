@@ -415,6 +415,16 @@
     // Jos se ei lataudu, korttiin ei jätetä rikkinäistä kuvakehystä: teksti
     // jää näkyviin yksinään, ja pelkkä kuva -ilmoitus katoaa kokonaan.
     $$('.uutinen__kuva img', kehys).forEach(function (img) {
+      /* Kuvakehys on aina saman kokoinen, mutta kuvaa ei rajata. Reunoille
+         jaava tila taytetaan samasta kuvasta tehdyllä sumealla taustalla,
+         jolloin kehys on reunasta reunaan tayttä eikä siihen jää tyhjiä
+         tummia palkkeja. Osoite asetetaan tässä eikä HTML-merkkijonossa,
+         jottei url() tarvitse merkkien pakenemista lainkaan. */
+      var kehysKuva0 = img.closest('.uutinen__kuva');
+      if (kehysKuva0 && img.getAttribute('src')) {
+        kehysKuva0.style.setProperty('--tausta', 'url("' + img.src + '")');
+      }
+
       img.addEventListener('error', function () {
         var kortti = img.closest('.uutinen');
         if (!kortti) return;
