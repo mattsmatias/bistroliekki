@@ -409,6 +409,46 @@
   }
 
   /* Kuvakenttä: esikatselu, vaihto, poisto ja vaihtoehtoinen teksti. */
+  /* Valmiit kuvat ovat ravintolan omia, sivustolla jo olevia valokuvia ja
+     hiilligrafiikoita. Niissa ei ole kuvapankkien kayttoehtoja eika
+     tekijanoikeusriskia, ja ne sopivat sivuston tummaan ja lampimaan ilmeeseen
+     ilman erillista kasittelya. Polku tallennetaan sivuston juuresta, jolloin
+     sama arvo toimii seka sivustolla etta hallinnassa. */
+  var VALMIIT_KUVAT = [
+    { t: 'assets/img/grill-flame.webp',         n: 'Liekit',
+      a: 'Liekit nousevat puuhiilestä' },
+    { t: 'assets/img/band-embers.webp',         n: 'Hiillos',
+      a: 'Hehkuva puuhiilihiillos' },
+    { t: 'assets/img/hero.webp',                n: 'Burgeri ja ranskalaiset',
+      a: 'Tuplaburgeri ja ranskalaiset' },
+    { t: 'assets/img/burgeri-chimichurri.webp', n: 'Tuplaburgeri',
+      a: 'Tuplaburgeri puuhiiligrillistä ja punaista kastiketta' },
+    { t: 'assets/img/burgeri-pekoni.webp',      n: 'Pekoniburgeri',
+      a: 'Pekoniburgeri puuhiiligrillistä' },
+    { t: 'assets/img/lounasbuffet.webp',        n: 'Lounasbuffet',
+      a: 'Lounasbuffet katettuna ravintolasalissa' },
+    { t: 'assets/img/lounas-burgerit.webp',     n: 'Lounasburgerit',
+      a: 'Hampurilaisia lounasbuffetin lämpöhauteissa' },
+    { t: 'assets/img/lammin-poyta.webp',        n: 'Lämmin pöytä',
+      a: 'Lämpimiä ruokia lounasbuffetin hauteissa' },
+    { t: 'assets/img/salaattipoyta.webp',       n: 'Salaattipöytä',
+      a: 'Salaattipöydän antimia lounasbuffetissa' },
+    { t: 'assets/img/pysty-burgeri.webp',       n: 'Burgeri — pystykuva',
+      a: 'Burgeri puuhiiligrillistä' },
+    { t: 'assets/img/pysty-pekoni.webp',        n: 'Pekoniburgeri — pystykuva',
+      a: 'Pekoniburgeri puuhiiligrillistä' },
+    { t: 'assets/img/pysty-buffet.webp',        n: 'Lämmin pöytä — pystykuva',
+      a: 'Lämpimiä ruokia lounasbuffetin hauteissa' }
+  ];
+
+  /* Hallinta on kansiossa /hallinta/, joten sivuston juuresta tallennettu
+     polku tarvitsee esikatselua varten yhden askeleen ylospain. */
+  function kuvaOsoite(p) {
+    if (!p) return '';
+    if (/^(https?:)?\/\//.test(p) || p.indexOf('data:') === 0 || p.charAt(0) === '/') return p;
+    return '../' + p;
+  }
+
   function kuvakentta(kohde) {
     var lb = tee('div');
     lb.style.marginBottom = '1rem';
@@ -429,6 +469,7 @@
     valitsin.style.display = 'none';
 
     var altKentta = null;
+    var galleriaAuki = false;
 
     function kerro(teksti, luokka) {
       viesti.hidden = !teksti;
@@ -436,11 +477,48 @@
       viesti.textContent = teksti || '';
     }
 
+    /* Ravintolan omat kuvat ruudukkona. Valinta asettaa myos kuvatekstin,
+       jottei sita tarvitse kirjoittaa kasin — sen saa toki muokata. */
+    function galleria() {
+      var k = tee('div', 'kuvapankki');
+      lisaa(k, tee('p', 'kuvapankki__ohje',
+                   'Ravintolan omat kuvat sivustolta. Voit myös ladata oman kuvan.'));
+      var ruudukko = tee('div', 'kuvapankki__ruudukko');
+
+      VALMIIT_KUVAT.forEach(function (v) {
+        var nappi = tee('button', 'kuvapankki__kohde' +
+                        (kohde.kuva === v.t ? ' kuvapankki__kohde--valittu' : ''));
+        nappi.type = 'button';
+        nappi.title = v.n;
+        if (kohde.kuva === v.t) nappi.setAttribute('aria-current', 'true');
+
+        var pikku = document.createElement('img');
+        pikku.src = kuvaOsoite(v.t);
+        pikku.alt = '';
+        pikku.loading = 'lazy';
+        pikku.decoding = 'async';
+        lisaa(nappi, pikku, tee('span', null, v.n));
+
+        nappi.addEventListener('click', function () {
+          kohde.kuva = v.t;
+          kohde.kuvaAlt = v.a;
+          galleriaAuki = false;
+          piirra();
+          muutos();
+          kerro('Kuva valittu. Muista tallentaa.', 'onnistui');
+        });
+        lisaa(ruudukko, nappi);
+      });
+
+      lisaa(k, ruudukko);
+      return k;
+    }
+
     function piirra() {
       esikatselu.innerHTML = '';
       if (kohde.kuva) {
         var kuva = document.createElement('img');
-        kuva.src = kohde.kuva;
+        kuva.src = kuvaOsoite(kohde.kuva);
         kuva.alt = '';
         kuva.className = 'kuvakentta__kuva';
         kuva.addEventListener('error', function () {
@@ -456,10 +534,19 @@
 
       var napit = tee('div', 'kuvakentta__napit');
       var vaihda = tee('button', 'nappi nappi--hiljainen nappi--pieni',
-                       kohde.kuva ? 'Vaihda kuva' : 'Valitse kuva');
+                       kohde.kuva ? 'Vaihda kuva' : 'Lataa oma kuva');
       vaihda.type = 'button';
       vaihda.addEventListener('click', function () { valitsin.click(); });
       lisaa(napit, vaihda);
+
+      var valmiit = tee('button', 'nappi nappi--hiljainen nappi--pieni',
+                        galleriaAuki ? 'Sulje valmiit kuvat' : 'Valitse valmiista kuvista');
+      valmiit.type = 'button';
+      valmiit.addEventListener('click', function () {
+        galleriaAuki = !galleriaAuki;
+        piirra();
+      });
+      lisaa(napit, valmiit);
 
       if (kohde.kuva) {
         var pois = tee('button', 'nappi nappi--hiljainen nappi--pieni nappi--vaara', 'Poista kuva');
@@ -473,6 +560,8 @@
         lisaa(napit, pois);
       }
       lisaa(esikatselu, napit);
+
+      if (galleriaAuki) lisaa(esikatselu, galleria());
 
       if (kohde.kuva) {
         altKentta = syote('Mitä kuvassa näkyy', kohde, 'kuvaAlt', {

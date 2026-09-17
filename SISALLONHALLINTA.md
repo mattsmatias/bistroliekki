@@ -101,13 +101,19 @@ nuolinapeilla ja poistaa ruksista.
 - **Ajankohtaiset ilmoitukset.** Esimerkiksi poikkeusaukiolo jouluna.
   Kirjoita alkamis- ja päättymispäivä muodossa `2026-12-24`, niin ilmoitus
   katoaa sivustolta itsestään päättymispäivän jälkeen.
-  - **Kuva (vapaaehtoinen).** Paina "Valitse kuva" ja poimi kuva puhelimen tai
-    koneen kuvista. Kuva pienennetään automaattisesti, joten isokin
-    puhelinkuva kelpaa sellaisenaan. Kirjoita vielä "Mitä kuvassa näkyy"
-    -kenttään lyhyt kuvaus — se näkyy näkövammaisille ja silloin, jos kuva ei
-    lataudu. Kuva näkyy sivustolla aina kokonaan — sitä ei rajata, joten
-    juliste tai grafiikka säilyy luettavana. Ilman kuvaa ilmoitus näkyy
-    pelkkänä tekstinä; se on ihan yhtä hyvä tapa.
+  - **Kuva (vapaaehtoinen).** Kaksi tapaa:
+    - *"Valitse valmiista kuvista"* avaa ruudukon ravintolan omista kuvista,
+      jotka ovat jo sivustolla: liekit, hiillos, burgerit, lounasbuffet,
+      salaattipöytä ja lämmin pöytä sekä muutama pystykuva. Valinta täyttää
+      myös kuvatekstin valmiiksi. Nämä kuvat ovat teidän omianne, joten
+      niiden käytössä ei ole kuvapankkien ehtoja eikä tekijänoikeusriskiä.
+    - *"Lataa oma kuva"* poimii kuvan puhelimen tai koneen kuvista. Kuva
+      pienennetään automaattisesti, joten isokin puhelinkuva kelpaa
+      sellaisenaan. Kirjoita vielä "Mitä kuvassa näkyy" -kenttään lyhyt
+      kuvaus — se näkyy näkövammaisille ja silloin, jos kuva ei lataudu.
+
+    Kuvaa ei rajata, joten juliste tai grafiikka säilyy luettavana. Ilman
+    kuvaa ilmoitus näkyy pelkkänä tekstinä; se on ihan yhtä hyvä tapa.
   - **Linkki (vapaaehtoinen).** Jos ilmoituksesta pitää päästä eteenpäin —
     äänestykseen, tapahtumasivulle tai vaikka omalle catering-sivulle —
     liitä osoite tähän. "Linkin teksti" on painikkeen teksti; tyhjänä siinä
@@ -116,10 +122,10 @@ nuolinapeilla ja poistaa ruksista.
     Kannattaa käyttää säästeliäästi, korkeintaan yhteen ilmoitukseen
     kerrallaan.
 
-  Jokainen ilmoitus on sivustolla oma rivinsä: kuva vasemmalla, teksti
-  oikealla (puhelimessa kuva ylhäällä). Kortti on tasan sisältönsä korkuinen,
-  joten lyhyt ilmoitus pysyy lyhyenä silloinkin, kun sen vieressä on
-  kuvallinen ilmoitus.
+  Jokainen ilmoitus on sivustolla oma laatikkonsa: kuva ylhäällä koko
+  laatikon leveydeltä, otsikko ja teksti sen alla. Laatikko on tasan
+  sisältönsä korkuinen, joten lyhyt ilmoitus pysyy lyhyenä.
+
 - **Äänestyslaatikko.** Poista valinta "Näytetään sivustolla", kun äänestys
   on ohi.
 - **Työn alla -ilmoitus.** Poista valinta, kun sivusto on valmis.

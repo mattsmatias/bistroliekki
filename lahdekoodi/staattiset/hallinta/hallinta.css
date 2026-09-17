@@ -331,11 +331,12 @@ input[type='checkbox'] {
   border: 1px solid var(--viiva);
   border-radius: var(--pyoristys);
 }
+/* Esikatselu nayttaa kuvan kokonaisena, kuten sivustollakin */
 .kuvakentta__kuva {
   display: block;
   width: 100%;
   max-height: 220px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 2px;
   background: var(--char-3);
 }
@@ -355,6 +356,60 @@ input[type='checkbox'] {
   margin-top: .7rem;
 }
 .kuvakentta__napit .nappi { flex: 1 1 auto; min-width: 0; }
+
+/* ------------------------------------------------------ VALMIIT KUVAT */
+/* Ravintolan omat kuvat ruudukkona. Kosketuskohde on koko ruutu, ja
+   valittuna oleva kuva erottuu hiillosreunuksella. */
+.kuvapankki {
+  margin-top: .8rem;
+  padding-top: .8rem;
+  border-top: 1px solid var(--viiva);
+}
+.kuvapankki__ohje {
+  margin: 0 0 .7rem;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--bone-4);
+}
+.kuvapankki__ruudukko {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: .6rem;
+}
+.kuvapankki__kohde {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  padding: .35rem;
+  background: var(--char-3);
+  border: 1px solid var(--viiva);
+  border-radius: var(--pyoristys);
+  color: var(--bone-3);
+  font-family: var(--sans);
+  font-size: 11.5px;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .2s ease, color .2s ease;
+}
+.kuvapankki__kohde img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 2px;
+  background: var(--char);
+}
+.kuvapankki__kohde:hover,
+.kuvapankki__kohde:focus-visible {
+  border-color: var(--ember);
+  color: var(--bone);
+}
+.kuvapankki__kohde--valittu {
+  border-color: var(--ember);
+  color: var(--bone);
+  box-shadow: inset 0 0 0 1px var(--ember);
+}
 
 /* ------------------------------------------------------------ ALATUNNISTE */
 /* Alatunniste kantaa tallennuspalkin vaatiman tyhjan tilan, jotta palkki ei
