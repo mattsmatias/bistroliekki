@@ -1029,15 +1029,17 @@ body.is-locked .mobiilipalkki { transform: translateY(115%); }
   background: var(--char-3);
   border-bottom: 1px solid var(--line-soft);
 }
-/* Kuva tayttaa laatikon reunasta reunaan ja sailyy kokonaisena: korkeus
-   seuraa kuvan omaa mittasuhdetta. Katto on vain varmistus, jottei
-   poikkeuksellisen kapea ja korkea kuva venyta korttia loputtomiin. */
+/* Kuvakehys on aina saman kokoinen riippumatta siita, onko lisatty kuva
+   pysty, vaaka vai nelio. Nain vierekkaiset ilmoitukset nayttavat samalta
+   eika rivi hypi. object-fit: contain pitaa kuvan kokonaisena — juliste,
+   jossa on tekstia reunoja myoten, ei siis leikkaudu; sen sijaan kehyksen
+   reunoille jaa tummaa taustaa. */
 .uutinen__kuva img {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 560px;
-  object-fit: cover;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
   object-position: center;
 }
 
