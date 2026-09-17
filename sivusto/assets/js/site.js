@@ -1830,9 +1830,67 @@
     setTimeout(aloita, ODOTUS_MS);
   }
 
+  /* ------------------------------------------------ 26. KÄVIJÄLASKURI */
+  /* Ravintola näkee hallintapaneelista, montako kävijää sivustolla käy.
+     Laskuri kirjaa vain kaksi asiaa: minä päivänä ja millä sivulla käytiin.
+     Mitään henkilöön yhdistettävää ei lähetetä eikä tallenneta — ei
+     IP-osoitetta, ei selaintietoja, ei evästeitä, ei tunnistetta. Siksi
+     tämä ei vaadi evästebanneria eikä suostumusta.
+
+     Saman selainistunnon toinen sivulataus kasvattaa vain näyttökertoja,
+     ei käyntien määrää. Istuntomerkki elää sessionStoragessa ja katoaa
+     välilehden mukana; se ei kerro kävijästä mitään. */
+  var LASKURI_SALLITUT = [
+    '/', '/meista/', '/menu/', '/lounas/', '/catering/', '/galleria/',
+    '/lahjakortti/', '/yhteystiedot/', '/palaute/', '/vahvista-poytavaraus/'
+  ];
+  var ISTUNTOAVAIN = 'liekki-istunto';
+
+  function laskuriPolku() {
+    var p = (location.pathname || '/').toLowerCase();
+    if (p.length > 1 && p.charAt(p.length - 1) !== '/') p += '/';
+    if (LASKURI_SALLITUT.indexOf(p) > -1) return p;
+    if (/404/.test(p)) return '/404';
+    return '/muu';
+  }
+
+  function kirjaaKaynti() {
+    var y = window.LIEKKI_YHTEYS || {};
+    if (!y.osoite || !y.avain || typeof fetch !== 'function') return;
+
+    // Hallintapaneeli, paikallinen kehitys ja automaatio jätetään laskematta,
+    // jottei ravintolan oma työ näy tilastossa kävijöinä.
+    if (location.pathname.indexOf('/hallinta') === 0) return;
+    if (/^(localhost|127\.|0\.0\.0\.0|\[?::1)/.test(location.hostname)) return;
+    if (navigator.webdriver) return;
+
+    var uusi = true;
+    try {
+      if (sessionStorage.getItem(ISTUNTOAVAIN)) uusi = false;
+      else sessionStorage.setItem(ISTUNTOAVAIN, '1');
+    } catch (e) { /* yksityinen selaus: lasketaan uudeksi käynniksi */ }
+
+    try {
+      fetch(y.osoite.replace(/\/+$/, '') + '/rest/v1/rpc/kirjaa_kaynti', {
+        method: 'POST',
+        headers: {
+          apikey: y.avain,
+          Authorization: 'Bearer ' + y.avain,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ p_polku: laskuriPolku(), p_uusi: uusi }),
+        keepalive: true
+      }).catch(function () { /* tilasto ei saa koskaan rikkoa sivua */ });
+    } catch (e) { /* sama */ }
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', kaynnistaSisallolla);
   } else {
     kaynnistaSisallolla();
   }
+
+  // Kirjaus vasta sivun latauduttua, jottei se vie kaistaa sisällöltä.
+  if (document.readyState === 'complete') setTimeout(kirjaaKaynti, 1200);
+  else window.addEventListener('load', function () { setTimeout(kirjaaKaynti, 1200); });
 })();

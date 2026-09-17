@@ -1346,6 +1346,190 @@
     return k;
   }
 
+  /* ==================================================== OSIO: KÄVIJÄT */
+  /* Luvut tulevat taulusta julkinen_kavijat, jossa on vain päiväkohtaisia
+     summia sivua kohden. Tämä paneeli on pelkkä lukunäkymä: se ei kosketa
+     työkopiota T eikä siten koskaan merkitse tallentamattomia muutoksia. */
+
+  var SIVUNIMET = {
+    '/': 'Etusivu',
+    '/meista/': 'Tarina',
+    '/menu/': 'Ruokalista',
+    '/lounas/': 'Lounas',
+    '/catering/': 'Catering',
+    '/galleria/': 'Galleria',
+    '/lahjakortti/': 'Lahjakortti',
+    '/yhteystiedot/': 'Yhteystiedot',
+    '/palaute/': 'Palaute',
+    '/vahvista-poytavaraus/': 'Varauksen vahvistus',
+    '/404': 'Sivua ei löytynyt',
+    '/muu': 'Muu sivu'
+  };
+
+  function paivaAvain(d) {
+    // Ravintolan oma aika, sama kuin tietokannassa.
+    var o = new Date(d.toLocaleString('en-US', { timeZone: 'Europe/Helsinki' }));
+    return o.getFullYear() + '-' +
+           ('0' + (o.getMonth() + 1)).slice(-2) + '-' +
+           ('0' + o.getDate()).slice(-2);
+  }
+
+  function paivaaSitten(n) {
+    var d = new Date();
+    d.setDate(d.getDate() - n);
+    return paivaAvain(d);
+  }
+
+  function lyhytPvm(avain) {
+    var o = avain.split('-');
+    return parseInt(o[2], 10) + '.' + parseInt(o[1], 10) + '.';
+  }
+
+  function paneeliKavijat() {
+    var k = tee('div');
+
+    lisaa(k, ohjelaatikko('Mitä näistä luvuista näkee', [
+      'Käynnit = montako kertaa sivustolle tultiin. Saman selailukerran aikana avatut sivut lasketaan yhdeksi käynniksi.',
+      'Näyttökerrat = montako sivua kaikkiaan avattiin. Tämä on aina käyntejä suurempi tai yhtä suuri.',
+      'Päivä vaihtuu Suomen ajan mukaan keskiyöllä.',
+      'Laskuri ei kerää evästeitä, IP-osoitteita eikä mitään henkilötietoja — vain päivän, sivun ja lukumäärän.',
+      'Hallintapaneelin omat käynnit eivät näy tilastossa.'
+    ]));
+
+    var tila = tee('p', 'lataus', 'Haetaan kävijätietoja…');
+    lisaa(k, tila);
+
+    var sisus = tee('div');
+    sisus.hidden = true;
+    lisaa(k, sisus);
+
+    pyynto('/rest/v1/julkinen_kavijat?select=pvm,polku,nayttokerrat,kaynnit' +
+           '&pvm=gte.' + paivaaSitten(89) + '&order=pvm.desc')
+      .then(function (rivit) {
+        // .lataus on display:grid, joten pelkka hidden ei riita — poistetaan.
+        if (tila.parentNode) tila.parentNode.removeChild(tila);
+        sisus.hidden = false;
+        piirraKavijat(sisus, rivit || []);
+      })
+      .catch(function (e) {
+        tila.className = 'viesti viesti--virhe';
+        tila.style.minHeight = '0';
+        tila.textContent = 'Kävijätietojen haku ei onnistunut: ' + e.message;
+      });
+
+    return k;
+  }
+
+  function piirraKavijat(kehys, rivit) {
+    if (!rivit.length) {
+      lisaa(kehys, tee('div', 'lista__tyhja',
+        'Kävijätietoja ei ole vielä kertynyt. Luvut alkavat karttua heti, ' +
+        'kun sivustolla käydään.'));
+      return;
+    }
+
+    // Päivittäiset summat
+    var paivat = {};
+    var sivut = {};
+    rivit.forEach(function (r) {
+      var p = paivat[r.pvm] || (paivat[r.pvm] = { kaynnit: 0, nayttokerrat: 0 });
+      p.kaynnit += r.kaynnit;
+      p.nayttokerrat += r.nayttokerrat;
+    });
+
+    function summa(alkaen) {
+      var s = { kaynnit: 0, nayttokerrat: 0 };
+      Object.keys(paivat).forEach(function (pvm) {
+        if (pvm >= alkaen) {
+          s.kaynnit += paivat[pvm].kaynnit;
+          s.nayttokerrat += paivat[pvm].nayttokerrat;
+        }
+      });
+      return s;
+    }
+
+    var tanaan = paivaAvain(new Date());
+    var eilen = paivaaSitten(1);
+    var tanaanS = paivat[tanaan] || { kaynnit: 0, nayttokerrat: 0 };
+    var eilenS = paivat[eilen] || { kaynnit: 0, nayttokerrat: 0 };
+    var vk = summa(paivaaSitten(6));
+    var kk = summa(paivaaSitten(29));
+
+    var lb = lohko('Yhteenveto');
+    var ruudukko = tee('div', 'luvut');
+    [['Tänään', tanaanS], ['Eilen', eilenS],
+     ['7 päivää', vk], ['30 päivää', kk]].forEach(function (x) {
+      var kortti = tee('div', 'luku');
+      lisaa(kortti,
+        tee('span', 'luku__arvo', String(x[1].kaynnit)),
+        tee('span', 'luku__nimi', x[0] + ' · käyntiä'),
+        tee('span', 'luku__lisa', x[1].nayttokerrat + ' näyttökertaa'));
+      lisaa(ruudukko, kortti);
+    });
+    lisaa(lb, ruudukko);
+
+    var ka = kk.kaynnit / 30;
+    lisaa(lb, tee('p', 'lohko__vihje',
+      'Keskimäärin ' + (Math.round(ka * 10) / 10).toString().replace('.', ',') +
+      ' käyntiä päivässä viimeisen 30 päivän aikana.'));
+    lisaa(kehys, lb);
+
+    // Pylväät viimeiseltä 30 päivältä
+    var pb = lohko('Käynnit päivittäin', 'Viimeiset 30 päivää, vanhin vasemmalla');
+    var jarjestys = [];
+    for (var i = 29; i >= 0; i--) jarjestys.push(paivaaSitten(i));
+    var huippu = 1;
+    jarjestys.forEach(function (pvm) {
+      if (paivat[pvm] && paivat[pvm].kaynnit > huippu) huippu = paivat[pvm].kaynnit;
+    });
+
+    var kaavio = tee('div', 'kaavio');
+    jarjestys.forEach(function (pvm, i) {
+      var arvo = paivat[pvm] ? paivat[pvm].kaynnit : 0;
+      var sarake = tee('div', 'kaavio__sarake');
+      sarake.title = lyhytPvm(pvm) + ' — ' + arvo + ' käyntiä';
+      var pylvas = tee('div', 'kaavio__pylvas');
+      pylvas.style.height = Math.max(2, Math.round(arvo / huippu * 100)) + '%';
+      if (!arvo) pylvas.classList.add('kaavio__pylvas--tyhja');
+      lisaa(sarake, tee('span', 'kaavio__arvo', arvo ? String(arvo) : ''), pylvas);
+      // Joka viides päivämäärä riittää, muuten tekstit menevät päällekkäin.
+      lisaa(sarake, tee('span', 'kaavio__pvm', (i % 5 === 0 || i === 29) ? lyhytPvm(pvm) : ''));
+      lisaa(kaavio, sarake);
+    });
+    lisaa(pb, kaavio);
+    lisaa(kehys, pb);
+
+    // Suosituimmat sivut 30 päivältä
+    var raja = paivaaSitten(29);
+    rivit.forEach(function (r) {
+      if (r.pvm < raja) return;
+      var s = sivut[r.polku] || (sivut[r.polku] = { kaynnit: 0, nayttokerrat: 0 });
+      s.kaynnit += r.kaynnit;
+      s.nayttokerrat += r.nayttokerrat;
+    });
+    var lista = Object.keys(sivut).map(function (polku) {
+      return { polku: polku, n: sivut[polku].nayttokerrat, k: sivut[polku].kaynnit };
+    }).sort(function (a, b) { return b.n - a.n; });
+
+    var sb = lohko('Suosituimmat sivut', 'Viimeiset 30 päivää');
+    var yhteensa = lista.reduce(function (s, x) { return s + x.n; }, 0) || 1;
+    var taulu = tee('div', 'sivulista');
+    lista.forEach(function (x) {
+      var rivi = tee('div', 'sivulista__rivi');
+      var osuus = Math.round(x.n / yhteensa * 100);
+      lisaa(rivi,
+        tee('span', 'sivulista__nimi', SIVUNIMET[x.polku] || x.polku),
+        tee('span', 'sivulista__luku', String(x.n)),
+        tee('span', 'sivulista__osuus', osuus + ' %'));
+      var palkki = tee('div', 'sivulista__palkki');
+      palkki.style.width = Math.max(1, osuus) + '%';
+      lisaa(rivi, palkki);
+      lisaa(taulu, rivi);
+    });
+    lisaa(sb, taulu);
+    lisaa(kehys, sb);
+  }
+
   /* ================================================= OSIO: TILI JA VERSIOT */
 
   function paneeliTili() {
@@ -1473,6 +1657,9 @@
     { avain: 'tiedot',  nimi: 'Tiedot ja tekstit', otsikko: 'Tiedot ja tekstit',
       ohje: 'Yhteystiedot, linkit, some-osoitteet, saavutukset ja sivujen tekstit.',
       rakenna: paneeliTiedot },
+    { avain: 'kavijat', nimi: 'Kävijät',       otsikko: 'Kävijätilastot',
+      ohje: 'Montako kävijää sivustolla käy. Luvut päivittyvät jatkuvasti.',
+      rakenna: paneeliKavijat },
     { avain: 'tili',    nimi: 'Tili',          otsikko: 'Tili ja versiot',
       ohje: 'Salasanan vaihto ja aiempien versioiden palautus.',
       rakenna: paneeliTili }

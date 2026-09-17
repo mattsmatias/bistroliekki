@@ -566,3 +566,115 @@ details.ohje li { margin-bottom: .3rem; }
 @media (prefers-reduced-motion: reduce) {
   * { transition-duration: .001ms !important; animation-duration: .001ms !important; }
 }
+
+/* ------------------------------------------------------------- KÄVIJÄT */
+/* Yhteenvetoluvut, pylväskaavio ja sivukohtainen lista. Kaavio on tehty
+   pelkällä CSS:llä — mitään kirjastoa ei ladata, joten paneeli avautuu
+   yhtä nopeasti kuin muutkin. */
+.luvut {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: .7rem;
+}
+.luku {
+  padding: .9rem 1rem;
+  background: var(--char-3);
+  border: 1px solid var(--viiva);
+  border-radius: var(--pyoristys);
+}
+.luku__arvo {
+  display: block;
+  font-family: var(--display);
+  font-size: 1.9rem;
+  line-height: 1.1;
+  color: var(--bone);
+}
+.luku__nimi {
+  display: block;
+  margin-top: .3rem;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--bone-3);
+}
+.luku__lisa {
+  display: block;
+  margin-top: .2rem;
+  font-size: 11.5px;
+  color: var(--bone-4);
+}
+
+.kaavio {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  min-height: 170px;
+  overflow-x: auto;
+  padding-bottom: .2rem;
+}
+.kaavio__sarake {
+  flex: 1 1 0;
+  min-width: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 170px;
+  text-align: center;
+}
+.kaavio__arvo {
+  font-size: 10px;
+  line-height: 1.2;
+  color: var(--bone-4);
+  margin-bottom: 2px;
+}
+.kaavio__pylvas {
+  background: linear-gradient(180deg, var(--ember-lit), var(--ember));
+  border-radius: 2px 2px 0 0;
+  min-height: 2px;
+}
+.kaavio__pylvas--tyhja { background: var(--viiva); }
+.kaavio__pvm {
+  margin-top: .35rem;
+  font-size: 10px;
+  color: var(--bone-4);
+  white-space: nowrap;
+}
+
+.sivulista { display: grid; gap: .5rem; }
+.sivulista__rivi {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: .8rem;
+  padding: .6rem .8rem;
+  background: var(--char-3);
+  border: 1px solid var(--viiva);
+  border-radius: var(--pyoristys);
+  overflow: hidden;
+}
+.sivulista__nimi { font-size: 13.5px; color: var(--bone-2); min-width: 0; }
+.sivulista__luku { font-size: 13.5px; font-weight: 600; color: var(--bone); }
+.sivulista__osuus {
+  font-size: 11.5px;
+  color: var(--bone-4);
+  min-width: 42px;
+  text-align: right;
+}
+/* Palkki on taustalla, ei sisällön päällä — luvut pysyvät luettavina. */
+.sivulista__palkki {
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 0;
+  background: rgba(201, 85, 42, .16);
+  pointer-events: none;
+}
+.sivulista__nimi,
+.sivulista__luku,
+.sivulista__osuus { position: relative; z-index: 1; }
+
+@media (max-width: 480px) {
+  .kaavio__sarake { min-width: 10px; }
+  .kaavio__arvo { display: none; }
+}

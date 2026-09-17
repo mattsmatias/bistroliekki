@@ -152,6 +152,35 @@ Yhteystiedot, linkit, some-osoitteet, saavutukset ja sivujen tekstit.
   alkuperäinen teksti. Kirjoita kenttään vain jos haluat muuttaa tekstiä.
 - Rivinvaihto tekstikentässä tarkoittaa rivinvaihtoa myös sivulla.
 
+### Kävijät
+
+Näyttää, montako kävijää sivustolla käy. Luvut päivittyvät jatkuvasti; mitään
+ei tarvitse itse kirjata.
+
+- **Käynnit** = montako kertaa sivustolle tultiin. Jos sama ihminen selaa
+  peräkkäin etusivun, lounaan ja menun, se on **yksi käynti**.
+- **Näyttökerrat** = montako sivua kaikkiaan avattiin. Tämä luku on aina
+  käyntejä suurempi tai yhtä suuri.
+- Yhteenvedossa näkyy tänään, eilen, 7 päivää ja 30 päivää sekä keskiarvo
+  päivässä.
+- Pylväskaavio näyttää käynnit päivittäin viimeiseltä 30 päivältä.
+- Alimpana on lista siitä, mitkä sivut keräävät eniten katseluita.
+
+Päivä vaihtuu Suomen ajan mukaan keskiyöllä. Luvut alkavat kertyä siitä
+hetkestä, kun laskuri otettiin käyttöön — aiempaa historiaa ei ole.
+
+**Hallintapaneelin omat käynnit eivät näy tilastossa**, joten ravintolan oma
+työ ei sotke lukuja. Sivuston selaaminen omalla puhelimella näkyy kyllä
+käyntinä.
+
+> **Tietosuoja.** Laskuri kirjaa vain kolme asiaa: päivän, sivun ja
+> lukumäärän. Se ei kerää evästeitä, IP-osoitteita, sijaintia eikä mitään
+> muutakaan, mistä yksittäisen kävijän voisi tunnistaa. Tiedot ovat teidän
+> omassa tietokannassanne, eivät kenenkään ulkopuolisen palvelimella. Tästä
+> syystä sivusto ei tarvitse evästebanneria. (Tämä ei ole juridinen
+> lausunto — jos sivustolle joskus lisätään esimerkiksi Facebook-pikseli tai
+> Google Analytics, tilanne muuttuu ja banneri tarvitaan.)
+
 ---
 
 ## Tallentaminen
@@ -197,6 +226,7 @@ olisi hetken pois käytöstä** — silloin näkyy vain hieman vanhempi sisält�
 | Hallintapaneeli | `lahdekoodi/staattiset/hallinta/` |
 | Canva-listan luku | Edge Function `lue-lounaslista` |
 | Tekoälyavain | Supabase → Edge Functions → Secrets → `ANTHROPIC_API_KEY` |
+| Kävijälaskuri | Taulu `julkinen_kavijat` + funktio `kirjaa_kaynti`, koodi `tietokanta/kavijalaskuri.sql` |
 | Varasisältö | `sivusto/assets/js/content.js` |
 
 **Tärkeä huomio:** kun osio on kerran tallennettu hallintapaneelista,
