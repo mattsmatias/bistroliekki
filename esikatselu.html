@@ -968,16 +968,24 @@ body.is-locked .mobiilipalkki { transform: translateY(115%); }
 /* Ilmoitukset ovat allekkain omina kortteinaan: kuva ylhaalla koko kortin
    levyudelta, otsikko ja teksti sen alla. Sama asettelu joka ruudulla, joten
    tyopoytanakyma vastaa puhelinta. Kortti on tasan sisaltonsa korkuinen. */
+/* Ilmoitukset asettuvat riviin ja kaarivat seuraavalle riville, kun tila
+   loppuu. Yksittainen kortti pysyy kapeana (20rem), jottei lyhyt ilmoitus
+   veny koko kuoren levyiseksi — leveys tulee kortilta, ei kehykselta.
+
+   align-items: flex-start on olennainen: ilman sita vierekkaiset kortit
+   venyisivat samaan korkeuteen ja lyhyeen ilmoitukseen jaisi iso tyhja
+   alue kuvallisen ilmoituksen vieressa. */
 .uutiset {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
   gap: clamp(1.2rem, 2.4vw, 1.8rem);
-  /* Kortti ei veny koko kuoren levyiseksi: lyhyt ilmoitus hukkuisi tyhjaan.
-     Kapea laatikko pitaa kuvan ja tekstin yhtena kokonaisuutena. */
-  max-width: 20rem;
   margin-top: clamp(1.6rem, 3vw, 2.4rem);
 }
 
 .uutinen {
+  flex: 0 1 20rem;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   background: var(--char-2);
