@@ -959,7 +959,7 @@ body.is-locked .mobiilipalkki { transform: translateY(115%); }
   gap: clamp(1.2rem, 2.4vw, 1.8rem);
   /* Kortti ei veny koko kuoren levyiseksi: lyhyt ilmoitus hukkuisi tyhjaan.
      Kapea laatikko pitaa kuvan ja tekstin yhtena kokonaisuutena. */
-  max-width: 30rem;
+  max-width: 26rem;
   margin-top: clamp(1.6rem, 3vw, 2.4rem);
 }
 
@@ -1004,21 +1004,19 @@ body.is-locked .mobiilipalkki { transform: translateY(115%); }
    joten kuva sovitetaan kehykseen. Vaakakuva tayttaa kortin reunasta reunaan,
    pystykuva asettuu keskelle tummaa taustaa. */
 .uutinen__kuva {
-  display: flex;
-  justify-content: center;
-  padding: clamp(1rem, 2.2vw, 1.4rem);
   background: var(--char-3);
   border-bottom: 1px solid var(--line-soft);
 }
-/* Kuva on ilmoituksen tukena, ei sen paaosassa: korkeus on katkaistu niin,
-   ettei pystyjuliste tayta puolta ruudusta. Kuva sailyy kokonaisena. */
+/* Kuva tayttaa laatikon reunasta reunaan ja sailyy kokonaisena: korkeus
+   seuraa kuvan omaa mittasuhdetta. Katto on vain varmistus, jottei
+   poikkeuksellisen kapea ja korkea kuva venyta korttia loputtomiin. */
 .uutinen__kuva img {
   display: block;
-  width: auto;
-  max-width: 100%;
-  max-height: 230px;
-  object-fit: contain;
-  border-radius: 2px;
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* Pelkka kuva ilman otsikkoa ja tekstia: ei alareunan viivaa */
