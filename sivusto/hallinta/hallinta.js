@@ -409,36 +409,80 @@
   }
 
   /* Kuvakenttä: esikatselu, vaihto, poisto ja vaihtoehtoinen teksti. */
-  /* Valmiit kuvat ovat ravintolan omia, sivustolla jo olevia valokuvia ja
-     hiilligrafiikoita. Niissa ei ole kuvapankkien kayttoehtoja eika
-     tekijanoikeusriskia, ja ne sopivat sivuston tummaan ja lampimaan ilmeeseen
-     ilman erillista kasittelya. Polku tallennetaan sivuston juuresta, jolloin
-     sama arvo toimii seka sivustolla etta hallinnassa. */
-  var VALMIIT_KUVAT = [
-    { t: 'assets/img/grill-flame.webp',         n: 'Liekit',
-      a: 'Liekit nousevat puuhiilestä' },
-    { t: 'assets/img/band-embers.webp',         n: 'Hiillos',
-      a: 'Hehkuva puuhiilihiillos' },
-    { t: 'assets/img/hero.webp',                n: 'Burgeri ja ranskalaiset',
-      a: 'Tuplaburgeri ja ranskalaiset' },
-    { t: 'assets/img/burgeri-chimichurri.webp', n: 'Tuplaburgeri',
-      a: 'Tuplaburgeri puuhiiligrillistä ja punaista kastiketta' },
-    { t: 'assets/img/burgeri-pekoni.webp',      n: 'Pekoniburgeri',
-      a: 'Pekoniburgeri puuhiiligrillistä' },
-    { t: 'assets/img/lounasbuffet.webp',        n: 'Lounasbuffet',
-      a: 'Lounasbuffet katettuna ravintolasalissa' },
-    { t: 'assets/img/lounas-burgerit.webp',     n: 'Lounasburgerit',
-      a: 'Hampurilaisia lounasbuffetin lämpöhauteissa' },
-    { t: 'assets/img/lammin-poyta.webp',        n: 'Lämmin pöytä',
-      a: 'Lämpimiä ruokia lounasbuffetin hauteissa' },
-    { t: 'assets/img/salaattipoyta.webp',       n: 'Salaattipöytä',
-      a: 'Salaattipöydän antimia lounasbuffetissa' },
-    { t: 'assets/img/pysty-burgeri.webp',       n: 'Burgeri — pystykuva',
-      a: 'Burgeri puuhiiligrillistä' },
-    { t: 'assets/img/pysty-pekoni.webp',        n: 'Pekoniburgeri — pystykuva',
-      a: 'Pekoniburgeri puuhiiligrillistä' },
-    { t: 'assets/img/pysty-buffet.webp',        n: 'Lämmin pöytä — pystykuva',
-      a: 'Lämpimiä ruokia lounasbuffetin hauteissa' }
+  /* Valmiit kuvat kahdessa ryhmassa.
+
+     1) Ravintolan omat valokuvat, jotka ovat jo sivustolla. Ne ovat teidan
+        omianne, eika niiden kaytossa ole mitaan ehtoja.
+     2) Unsplashin ilmaiskuvat. Unsplash-lisenssi sallii kayton myos
+        kaupallisesti ilman lupaa ja ilman mainintaa. Kuvat haetaan
+        Unsplashin omalta palvelimelta, joten sivuston kansioon ei tule
+        yhtaan uutta tiedostoa. Jokainen kuva on katsottu lapi ennen
+        listalle ottamista, ja kuvaajan nimi on kirjattu talteen. */
+  var UNSPLASH = 'https://images.unsplash.com/';
+  var UNSPLASH_ISO   = '?w=1400&q=75&fm=webp&fit=max';
+  var UNSPLASH_PIKKU = '?w=320&h=240&q=60&fm=webp&fit=crop';
+
+  function unsplash(tunnus, nimi, alt, kuvaaja) {
+    return { t: UNSPLASH + tunnus + UNSPLASH_ISO,
+             pikku: UNSPLASH + tunnus + UNSPLASH_PIKKU,
+             n: nimi, a: alt, kuvaaja: kuvaaja };
+  }
+
+  var KUVARYHMAT = [
+    {
+      nimi: 'Ravintolan omat kuvat',
+      vihje: 'Sivustolla jo olevat omat valokuvanne.',
+      kuvat: [
+        { t: 'assets/img/grill-flame.webp',         n: 'Liekit',
+          a: 'Liekit nousevat puuhiilestä' },
+        { t: 'assets/img/band-embers.webp',         n: 'Hiillos',
+          a: 'Hehkuva puuhiilihiillos' },
+        { t: 'assets/img/hero.webp',                n: 'Burgeri ja ranskalaiset',
+          a: 'Tuplaburgeri ja ranskalaiset' },
+        { t: 'assets/img/burgeri-chimichurri.webp', n: 'Tuplaburgeri',
+          a: 'Tuplaburgeri puuhiiligrillistä ja punaista kastiketta' },
+        { t: 'assets/img/burgeri-pekoni.webp',      n: 'Pekoniburgeri',
+          a: 'Pekoniburgeri puuhiiligrillistä' },
+        { t: 'assets/img/lounasbuffet.webp',        n: 'Lounasbuffet',
+          a: 'Lounasbuffet katettuna ravintolasalissa' },
+        { t: 'assets/img/lounas-burgerit.webp',     n: 'Lounasburgerit',
+          a: 'Hampurilaisia lounasbuffetin lämpöhauteissa' },
+        { t: 'assets/img/lammin-poyta.webp',        n: 'Lämmin pöytä',
+          a: 'Lämpimiä ruokia lounasbuffetin hauteissa' },
+        { t: 'assets/img/salaattipoyta.webp',       n: 'Salaattipöytä',
+          a: 'Salaattipöydän antimia lounasbuffetissa' },
+        { t: 'assets/img/pysty-burgeri.webp',       n: 'Burgeri — pystykuva',
+          a: 'Burgeri puuhiiligrillistä' },
+        { t: 'assets/img/pysty-pekoni.webp',        n: 'Pekoniburgeri — pystykuva',
+          a: 'Pekoniburgeri puuhiiligrillistä' },
+        { t: 'assets/img/pysty-buffet.webp',        n: 'Lämmin pöytä — pystykuva',
+          a: 'Lämpimiä ruokia lounasbuffetin hauteissa' }
+      ]
+    },
+    {
+      nimi: 'Ilmaiskuvat — Unsplash',
+      vihje: 'Vapaasti käytettäviä kuvia, myös kaupallisesti. Näissä ei näy ' +
+             'teidän omaa ruokaanne, joten ne sopivat parhaiten tunnelmakuviksi ' +
+             '— esimerkiksi aukiolo- tai tapahtumailmoitukseen.',
+      kuvat: [
+        unsplash('photo-1621851709622-e19c9a4f0cc5', 'Liekit grillin ritilässä',
+                 'Liekit nousevat grillin ritilän läpi', 'Adam Mills'),
+        unsplash('photo-1748362918862-c3be586094bc', 'Hehkuva hiillos',
+                 'Hehkuvia hiiliä nuotion pohjalla', 'Edward Lawrence'),
+        unsplash('photo-1614119068601-483274e9dcb7', 'Pihvi liekkien yllä',
+                 'Pihvi nostetaan pihdeillä liekehtivältä hiiligrilliltä',
+                 'Matt Connor'),
+        unsplash('photo-1558030137-a56c1b004fa3', 'Lihaa grillissä',
+                 'Lihaa kypsymässä grillissä liekkien yllä', 'Emerson Vieira'),
+        unsplash('photo-1583248352195-d3a8e766edf2', 'Liekit halon päällä',
+                 'Oranssit liekit nousevat hiiltyneestä puusta',
+                 'Max Kukurudziak'),
+        unsplash('photo-1496483353456-90997957cf99', 'Tuli mustalla taustalla',
+                 'Tulen lähikuva pimeää taustaa vasten', 'Joshua Newton'),
+        unsplash('photo-1709548145082-04d0cde481d4', 'Hämärä ravintolasali',
+                 'Hämärästi valaistu ravintolasali pöytineen', 'Oliver Guhr')
+      ]
+    }
   ];
 
   /* Hallinta on kansiossa /hallinta/, joten sivuston juuresta tallennettu
@@ -477,40 +521,46 @@
       viesti.textContent = teksti || '';
     }
 
-    /* Ravintolan omat kuvat ruudukkona. Valinta asettaa myos kuvatekstin,
-       jottei sita tarvitse kirjoittaa kasin — sen saa toki muokata. */
+    /* Kuvat ryhmittain ruudukkona. Valinta asettaa myos kuvatekstin, jottei
+       sita tarvitse kirjoittaa kasin — sen saa toki muokata. */
     function galleria() {
       var k = tee('div', 'kuvapankki');
-      lisaa(k, tee('p', 'kuvapankki__ohje',
-                   'Ravintolan omat kuvat sivustolta. Voit myös ladata oman kuvan.'));
-      var ruudukko = tee('div', 'kuvapankki__ruudukko');
 
-      VALMIIT_KUVAT.forEach(function (v) {
-        var nappi = tee('button', 'kuvapankki__kohde' +
-                        (kohde.kuva === v.t ? ' kuvapankki__kohde--valittu' : ''));
-        nappi.type = 'button';
-        nappi.title = v.n;
-        if (kohde.kuva === v.t) nappi.setAttribute('aria-current', 'true');
+      KUVARYHMAT.forEach(function (ryhma) {
+        lisaa(k, tee('p', 'kuvapankki__otsikko', ryhma.nimi));
+        if (ryhma.vihje) lisaa(k, tee('p', 'kuvapankki__ohje', ryhma.vihje));
 
-        var pikku = document.createElement('img');
-        pikku.src = kuvaOsoite(v.t);
-        pikku.alt = '';
-        pikku.loading = 'lazy';
-        pikku.decoding = 'async';
-        lisaa(nappi, pikku, tee('span', null, v.n));
+        var ruudukko = tee('div', 'kuvapankki__ruudukko');
+        ryhma.kuvat.forEach(function (v) {
+          var nappi = tee('button', 'kuvapankki__kohde' +
+                          (kohde.kuva === v.t ? ' kuvapankki__kohde--valittu' : ''));
+          nappi.type = 'button';
+          nappi.title = v.n + (v.kuvaaja ? ' — kuva: ' + v.kuvaaja + ' / Unsplash' : '');
+          if (kohde.kuva === v.t) nappi.setAttribute('aria-current', 'true');
 
-        nappi.addEventListener('click', function () {
-          kohde.kuva = v.t;
-          kohde.kuvaAlt = v.a;
-          galleriaAuki = false;
-          piirra();
-          muutos();
-          kerro('Kuva valittu. Muista tallentaa.', 'onnistui');
+          var pikku = document.createElement('img');
+          pikku.src = kuvaOsoite(v.pikku || v.t);
+          pikku.alt = '';
+          pikku.loading = 'lazy';
+          pikku.decoding = 'async';
+          lisaa(nappi, pikku, tee('span', null, v.n));
+          if (v.kuvaaja) {
+            lisaa(nappi, tee('span', 'kuvapankki__kuvaaja', 'Kuva: ' + v.kuvaaja));
+          }
+
+          nappi.addEventListener('click', function () {
+            kohde.kuva = v.t;
+            kohde.kuvaAlt = v.a;
+            galleriaAuki = false;
+            piirra();
+            muutos();
+            kerro('Kuva valittu. Muista tallentaa.', 'onnistui');
+          });
+          lisaa(ruudukko, nappi);
         });
-        lisaa(ruudukko, nappi);
+        lisaa(k, ruudukko);
       });
 
-      lisaa(k, ruudukko);
       return k;
     }
 

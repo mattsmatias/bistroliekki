@@ -102,11 +102,22 @@ nuolinapeilla ja poistaa ruksista.
   Kirjoita alkamis- ja päättymispäivä muodossa `2026-12-24`, niin ilmoitus
   katoaa sivustolta itsestään päättymispäivän jälkeen.
   - **Kuva (vapaaehtoinen).** Kaksi tapaa:
-    - *"Valitse valmiista kuvista"* avaa ruudukon ravintolan omista kuvista,
-      jotka ovat jo sivustolla: liekit, hiillos, burgerit, lounasbuffet,
-      salaattipöytä ja lämmin pöytä sekä muutama pystykuva. Valinta täyttää
-      myös kuvatekstin valmiiksi. Nämä kuvat ovat teidän omianne, joten
-      niiden käytössä ei ole kuvapankkien ehtoja eikä tekijänoikeusriskiä.
+    - *"Valitse valmiista kuvista"* avaa kuvaruudukon, jossa on kaksi ryhmää:
+      - **Ravintolan omat kuvat** — sivustolla jo olevat valokuvanne: liekit,
+        hiillos, burgerit, lounasbuffet, salaattipöytä ja lämmin pöytä sekä
+        muutama pystykuva. Nämä ovat teidän omianne, joten niissä ei ole
+        mitään käyttöehtoja.
+      - **Ilmaiskuvat — Unsplash** — seitsemän tunnelmakuvaa (hiillosta,
+        liekkejä, grillattavaa lihaa, hämärä ravintolasali). Unsplash-lisenssi
+        sallii käytön myös kaupallisesti ilman lupaa ja ilman mainintaa.
+        Näissä ei näy teidän omaa ruokaanne, joten ne sopivat parhaiten
+        tunnelmakuviksi — esimerkiksi aukiolo- tai tapahtumailmoitukseen.
+        Kuvaajan nimi näkyy ruudussa. Kuvat haetaan Unsplashin palvelimelta,
+        eli ne eivät vie tilaa omasta sivustostanne; jos Unsplash ei jostain
+        syystä vastaa, ilmoitus näkyy pelkkänä tekstinä eikä rikkinäisenä
+        kuvana.
+
+      Kummassakin ryhmässä valinta täyttää myös kuvatekstin valmiiksi.
     - *"Lataa oma kuva"* poimii kuvan puhelimen tai koneen kuvista. Kuva
       pienennetään automaattisesti, joten isokin puhelinkuva kelpaa
       sellaisenaan. Kirjoita vielä "Mitä kuvassa näkyy" -kenttään lyhyt

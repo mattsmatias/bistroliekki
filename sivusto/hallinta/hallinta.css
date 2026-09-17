@@ -365,6 +365,20 @@ input[type='checkbox'] {
   padding-top: .8rem;
   border-top: 1px solid var(--viiva);
 }
+.kuvapankki__otsikko {
+  margin: 0 0 .35rem;
+  font-family: var(--sans);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--bone-2);
+}
+.kuvapankki__ruudukko + .kuvapankki__otsikko {
+  margin-top: 1.4rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--viiva);
+}
 .kuvapankki__ohje {
   margin: 0 0 .7rem;
   font-size: 13px;
@@ -375,6 +389,11 @@ input[type='checkbox'] {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
   gap: .6rem;
+}
+.kuvapankki__kuvaaja {
+  font-size: 10.5px;
+  line-height: 1.3;
+  color: var(--bone-4);
 }
 .kuvapankki__kohde {
   display: flex;

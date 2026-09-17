@@ -410,6 +410,20 @@
         (i.korosta ? ' uutinen--korostettu' : '') + '">' +
         kuva + sisus + '</article>';
     }).join('');
+
+    // Ilmoituksen kuva voi tulla ulkopuoliselta palvelimelta (esim. Unsplash).
+    // Jos se ei lataudu, korttiin ei jätetä rikkinäistä kuvakehystä: teksti
+    // jää näkyviin yksinään, ja pelkkä kuva -ilmoitus katoaa kokonaan.
+    $$('.uutinen__kuva img', kehys).forEach(function (img) {
+      img.addEventListener('error', function () {
+        var kortti = img.closest('.uutinen');
+        if (!kortti) return;
+        if (kortti.classList.contains('uutinen--vainkuva')) { kortti.remove(); return; }
+        var kehysKuva = img.closest('.uutinen__kuva');
+        if (kehysKuva) kehysKuva.remove();
+        kortti.classList.remove('uutinen--kuvallinen');
+      });
+    });
   }
 
   /* ---------------------------------------------------- 5. AUKIOLOLISTA */
