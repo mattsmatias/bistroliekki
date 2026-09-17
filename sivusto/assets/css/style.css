@@ -1921,7 +1921,9 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .footeri__logo { margin: 0 0 1.2rem; line-height: 0; }
 .footeri__logo img {
   width: auto;
-  height: clamp(96px, 12vw, 132px);
+  /* Oli clamp(96px, 12vw, 132px) — alatunnisteessa se vei liikaa tilaa ja
+     kilpaili ylapalkin logon kanssa. Nyt noin puolet pienempi. */
+  height: clamp(56px, 6vw, 76px);
 }
 .footeri__iskulause { color: var(--bone-3); font-size: var(--step--1); max-width: 30ch; margin-bottom: 1.6rem; }
 .footeri__otsikko {
@@ -3115,3 +3117,109 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 .tyhja-tila strong { overflow-wrap: anywhere; }
 .tietolista__lisa,
 .lounaspaiva__pvm { overflow-wrap: anywhere; }
+
+/* ========================================================================
+   25 LISÄEFEKTIT
+   Hienovaraisia liikkeitä, jotka tukevat sisältöä eivätkä vie siltä huomiota.
+   Kaikki kytkeytyy pois, jos käyttäjä on pyytänyt vähemmän liikettä.
+   ======================================================================== */
+
+/* ---------------------------------------- 25.1 PORRASTETTU PALJASTUS */
+/* Ruudukot paljastuivat aiemmin kerralla yhtena mohkaleena. Nyt kortit
+   nousevat esiin perakkain, mika ohjaa katseen luonnollisesti vasemmalta
+   oikealle. Viive on lyhyt: koko ruudukko on esilla alle sekunnissa.
+
+   Osa ruudukoista kantaa data-esiin-attribuuttia itse (galleria, kortit),
+   osa on sellaisen sisalla (lounaspaivat, saavutukset) — siksi molemmat
+   tapaukset on lueteltu erikseen. */
+[data-esiin]:is(.galleria, .kortit, .lounaspaivat, .some-ruudukko,
+                .saavutukset, .luvut) > *,
+[data-esiin] :is(.galleria, .kortit, .lounaspaivat, .some-ruudukko,
+                 .saavutukset, .luvut) > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .6s var(--ease-out), transform .6s var(--ease-out);
+}
+[data-esiin].on-nakyvissa:is(.galleria, .kortit, .lounaspaivat, .some-ruudukko,
+                             .saavutukset, .luvut) > *,
+[data-esiin].on-nakyvissa :is(.galleria, .kortit, .lounaspaivat, .some-ruudukko,
+                              .saavutukset, .luvut) > * {
+  opacity: 1;
+  transform: none;
+}
+[data-esiin].on-nakyvissa:is(.galleria, .kortit, .lounaspaivat, .some-ruudukko, .saavutukset, .luvut) > *:nth-child(2),
+[data-esiin].on-nakyvissa :is(.galleria, .kortit, .lounaspaivat, .some-ruudukko, .saavutukset, .luvut) > *:nth-child(2)  { transition-delay: 70ms; }
+[data-esiin].on-nakyvissa:is(.galleria, .kortit, .lounaspaivat, .some-ruudukko, .saavutukset, .luvut) > *:nth-child(3),
+[data-esiin].on-nakyvissa :is(.galleria, .kortit, .lounaspaivat, .some-ruudukko, .saavutukset, .luvut) > *:nth-child(3)  { transition-delay: 140ms; }
+[data-esiin].on-nakyvissa:is(.galleria, .kortit, .lounaspaivat, .some-ruudukko, .saavutukset, .luvut) > *:nth-child(4),
+[data-esiin].on-nakyvissa :is(.galleria, .kortit, .lounaspaivat, .some-ruudukko, .saavutukset, .luvut) > *:nth-child(4)  { transition-delay: 210ms; }
+[data-esiin].on-nakyvissa:is(.galleria, .kortit, .lounaspaivat, .some-ruudukko, .saavutukset, .luvut) > *:nth-child(5),
+[data-esiin].on-nakyvissa :is(.galleria, .kortit, .lounaspaivat, .some-ruudukko, .saavutukset, .luvut) > *:nth-child(5)  { transition-delay: 280ms; }
+[data-esiin].on-nakyvissa:is(.galleria, .kortit, .lounaspaivat, .some-ruudukko, .saavutukset, .luvut) > *:nth-child(n+6),
+[data-esiin].on-nakyvissa :is(.galleria, .kortit, .lounaspaivat, .some-ruudukko, .saavutukset, .luvut) > *:nth-child(n+6) { transition-delay: 350ms; }
+
+/* ------------------------------------------- 25.2 ETIKETIN VIIVA PIIRTYY */
+/* Osioiden yläetiketin hiillosviiva kasvaa esiin otsikon mukana. */
+[data-esiin] .etiketti::before {
+  width: 0;
+  transition: width .7s var(--ease-out) .15s;
+}
+[data-esiin].on-nakyvissa .etiketti::before { width: 2.4rem; }
+
+/* ------------------------------------------------ 25.3 LUKUETENEMÄPALKKI */
+/* Ohut hiillosviiva sivun ylimpänä kertoo, paljonko pitkästä sivusta
+   (ruokalista, lounaslista) on luettu. Luodaan site.js:ssä. */
+.etenema {
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: 200;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--ember-deep), var(--ember-lit));
+  pointer-events: none;
+}
+
+/* ------------------------------------------------ 25.4 RUOKALISTAN RIVIT */
+/* Rivi saa hiiren alla hennon lämpimän taustan, jolloin katse pysyy
+   rivillä nimen ja hinnan välisen matkan ajan. */
+@media (hover: hover) and (pointer: fine) {
+  .menu-rivi {
+    /* Tausta ulottuu hieman rivin reunojen yli, jottei teksti ole kiinni
+       korostuksen reunassa. */
+    margin-inline: -.9rem;
+    padding-inline: .9rem;
+    border-radius: 2px;
+    transition: background-color .3s var(--ease);
+  }
+  .menu-rivi:hover { background: rgba(233,116,59,.055); }
+
+  /* Gallerian kuva kohoaa jo ennestään — nyt myös kuva itse elää hieman. */
+  .galleria__kohde img { transition: transform .7s var(--ease-out), filter .5s var(--ease); }
+  .galleria__kohde:hover img { transform: scale(1.05); filter: brightness(1.06); }
+
+  /* Lounaspäivän kortti nousee kevyesti ja saa lämpimän reunan. */
+  .lounaspaiva {
+    transition: transform .45s var(--ease-out), border-color .45s var(--ease),
+                background-color .45s var(--ease);
+  }
+  .lounaspaiva:hover {
+    transform: translateY(-3px);
+    border-color: var(--line-strong);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-esiin]:is(.galleria, .kortit, .lounaspaivat, .some-ruudukko,
+                  .saavutukset, .luvut) > *,
+  [data-esiin] :is(.galleria, .kortit, .lounaspaivat, .some-ruudukko,
+                   .saavutukset, .luvut) > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  [data-esiin] .etiketti::before { width: 2.4rem; }
+  .etenema { display: none; }
+  .galleria__kohde:hover img,
+  .lounaspaiva:hover { transform: none; }
+}

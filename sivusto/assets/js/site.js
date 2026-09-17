@@ -1739,6 +1739,9 @@
     vierityssilmukka();
     kursorihehku();
     laskurit();
+    // Vasta sisällön rakentamisen jälkeen: sivun lopullinen korkeus ratkaisee,
+    // näytetäänkö etenemäpalkki lainkaan.
+    setTimeout(etenemapalkki, 400);
     setInterval(function () { aukiolotila(); lounastila(); }, 60000);   // tila pysyy ajan tasalla
   }
 
@@ -1828,6 +1831,43 @@
       aloita();
     }).catch(aloita);
     setTimeout(aloita, ODOTUS_MS);
+  }
+
+  /* --------------------------------------------- 25b. LUKUETENEMÄPALKKI */
+  /* Ohut hiillosviiva sivun ylimpänä kertoo, paljonko sivusta on luettu.
+     Näkyy vain sivuilla, jotka ovat selvästi ruutua pidempiä — lyhyellä
+     sivulla palkki olisi pelkkää koristetta. Palkki luodaan tässä, jotta
+     jokaisen sivun HTML:ään ei tarvitse lisätä omaa elementtiä. */
+  function etenemapalkki() {
+    if (kevyt) return;
+
+    function pituus() {
+      return Math.max(
+        document.body.scrollHeight, document.documentElement.scrollHeight
+      ) - window.innerHeight;
+    }
+    if (pituus() < window.innerHeight * 1.5) return;
+
+    var palkki = document.createElement('div');
+    palkki.className = 'etenema';
+    palkki.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(palkki);
+
+    var odottaa = false;
+    function paivita() {
+      odottaa = false;
+      var kaikki = pituus();
+      var osuus = kaikki > 0 ? Math.min(1, Math.max(0, window.scrollY / kaikki)) : 0;
+      palkki.style.transform = 'scaleX(' + osuus + ')';
+    }
+    function pyyda() {
+      if (odottaa) return;
+      odottaa = true;
+      requestAnimationFrame(paivita);
+    }
+    window.addEventListener('scroll', pyyda, { passive: true });
+    window.addEventListener('resize', pyyda, { passive: true });
+    paivita();
   }
 
   /* ------------------------------------------------ 26. KÄVIJÄLASKURI */
