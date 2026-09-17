@@ -1062,13 +1062,23 @@
     lisaa(jb, toistuva(T.ajankohtaista, function (i) {
       var kehys = tee('div');
       lisaa(kehys, syote('Otsikko', i, 'otsikko', { vihje: 'Poikkeava aukiolo' }));
-      lisaa(kehys, syote('Teksti', i, 'teksti', { alue: true, rivit: 3 }));
+      lisaa(kehys, syote('Teksti', i, 'teksti', {
+        alue: true, rivit: 4,
+        vihje: 'Kerro lyhyesti, mistä on kyse. Tyhjä rivi aloittaa uuden kappaleen.'
+      }));
       var r = tee('div', 'rivi rivi--2');
       lisaa(r, syote('Alkaa', i, 'alkaa', { vihje: '2026-12-24' }),
                syote('Päättyy', i, 'paattyy', { vihje: '2026-12-26' }));
-      lisaa(kehys, r, kuvakentta(i), valinta('Korosta ilmoitus', i, 'korosta'));
+      var rl = tee('div', 'rivi rivi--2');
+      lisaa(rl, syote('Linkki (vapaaehtoinen)', i, 'linkki',
+                      { tyyppi: 'url', vihje: 'https://…' }),
+                syote('Linkin teksti', i, 'linkkiTeksti', { vihje: 'Lue lisää' }));
+      lisaa(kehys, r, kuvakentta(i), rl, valinta('Korosta ilmoitus', i, 'korosta'));
       return kehys;
-    }, function () { return { otsikko: '', teksti: '', alkaa: '', paattyy: '', korosta: false }; },
+    }, function () {
+      return { otsikko: '', teksti: '', alkaa: '', paattyy: '',
+               linkki: '', linkkiTeksti: '', korosta: false };
+    },
        'Ei ajankohtaisia ilmoituksia.', '+ Lisää ilmoitus'));
     lisaa(k, jb);
 
@@ -1363,6 +1373,12 @@
     T.tyonAlla = T.tyonAlla || {};
     T.tekstit = T.tekstit || {};
     T.ajankohtaista = T.ajankohtaista || [];
+    // Vanhoissa ilmoituksissa ei ole linkkikenttiä. Täydennetään ne tyhjinä,
+    // jottei pelkkä välilehden avaaminen näytä tallentamattomia muutoksia.
+    T.ajankohtaista.forEach(function (i) {
+      if (typeof i.linkki !== 'string') i.linkki = '';
+      if (typeof i.linkkiTeksti !== 'string') i.linkkiTeksti = '';
+    });
     T.saavutukset = T.saavutukset || [];
     T.menu = T.menu || {};
     T.menu.osiot = T.menu.osiot || [];

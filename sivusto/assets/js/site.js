@@ -329,6 +329,11 @@
   }
 
   /* ------------------------------------------------- 4. AJANKOHTAISTA */
+  // Sama nuoli kuin sivuston muissa tekstilinkeissä (build.py: ICONS.nuoli).
+  var NUOLI = '<svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">' +
+              '<path d="M9 1l4 4-4 4M13 5H0" stroke="currentColor" stroke-width="1.4" ' +
+              'stroke-linecap="square"/></svg>';
+
   function ajankohtaista() {
     var lista = (D.ajankohtaista || []).filter(function (i) {
       if (!i.paattyy) return true;
@@ -356,11 +361,15 @@
     var osio = kehys.closest('[data-uutisosio]');
     if (osio) osio.hidden = false;
 
-    // Ilmoitusten määrä ohjaa asettelua: yksi ilmoitus levittäytyy koko
-    // leveydelle kuvan kanssa, useampi asettuu korteiksi rinnakkain.
-    kehys.setAttribute('data-maara', lista.length === 1 ? '1' : (lista.length === 2 ? '2' : '3'));
+    // Jokainen ilmoitus on oma rivinsä. Tyhjiä kenttiä ei piirretä, jottei
+    // korttiin jää otsikon tai tekstin kokoista aukkoa.
+    kehys.removeAttribute('data-maara');
 
     kehys.innerHTML = lista.map(function (i) {
+      var otsikko = (i.otsikko || '').trim();
+      var teksti  = (i.teksti  || '').trim();
+      var linkki  = (i.linkki  || '').trim();
+
       var pvm = '';
       if (i.alkaa) {
         try {
@@ -368,17 +377,38 @@
                   .format(new Date(i.alkaa + 'T00:00:00'));
         } catch (e) { pvm = i.alkaa; }
       }
+
       var kuva = i.kuva
         ? '<div class="uutinen__kuva"><img src="' + turva(polku(i.kuva)) + '" alt="' +
           merkit(i.kuvaAlt || '') + '" loading="lazy" decoding="async"></div>'
         : '';
-      return '<article class="uutinen' + (i.kuva ? ' uutinen--kuvallinen' : '') +
-        (i.korosta ? ' uutinen--korostettu' : '') + '">' + kuva +
-        '<div class="uutinen__sisus">' +
-        (pvm ? '<time datetime="' + merkit(i.alkaa) + '">' + merkit(pvm) + '</time>' : '') +
-        '<h3>' + merkit(i.otsikko || '') + '</h3>' +
-        '<p>' + merkit(i.teksti || '').replace(/\n/g, '<br>') + '</p>' +
-        '</div></article>';
+
+      // Kappalejako tyhjästä rivistä, rivinvaihto yksittäisestä.
+      var kappaleet = teksti
+        ? teksti.split(/\n\s*\n/).map(function (k) {
+            return '<p>' + merkit(k.trim()).replace(/\n/g, '<br>') + '</p>';
+          }).join('')
+        : '';
+
+      var sisus = '';
+      if (otsikko || teksti || pvm || linkki) {
+        sisus = '<div class="uutinen__sisus">' +
+          (pvm ? '<time datetime="' + merkit(i.alkaa) + '">' + merkit(pvm) + '</time>' : '') +
+          (otsikko ? '<h3>' + merkit(otsikko) + '</h3>' : '') +
+          kappaleet +
+          (linkki
+            ? '<a class="linkki uutinen__linkki" href="' + turva(linkki) + '"' +
+              (/^https?:/i.test(linkki) ? ' target="_blank" rel="noopener"' : '') + '>' +
+              merkit((i.linkkiTeksti || '').trim() || 'Lue lisää') + NUOLI + '</a>'
+            : '') +
+          '</div>';
+      }
+
+      return '<article class="uutinen' +
+        (i.kuva ? ' uutinen--kuvallinen' : '') +
+        (i.kuva && !sisus ? ' uutinen--vainkuva' : '') +
+        (i.korosta ? ' uutinen--korostettu' : '') + '">' +
+        kuva + sisus + '</article>';
     }).join('');
   }
 

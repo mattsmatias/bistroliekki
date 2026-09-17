@@ -105,11 +105,21 @@ nuolinapeilla ja poistaa ruksista.
     koneen kuvista. Kuva pienennetään automaattisesti, joten isokin
     puhelinkuva kelpaa sellaisenaan. Kirjoita vielä "Mitä kuvassa näkyy"
     -kenttään lyhyt kuvaus — se näkyy näkövammaisille ja silloin, jos kuva ei
-    lataudu. Ilman kuvaa ilmoitus näkyy sivustolla pelkkänä tekstinä; se on
-    ihan yhtä hyvä tapa.
+    lataudu. Kuva näkyy sivustolla aina kokonaan — sitä ei rajata, joten
+    juliste tai grafiikka säilyy luettavana. Ilman kuvaa ilmoitus näkyy
+    pelkkänä tekstinä; se on ihan yhtä hyvä tapa.
+  - **Linkki (vapaaehtoinen).** Jos ilmoituksesta pitää päästä eteenpäin —
+    äänestykseen, tapahtumasivulle tai vaikka omalle catering-sivulle —
+    liitä osoite tähän. "Linkin teksti" on painikkeen teksti; tyhjänä siinä
+    lukee "Lue lisää".
   - **Korosta ilmoitus.** Nostaa ilmoituksen esiin oranssilla reunaviivalla.
     Kannattaa käyttää säästeliäästi, korkeintaan yhteen ilmoitukseen
     kerrallaan.
+
+  Jokainen ilmoitus on sivustolla oma rivinsä: kuva vasemmalla, teksti
+  oikealla (puhelimessa kuva ylhäällä). Kortti on tasan sisältönsä korkuinen,
+  joten lyhyt ilmoitus pysyy lyhyenä silloinkin, kun sen vieressä on
+  kuvallinen ilmoitus.
 - **Äänestyslaatikko.** Poista valinta "Näytetään sivustolla", kun äänestys
   on ohi.
 - **Työn alla -ilmoitus.** Poista valinta, kun sivusto on valmis.
