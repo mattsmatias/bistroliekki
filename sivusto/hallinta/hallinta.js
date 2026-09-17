@@ -1058,22 +1058,33 @@
     lisaa(k, lb);
 
     // Ajankohtaista
-    var jb = lohko('Ajankohtaiset ilmoitukset', 'Poikkeusaukiolot, juhlapyhät, tapahtumat');
-    lisaa(jb, toistuva(T.ajankohtaista, function (i) {
+    var jb = lohko('Ajankohtaiset ilmoitukset',
+                   'Yksi ilmoitus = yksi laatikko sivustolla. Otsikko, teksti ja kuva ' +
+                   'kuuluvat samaan ilmoitukseen — älä tee kuvalle omaa ilmoitusta.');
+    lisaa(jb, toistuva(T.ajankohtaista, function (i, nro) {
       var kehys = tee('div');
+
+      // Otsikkorivi tekee selvaksi, mihin ilmoitukseen kentat kuuluvat.
+      var tunnus = tee('p', 'osarivi__otsikko', 'Ilmoitus ' + (nro + 1));
+      lisaa(kehys, tunnus);
+
       lisaa(kehys, syote('Otsikko', i, 'otsikko', { vihje: 'Poikkeava aukiolo' }));
       lisaa(kehys, syote('Teksti', i, 'teksti', {
         alue: true, rivit: 4,
         vihje: 'Kerro lyhyesti, mistä on kyse. Tyhjä rivi aloittaa uuden kappaleen.'
       }));
-      var r = tee('div', 'rivi rivi--2');
-      lisaa(r, syote('Alkaa', i, 'alkaa', { vihje: '2026-12-24' }),
-               syote('Päättyy', i, 'paattyy', { vihje: '2026-12-26' }));
+      // Kuva heti tekstin jalkeen: se kuuluu tahan samaan ilmoitukseen.
+      lisaa(kehys, kuvakentta(i));
+
       var rl = tee('div', 'rivi rivi--2');
       lisaa(rl, syote('Linkki (vapaaehtoinen)', i, 'linkki',
                       { tyyppi: 'url', vihje: 'https://…' }),
                 syote('Linkin teksti', i, 'linkkiTeksti', { vihje: 'Lue lisää' }));
-      lisaa(kehys, r, kuvakentta(i), rl, valinta('Korosta ilmoitus', i, 'korosta'));
+      var r = tee('div', 'rivi rivi--2');
+      lisaa(r, syote('Näytä alkaen', i, 'alkaa', { vihje: '2026-12-24' }),
+               syote('Piilota jälkeen', i, 'paattyy', { vihje: '2026-12-26' }));
+
+      lisaa(kehys, rl, r, valinta('Korosta ilmoitus', i, 'korosta'));
       return kehys;
     }, function () {
       return { otsikko: '', teksti: '', alkaa: '', paattyy: '',

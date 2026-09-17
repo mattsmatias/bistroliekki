@@ -287,6 +287,19 @@ input[type='checkbox'] {
   border-radius: var(--pyoristys);
 }
 .lista__rivi--tiivis { padding: .55rem .7rem; }
+
+/* Rivin oma otsikko: tekee selvaksi, mitka kentat kuuluvat samaan kohteeseen */
+.osarivi__otsikko {
+  margin: 0 0 .2rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--viiva);
+  font-family: var(--sans);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ember-lit);
+}
 .lista__tyokalut { display: flex; gap: .35rem; justify-content: flex-end; }
 .lista__nappi {
   width: 40px; height: 40px;
