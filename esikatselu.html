@@ -21,7 +21,11 @@
   --bone:       #F4EFE6;
   --bone-2:     #D8D0C2;
   --bone-3:     #A79C8C;
-  --bone-4:     #6F675C;
+  /* Vaalennettu #6F675C:sta. Vanha savy antoi tummaa taustaa vasten vain
+     noin 3,1–3,6:1 kontrastin, eli se jai WCAG AA:n 4,5:1 rajan alle —
+     ja juuri talla savylla on kirjoitettu mm. ruokalistan annoskuvaukset,
+     joissa lukee myos ruokavaliotiedot. Nyt kontrasti on 4,6–5,4:1. */
+  --bone-4:     #8D8376;
 
   --ember:      #C9552A;
   --ember-lit:  #E9743B;
@@ -38,7 +42,13 @@
 
   /* Maltillinen asteikko: otsikot erottuvat, mutta eivät huuda.
      Ylin porras on nyt 62 px aiemman 105 px sijaan. */
-  --step--1: clamp(.79rem, .77rem + .1vw,  .85rem);   /* 12.6 – 13.6 px */
+  /* Versaalit mikrotekstit (etiketit, napit, linkit) pysyvat pienina:
+     harvennettuna ja isoin kirjaimin ne lukevat hyvin tassa koossa. */
+  --step-label: clamp(.79rem, .77rem + .1vw,  .85rem);  /* 12.6 – 13.6 px */
+  /* Pieni leipateksti (korttien tekstit, listat, kuvaukset) oli aiemmin
+     samassa koossa kuin versaalietiketit, eli 12.6–13.6 px. Se on juoksevalle
+     tekstille liian pieni, joten sille on nyt oma, isompi porras. */
+  --step--1: clamp(.85rem, .82rem + .14vw, .93rem);     /* 13.6 – 14.9 px */
   --step-0:  clamp(1rem,   .97rem + .14vw, 1.06rem);  /*   16 – 17   px */
   --step-1:  clamp(1.1rem, 1.05rem + .24vw, 1.24rem); /* 17.6 – 19.8 px */
   --step-2:  clamp(1.3rem, 1.19rem + .5vw,  1.62rem); /* 20.8 – 26   px */
@@ -164,7 +174,7 @@ a { color: inherit; }
   align-items: center;
   gap: .75rem;
   font-family: var(--sans);
-  font-size: var(--step--1);
+  font-size: var(--step-label);
   font-weight: 500;
   letter-spacing: .18em;
   text-transform: uppercase;
@@ -231,7 +241,7 @@ a { color: inherit; }
   background: var(--nappi-bg);
   color: var(--nappi-vari);
   font-family: var(--sans);
-  font-size: var(--step--1);
+  font-size: var(--step-label);
   font-weight: 600;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -288,7 +298,7 @@ a { color: inherit; }
   display: inline-flex;
   align-items: center;
   gap: .55rem;
-  font-size: var(--step--1);
+  font-size: var(--step-label);
   font-weight: 600;
   letter-spacing: .13em;
   text-transform: uppercase;
@@ -799,7 +809,7 @@ a { color: inherit; }
 .hero__sisus { position: relative; width: 100%; }
 
 .hero__ylanimi {
-  font-size: var(--step--1);
+  font-size: var(--step-label);
   letter-spacing: .34em;
   text-transform: uppercase;
   color: #EBDCC4;
@@ -885,7 +895,7 @@ a { color: inherit; }
   display: inline-flex;
   align-items: center;
   gap: .7rem;
-  font-size: var(--step--1);
+  font-size: var(--step-label);
   font-weight: 600;
   letter-spacing: .13em;
   text-transform: uppercase;
@@ -1975,7 +1985,9 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .sivuhero--tiivis {
   padding-block: calc(var(--header-h) + clamp(1.6rem, 3.5vw, 2.8rem)) clamp(1.6rem, 3vw, 2.6rem);
 }
-.sivuhero--tiivis h1 { font-size: var(--step-3); margin-bottom: .7rem; }
+/* Sama koko kuin muidenkin alasivujen h1:lla. Aiemmin tama oli porrasta
+   pienempi, jolloin Lounas-sivun h1 jai sivun h2:ta pienemmaksi. */
+.sivuhero--tiivis h1 { font-size: var(--step-4); margin-bottom: .7rem; }
 .sivuhero--tiivis .ingressi { font-size: var(--step-0); }
 .sivuhero--tiivis .murupolku { margin-bottom: 1rem; }
 
@@ -2082,7 +2094,10 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 /* --------------------------------- Menu-sivun välilehdet ja paneelit */
 /* Välilehtirivi vierii kapealla ruudulla. Oikean reunan häivytys kertoo
    että lehtiä on lisää — ilman sitä "Juomat" jää huomaamatta. */
-.menu-kehys { position: relative; }
+/* Ruokalista pysyy yhtena keskitettyna palstana. Aiemmin lista oli
+   kiinnitetty vasempaan reunaan, jolloin leveilla naytoilla oikealle jai
+   satoja pikseleja tyhjaa ja sivu nayttI keskenerailselta. */
+.menu-kehys { position: relative; max-width: 900px; margin-inline: auto; }
 .menu-valilehdet {
   position: relative;
   display: flex;
@@ -2135,7 +2150,7 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   color: var(--bone-3);
   font-size: var(--step-0);
 }
-.menu-lista { max-width: 820px; }
+.menu-lista { max-width: 100%; }
 .menu-ryhma + .menu-ryhma { margin-top: clamp(2.6rem, 5vw, 4rem); }
 .menu-ryhma__otsikko {
   display: flex;
@@ -2264,7 +2279,9 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 
 /* ------------------------------------------ VIIKON LOUNAS (Lounas) */
 .lounasviikko__ylä { margin-bottom: clamp(1.4rem, 3vw, 2.2rem); }
-.lounasviikko__ylä .otsikko-l { margin-top: .4rem; }
+/* Sivun h1 on hero-osiossa. Talla h2:lla oli sama koko kuin h1:lla,
+   jolloin hierarkia kaantyi ylosalaisin — nyt se on porrasta pienempi. */
+.lounasviikko__ylä .otsikko-l { margin-top: .4rem; font-size: var(--step-3); line-height: 1.12; }
 /* Hinnat ja sisältö tulevat päivälistan jälkeen */
 .lounasviikko__ala { margin-top: clamp(2.4rem, 5vw, 3.6rem); }
 
@@ -2338,14 +2355,27 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 }
 
 /* Viikonpäivät */
+/* Viisi arkipaivaa kolmessa sarakkeessa jatti alariville kahden kortin
+   jalkeen kolmannen sarakkeen levyisen aukon, joka nayttI virheelta.
+   Flex-taitto kaarii kortit samaan tapaan mutta keskittaa vajaan rivin,
+   jolloin asettelu nayttaa tarkoitukselliselta. Viisi saraketta olisi
+   liian ahdas 14 annokselle, siksi enintaan kolme kerrallaan. */
 .lounaspaivat {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: clamp(1rem, 2vw, 1.4rem);
 }
-/* minmax(0,…) jotta pitkät annosnimet eivät leventäisi sarakkeita.
-   Viisi saraketta olisi liian ahdas 14 annokselle, siksi enintään kolme. */
-@media (min-width: 620px)  { .lounaspaivat { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (min-width: 1000px) { .lounaspaivat { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.lounaspaivat > * { flex: 1 1 100%; min-width: 0; }
+@media (min-width: 620px) {
+  .lounaspaivat > * { flex: 1 1 calc(50% - clamp(1rem, 2vw, 1.4rem) / 2); }
+}
+@media (min-width: 1000px) {
+  .lounaspaivat > * {
+    flex: 0 1 calc(33.333% - clamp(1rem, 2vw, 1.4rem) * 2 / 3);
+    max-width: calc(33.333% - clamp(1rem, 2vw, 1.4rem) * 2 / 3);
+  }
+}
 
 .lounaspaiva {
   padding: clamp(1.2rem, 2.2vw, 1.5rem);
