@@ -955,16 +955,14 @@ body.is-locked .mobiilipalkki { transform: translateY(115%); }
 .ilmoituspalkki strong { letter-spacing: .1em; text-transform: uppercase; font-weight: 700; }
 .ilmoituspalkki a { color: #fff; }
 
-/* Ilmoitukset ovat allekkain omina riveinaan. Vierekkaisista sarakkeista
-   luovuttiin, koska ne venyttivat lyhyen ilmoituksen kuvallisen ilmoituksen
-   korkuiseksi ja korttiin jai iso tyhja alue. Nyt jokainen kortti on tasan
-   sisaltonsa korkuinen. */
+/* Ilmoitukset ovat allekkain omina kortteinaan: kuva ylhaalla koko kortin
+   levyudelta, otsikko ja teksti sen alla. Sama asettelu joka ruudulla, joten
+   tyopoytanakyma vastaa puhelinta. Kortti on tasan sisaltonsa korkuinen. */
 .uutiset {
   display: grid;
-  gap: clamp(1rem, 2vw, 1.4rem);
-  /* Leveilla naytoilla rivi ei veny koko kuoren levyiseksi: lyhyt ilmoitus
-     nayttaisi hukkuvan tyhjaan. */
-  max-width: 62rem;
+  gap: clamp(1.2rem, 2.4vw, 1.8rem);
+  /* Kortti ei veny koko kuoren levyiseksi: lyhyt ilmoitus hukkuisi tyhjaan. */
+  max-width: 42rem;
   margin-top: clamp(1.6rem, 3vw, 2.4rem);
 }
 
@@ -977,7 +975,7 @@ body.is-locked .mobiilipalkki { transform: translateY(115%); }
   overflow: hidden;
 }
 .uutinen__sisus {
-  padding: clamp(1.3rem, 2.6vw, 2rem);
+  padding: clamp(1.3rem, 2.6vw, 1.9rem);
   min-width: 0;
 }
 .uutinen h3 { font-size: var(--step-1); margin: 0 0 .5rem; }
@@ -992,7 +990,7 @@ body.is-locked .mobiilipalkki { transform: translateY(115%); }
   color: var(--ember-lit);
 }
 .uutinen p {
-  max-width: 68ch;
+  max-width: 62ch;
   margin: 0;
   color: var(--bone-3);
   font-size: var(--step--1);
@@ -1006,41 +1004,23 @@ body.is-locked .mobiilipalkki { transform: translateY(115%); }
 
 /* Kuva nakyy aina kokonaan. Ravintola lisaa usein julisteen tai grafiikan,
    jossa on tekstia reunoja myoten — rajaava object-fit leikkaisi sen rikki,
-   joten kuva sovitetaan kehykseen ja tausta jaa sen ymparille. */
+   joten kuva sovitetaan kehykseen. Vaakakuva tayttaa kortin reunasta reunaan,
+   pystykuva asettuu keskelle tummaa taustaa. */
 .uutinen__kuva {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(.7rem, 2vw, 1.1rem);
   background: var(--char-3);
+  border-bottom: 1px solid var(--line-soft);
 }
 .uutinen__kuva img {
   display: block;
-  width: auto;
-  max-width: 100%;
-  max-height: 380px;
+  width: 100%;
+  height: auto;
+  max-height: min(560px, 78vh);
   object-fit: contain;
-  border-radius: 2px;
+  object-position: center;
 }
 
-/* Leveammalla ruudulla kuva ja teksti asettuvat rinnakkain. Kuvapalsta on
-   tarkoituksella kapea, jottei sovitetun kuvan ymparille jaa leveita
-   tyhjia reunoja. */
-@media (min-width: 720px) {
-  .uutinen--kuvallinen:not(.uutinen--vainkuva) { flex-direction: row; align-items: stretch; }
-  .uutinen--kuvallinen:not(.uutinen--vainkuva) .uutinen__kuva {
-    flex: 0 0 clamp(190px, 24%, 270px);
-    border-right: 1px solid var(--line-soft);
-  }
-  .uutinen--kuvallinen:not(.uutinen--vainkuva) .uutinen__kuva img { max-height: 260px; }
-  .uutinen--kuvallinen:not(.uutinen--vainkuva) .uutinen__sisus {
-    flex: 1 1 auto;
-    align-self: center;
-  }
-}
-
-/* Pelkka kuva ilman otsikkoa ja tekstia: kuva saa koko leveyden */
-.uutinen--vainkuva .uutinen__kuva img { max-height: 440px; }
+/* Pelkka kuva ilman otsikkoa ja tekstia: ei alareunan viivaa */
+.uutinen--vainkuva .uutinen__kuva { border-bottom: 0; }
 
 .tyhja-tila {
   border: 1px dashed var(--line);
