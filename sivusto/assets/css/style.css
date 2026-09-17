@@ -1021,39 +1021,24 @@ body.is-locked .mobiilipalkki { transform: translateY(115%); }
    jossa on tekstia reunoja myoten — rajaava object-fit leikkaisi sen rikki,
    joten kuva sovitetaan kehykseen. Vaakakuva tayttaa kortin reunasta reunaan,
    pystykuva asettuu keskelle tummaa taustaa. */
-/* Kuvakehys: aina sama koko, kuva aina kokonaisena.
-   Nama kaksi vaatimusta ovat ristiriidassa vain jos reunoille jatetaan
-   tyhjaa. Siksi tausta taytetaan samasta kuvasta tehdyllä sumealla ja
-   tummennetulla suurennoksella — kehys nayttaa taydelta, eika julisteen
-   reunoihin asti ulottuvasta tekstista leikkaannu mitaan. */
 .uutinen__kuva {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
   background: var(--char-3);
   border-bottom: 1px solid var(--line-soft);
-}
-.uutinen__kuva::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: var(--tausta);
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.15);
-  filter: blur(26px) saturate(1.15) brightness(.5);
 }
 /* Kuvakehys on aina saman kokoinen riippumatta siita, onko lisatty kuva
    pysty, vaaka vai nelio. Nain vierekkaiset ilmoitukset nayttavat samalta
    eika rivi hypi. object-fit: contain pitaa kuvan kokonaisena — juliste,
    jossa on tekstia reunoja myoten, ei siis leikkaudu; sen sijaan kehyksen
    reunoille jaa tummaa taustaa. */
+/* Kuva tayttaa laatikon reunasta reunaan ja sailyy kokonaisena: korkeus
+   seuraa kuvan omaa mittasuhdetta. Katto on vain varmistus, jottei
+   poikkeuksellisen kapea ja korkea kuva venyta korttia loputtomiin. */
 .uutinen__kuva img {
-  position: relative;
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
+  max-height: 560px;
+  object-fit: cover;
   object-position: center;
 }
 
