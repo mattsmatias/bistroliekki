@@ -3266,6 +3266,61 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
    nauhan paalla. Vaalealla varalevylla se pitaa kaantaa tummaksi. */
 .tunnusmerkki--varalla .r-ribbon_title { color: var(--ink) !important; }
 
+/* --------------------------------------------- 25.6 GOOGLE-ARVOSTELUT */
+/* Ravintolan itse yllapitama arvosana ja linkit Googleen. Osio piirtyy
+   vain jos arvosana on taytetty (site.js), joten tyhjaa laatikkoa ei
+   voi jaada nakyviin. */
+.google-arvio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .55rem;
+  text-align: center;
+}
+.google-arvio__luku {
+  margin: 0;
+  font-family: var(--display);
+  line-height: 1;
+  color: var(--bone);
+}
+.google-arvio__luku strong {
+  font-size: clamp(2.6rem, 6vw, 3.6rem);
+  font-weight: 500;
+}
+.google-arvio__max {
+  margin-left: .35rem;
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  color: var(--bone-4);
+}
+.google-arvio__maara {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--bone-3);
+}
+.google-arvio .napit { margin-top: 1.1rem; justify-content: center; }
+
+/* Tahtirivi: kaksi paallekkaista riviä, joista paallimmaisen leveys
+   kertoo arvosanan. Nain puolikkaat tahdet syntyvat ilman erillisia
+   kuvia tai kirjastoja. */
+.tahdet {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+.tahdet__tyhja { color: var(--line-strong); display: block; }
+.tahdet__taysi {
+  position: absolute;
+  inset: 0 auto 0 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--ember-lit);
+}
+.tahdet svg { display: inline-block; vertical-align: top; }
+
 .sivu[hidden]{display:none!important}
 .esikatselu-huomio{position:fixed;left:0;right:0;bottom:0;z-index:9600;background:rgba(12,10,9,.94);
   -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid rgba(244,239,230,.1);
@@ -3546,6 +3601,17 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   </div>
   <div class="kuori">
     <div class="galleria" data-galleria="6" data-esiin></div>
+  </div>
+</section>
+
+<!-- ================================================ GOOGLE-ARVOSTELUT -->
+<!-- Arvosana tulee content.js:n google-lohkosta ja on ravintolan itse
+     yllapitama. Tyhja arvosana poistaa koko osion sivulta. -->
+<section class="osio osio--tiivis viiva-ylä" aria-labelledby="google-arviot">
+  <div class="kuori keskita" data-esiin>
+    <p class="etiketti etiketti--keskellä">Asiakkaiden arviot</p>
+    <h2 class="otsikko-m" id="google-arviot">Mitä Googlessa sanotaan</h2>
+    <div data-google style="margin-top:clamp(1.6rem,3vw,2.2rem)"></div>
   </div>
 </section>
 
@@ -4338,6 +4404,17 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   </div>
 </section>
 
+<!-- ================================================ GOOGLE-ARVOSTELUT -->
+<!-- Arvosana tulee content.js:n google-lohkosta ja on ravintolan itse
+     yllapitama. Tyhja arvosana poistaa koko osion sivulta. -->
+<section class="osio osio--tiivis viiva-ylä" aria-labelledby="google-arviot-yhteys">
+  <div class="kuori keskita" data-esiin>
+    <p class="etiketti etiketti--keskellä">Asiakkaiden arviot</p>
+    <h2 class="otsikko-m" id="google-arviot-yhteys">Mitä Googlessa sanotaan</h2>
+    <div data-google style="margin-top:clamp(1.6rem,3vw,2.2rem)"></div>
+  </div>
+</section>
+
 </div><div class="sivu" data-sivu="palaute" data-otsikko="Palaute — Bistro Liekki" hidden>
 <!-- ===================================================================
      PALAUTE — OHJAUSSIVU
@@ -4736,6 +4813,21 @@ window.LIEKKI = {
   /* ------------------------------------------------------------------ some */
   /* Tyhjä osoite ('') piilottaa kyseisen kanavan ikonin ja kortin kokonaan.
      Lisää osoite, niin se ilmestyy sivulle itsestään. */
+  /* Google-arvostelut.
+     Sivusto EI hae arvosteluja Googlen rajapinnasta: Googlen ehdot kieltävät
+     niiden tallentamisen, jolloin ne pitäisi hakea uudelleen joka
+     sivulatauksella — se maksaisi kävijämäärän mukaan ja hidastaisi sivua.
+     Sen sijaan tässä on ravintolan itse ylläpitämä arvosana ja linkit
+     Googleen. Arvosana ja määrä päivitetään hallintapaneelista.
+     Tyhjä arvosana piilottaa koko osion, joten sivulla ei koskaan näy
+     keksittyä lukua. */
+  google: {
+    arvosana:        '',     // esim. 4,6 — katso Google Mapsista ja päivitä
+    maara:           '',     // arvostelujen määrä, esim. 312
+    linkki:          'https://maps.google.com/?cid=14154760237252176423',
+    arvostelulinkki: 'https://www.google.com/maps/place//data=!4m3!3m2!1s0x469207bf4ea82d11:0xc46fcf70ce3d6a27!12e1?source=g.page.m.nr._'
+  },
+
   some: {
     facebook:  'https://www.facebook.com/BistroLiekkiTalvikkitie',
     instagram: 'https://www.instagram.com/bistroliekkitalvikkitie/',
@@ -7022,6 +7114,7 @@ window.LIEKKI = {
     // näytetäänkö etenemäpalkki lainkaan.
     setTimeout(etenemapalkki, 400);
     tunnusmerkki();
+    googleArvostelut();
     setInterval(function () { aukiolotila(); lounastila(); }, 60000);   // tila pysyy ajan tasalla
   }
 
@@ -7111,6 +7204,66 @@ window.LIEKKI = {
       aloita();
     }).catch(aloita);
     setTimeout(aloita, ODOTUS_MS);
+  }
+
+  /* ------------------------------------------- 24z. GOOGLE-ARVOSTELUT */
+  /* Osio piirretään vain, jos ravintola on täyttänyt arvosanan. Tyhjänä
+     koko osio poistuu sivulta — näin sivulla ei voi koskaan näkyä
+     paikkamerkkiä eikä keksittyä lukua.
+
+     Tähtirivi piirretään yhdestä SVG:stä, jonka täyttöaste seuraa
+     arvosanaa. Ruudunlukijalle riittää tekstimuotoinen arvosana, joten
+     tähdet on merkitty aria-hiddeniksi. */
+  function tahdet(arvosana) {
+    var osuus = Math.max(0, Math.min(1, arvosana / 5)) * 100;
+    var tahti = 'M10 1.6l2.47 5.28 5.53.78-4 4.1.95 5.84L10 14.83l-4.95 2.77.95-5.84-4-4.1 5.53-.78z';
+    var yksi = '<svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">' +
+               '<path d="' + tahti + '" fill="currentColor"/></svg>';
+    var rivi = '';
+    for (var i = 0; i < 5; i++) rivi += yksi;
+    return '<span class="tahdet" aria-hidden="true">' +
+             '<span class="tahdet__tyhja">' + rivi + '</span>' +
+             '<span class="tahdet__taysi" style="width:' + osuus + '%">' + rivi + '</span>' +
+           '</span>';
+  }
+
+  function googleArvostelut() {
+    var kehykset = $$('[data-google]');
+    if (!kehykset.length) return;
+
+    var g = D.google || {};
+    var arvosana = String(g.arvosana || '').trim();
+    var luku = parseFloat(arvosana.replace(',', '.'));
+
+    if (!arvosana || !isFinite(luku)) {
+      kehykset.forEach(function (k) {
+        var osio = k.closest('.osio') || k;
+        if (osio.parentNode) osio.parentNode.removeChild(osio);
+      });
+      return;
+    }
+
+    var maara = String(g.maara || '').trim();
+    var linkki = (g.linkki || '').trim();
+    var arvostelu = (g.arvostelulinkki || '').trim();
+
+    kehykset.forEach(function (k) {
+      k.innerHTML =
+        '<div class="google-arvio">' +
+          '<p class="google-arvio__luku"><strong>' + merkit(arvosana) + '</strong>' +
+            '<span class="google-arvio__max">/ 5</span></p>' +
+          tahdet(luku) +
+          '<p class="google-arvio__maara">' +
+            (maara ? merkit(maara) + ' arvostelua Googlessa' : 'Arvostelut Googlessa') +
+          '</p>' +
+          '<div class="napit">' +
+            (linkki ? '<a class="nappi nappi--hiljainen" href="' + turva(linkki) +
+                      '" target="_blank" rel="noopener"><span>Lue arvostelut</span></a>' : '') +
+            (arvostelu ? '<a class="nappi" href="' + turva(arvostelu) +
+                      '" target="_blank" rel="noopener"><span>Arvostele meidät</span></a>' : '') +
+          '</div>' +
+        '</div>';
+    });
   }
 
   /* ------------------------------------------ 25a. TUNNUSTUSMERKKI */

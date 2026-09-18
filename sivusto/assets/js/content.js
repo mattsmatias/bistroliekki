@@ -213,6 +213,21 @@ window.LIEKKI = {
   /* ------------------------------------------------------------------ some */
   /* Tyhjä osoite ('') piilottaa kyseisen kanavan ikonin ja kortin kokonaan.
      Lisää osoite, niin se ilmestyy sivulle itsestään. */
+  /* Google-arvostelut.
+     Sivusto EI hae arvosteluja Googlen rajapinnasta: Googlen ehdot kieltävät
+     niiden tallentamisen, jolloin ne pitäisi hakea uudelleen joka
+     sivulatauksella — se maksaisi kävijämäärän mukaan ja hidastaisi sivua.
+     Sen sijaan tässä on ravintolan itse ylläpitämä arvosana ja linkit
+     Googleen. Arvosana ja määrä päivitetään hallintapaneelista.
+     Tyhjä arvosana piilottaa koko osion, joten sivulla ei koskaan näy
+     keksittyä lukua. */
+  google: {
+    arvosana:        '',     // esim. 4,6 — katso Google Mapsista ja päivitä
+    maara:           '',     // arvostelujen määrä, esim. 312
+    linkki:          'https://maps.google.com/?cid=14154760237252176423',
+    arvostelulinkki: 'https://www.google.com/maps/place//data=!4m3!3m2!1s0x469207bf4ea82d11:0xc46fcf70ce3d6a27!12e1?source=g.page.m.nr._'
+  },
+
   some: {
     facebook:  'https://www.facebook.com/BistroLiekkiTalvikkitie',
     instagram: 'https://www.instagram.com/bistroliekkitalvikkitie/',

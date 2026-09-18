@@ -148,6 +148,18 @@ Yhteystiedot, linkit, some-osoitteet, saavutukset ja sivujen tekstit.
 - Puhelinnumeron soittolinkki muodostuu itsestään — kirjoita numero vain
   kerran.
 - Tyhjäksi jätetty some-osoite piilottaa kyseisen kanavan sivustolta.
+- **Google-arvostelut.** Arvosana ja arvostelujen määrä kirjoitetaan käsin.
+  Katso ne Google Mapsista ja kirjoita samassa muodossa kuin Google näyttää
+  ne, esimerkiksi `4,6` ja `312`. Osio näkyy etusivulla ja Yhteys-sivulla.
+  **Tyhjä arvosana piilottaa koko osion**, joten sivulla ei voi näkyä
+  keksittyä lukua. Luku ei päivity itsestään — käy päivittämässä se
+  esimerkiksi kerran kuussa.
+
+  > Miksei arvosana päivity automaattisesti? Googlen käyttöehdot kieltävät
+  > arvostelujen tallentamisen, joten ne pitäisi hakea Googlelta uudelleen
+  > jokaisella sivulatauksella. Se maksaisi kävijämäärän mukaan ja hidastaisi
+  > sivua. Käsin ylläpidetty luku on tähän tarkoitukseen kevyempi ja
+  > ilmainen.
 - Sivujen tekstikentät: tyhjä kenttä tarkoittaa, että sivustolla näkyy
   alkuperäinen teksti. Kirjoita kenttään vain jos haluat muuttaa tekstiä.
 - Rivinvaihto tekstikentässä tarkoittaa rivinvaihtoa myös sivulla.

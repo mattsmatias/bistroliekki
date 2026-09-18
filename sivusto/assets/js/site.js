@@ -1743,6 +1743,7 @@
     // näytetäänkö etenemäpalkki lainkaan.
     setTimeout(etenemapalkki, 400);
     tunnusmerkki();
+    googleArvostelut();
     setInterval(function () { aukiolotila(); lounastila(); }, 60000);   // tila pysyy ajan tasalla
   }
 
@@ -1832,6 +1833,66 @@
       aloita();
     }).catch(aloita);
     setTimeout(aloita, ODOTUS_MS);
+  }
+
+  /* ------------------------------------------- 24z. GOOGLE-ARVOSTELUT */
+  /* Osio piirretään vain, jos ravintola on täyttänyt arvosanan. Tyhjänä
+     koko osio poistuu sivulta — näin sivulla ei voi koskaan näkyä
+     paikkamerkkiä eikä keksittyä lukua.
+
+     Tähtirivi piirretään yhdestä SVG:stä, jonka täyttöaste seuraa
+     arvosanaa. Ruudunlukijalle riittää tekstimuotoinen arvosana, joten
+     tähdet on merkitty aria-hiddeniksi. */
+  function tahdet(arvosana) {
+    var osuus = Math.max(0, Math.min(1, arvosana / 5)) * 100;
+    var tahti = 'M10 1.6l2.47 5.28 5.53.78-4 4.1.95 5.84L10 14.83l-4.95 2.77.95-5.84-4-4.1 5.53-.78z';
+    var yksi = '<svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">' +
+               '<path d="' + tahti + '" fill="currentColor"/></svg>';
+    var rivi = '';
+    for (var i = 0; i < 5; i++) rivi += yksi;
+    return '<span class="tahdet" aria-hidden="true">' +
+             '<span class="tahdet__tyhja">' + rivi + '</span>' +
+             '<span class="tahdet__taysi" style="width:' + osuus + '%">' + rivi + '</span>' +
+           '</span>';
+  }
+
+  function googleArvostelut() {
+    var kehykset = $$('[data-google]');
+    if (!kehykset.length) return;
+
+    var g = D.google || {};
+    var arvosana = String(g.arvosana || '').trim();
+    var luku = parseFloat(arvosana.replace(',', '.'));
+
+    if (!arvosana || !isFinite(luku)) {
+      kehykset.forEach(function (k) {
+        var osio = k.closest('.osio') || k;
+        if (osio.parentNode) osio.parentNode.removeChild(osio);
+      });
+      return;
+    }
+
+    var maara = String(g.maara || '').trim();
+    var linkki = (g.linkki || '').trim();
+    var arvostelu = (g.arvostelulinkki || '').trim();
+
+    kehykset.forEach(function (k) {
+      k.innerHTML =
+        '<div class="google-arvio">' +
+          '<p class="google-arvio__luku"><strong>' + merkit(arvosana) + '</strong>' +
+            '<span class="google-arvio__max">/ 5</span></p>' +
+          tahdet(luku) +
+          '<p class="google-arvio__maara">' +
+            (maara ? merkit(maara) + ' arvostelua Googlessa' : 'Arvostelut Googlessa') +
+          '</p>' +
+          '<div class="napit">' +
+            (linkki ? '<a class="nappi nappi--hiljainen" href="' + turva(linkki) +
+                      '" target="_blank" rel="noopener"><span>Lue arvostelut</span></a>' : '') +
+            (arvostelu ? '<a class="nappi" href="' + turva(arvostelu) +
+                      '" target="_blank" rel="noopener"><span>Arvostele meidät</span></a>' : '') +
+          '</div>' +
+        '</div>';
+    });
   }
 
   /* ------------------------------------------ 25a. TUNNUSTUSMERKKI */

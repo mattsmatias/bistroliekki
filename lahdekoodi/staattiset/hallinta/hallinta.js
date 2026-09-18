@@ -22,7 +22,8 @@
   var RIVIT = {
     perustiedot: ['nimi', 'iskulause', 'perustettu', 'osoite', 'puhelin', 'puhelinHref',
                   'varausPuhelin', 'varausPuhelinHref', 'sahkoposti', 'keittioSahkoposti',
-                  'linkit', 'some', 'someUpotukset', 'instagramWidget', 'instagramJulkaisut'],
+                  'linkit', 'some', 'google', 'someUpotukset', 'instagramWidget',
+                  'instagramJulkaisut'],
     aukioloajat: ['aukioloajat', 'keittioSulkeutuuEnnen', 'lounas'],
     lounaslista: ['lounaslista'],
     menu:        ['menu'],
@@ -1296,6 +1297,27 @@
       syote('Kartta', T.linkit, 'kartta', { tyyppi: 'url' }));
     lisaa(k, lb);
 
+    /* Google-arvostelut. Sivusto ei hae arvosanaa Googlelta, koska Googlen
+       ehdot kieltavat arvostelujen tallentamisen — silloin ne pitaisi hakea
+       uudelleen joka sivulatauksella. Arvosana yllapidetaan tassa kasin. */
+    var gb = lohko('Google-arvostelut',
+                   'Tyhjä arvosana piilottaa koko osion etusivulta ja Yhteys-sivulta');
+    lisaa(gb, ohjelaatikko('Mistä arvosanan saa', [
+      'Avaa ravintolan kohta Google Mapsissa. Arvosana ja arvostelujen määrä lukevat nimen alla.',
+      'Kirjoita arvosana samassa muodossa kuin Google näyttää sen, esimerkiksi 4,6.',
+      'Luku ei päivity itsestään — käy päivittämässä se silloin tällöin, esimerkiksi kerran kuussa.',
+      'Jos jätät arvosanan tyhjäksi, osiota ei näytetä lainkaan. Sivulla ei siis koskaan näy vanhentunutta tai keksittyä lukua.'
+    ]));
+    var gr = tee('div', 'rivi rivi--2');
+    lisaa(gr, syote('Arvosana', T.google, 'arvosana', { vihje: '4,6' }),
+              syote('Arvostelujen määrä', T.google, 'maara', { vihje: '312' }));
+    lisaa(gb, gr,
+      syote('Linkki arvosteluihin', T.google, 'linkki', {
+        tyyppi: 'url', apu: 'Ravintolan sivu Google Mapsissa.' }),
+      syote('Linkki arvostelun jättämiseen', T.google, 'arvostelulinkki', {
+        tyyppi: 'url', apu: 'Googlen antama "jätä arvostelu" -osoite.' }));
+    lisaa(k, gb);
+
     var sb = lohko('Sosiaalinen media', 'Tyhjä osoite piilottaa kanavan');
     lisaa(sb,
       syote('Facebook', T.some, 'facebook', { tyyppi: 'url' }),
@@ -1705,6 +1727,10 @@
     T.osoite = T.osoite || {};
     T.linkit = T.linkit || {};
     T.some = T.some || {};
+    T.google = T.google || {};
+    ['arvosana', 'maara', 'linkki', 'arvostelulinkki'].forEach(function (kentta) {
+      if (typeof T.google[kentta] !== 'string') T.google[kentta] = '';
+    });
     T.lounas = T.lounas || {};
     T.aanestys = T.aanestys || {};
     T.tyonAlla = T.tyonAlla || {};

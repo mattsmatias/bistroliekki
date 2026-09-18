@@ -3261,3 +3261,58 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 /* Ravintolan nimi on merkissa valkoinen, koska se on normaalisti tumman
    nauhan paalla. Vaalealla varalevylla se pitaa kaantaa tummaksi. */
 .tunnusmerkki--varalla .r-ribbon_title { color: var(--ink) !important; }
+
+/* --------------------------------------------- 25.6 GOOGLE-ARVOSTELUT */
+/* Ravintolan itse yllapitama arvosana ja linkit Googleen. Osio piirtyy
+   vain jos arvosana on taytetty (site.js), joten tyhjaa laatikkoa ei
+   voi jaada nakyviin. */
+.google-arvio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .55rem;
+  text-align: center;
+}
+.google-arvio__luku {
+  margin: 0;
+  font-family: var(--display);
+  line-height: 1;
+  color: var(--bone);
+}
+.google-arvio__luku strong {
+  font-size: clamp(2.6rem, 6vw, 3.6rem);
+  font-weight: 500;
+}
+.google-arvio__max {
+  margin-left: .35rem;
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  color: var(--bone-4);
+}
+.google-arvio__maara {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--bone-3);
+}
+.google-arvio .napit { margin-top: 1.1rem; justify-content: center; }
+
+/* Tahtirivi: kaksi paallekkaista riviä, joista paallimmaisen leveys
+   kertoo arvosanan. Nain puolikkaat tahdet syntyvat ilman erillisia
+   kuvia tai kirjastoja. */
+.tahdet {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+.tahdet__tyhja { color: var(--line-strong); display: block; }
+.tahdet__taysi {
+  position: absolute;
+  inset: 0 auto 0 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--ember-lit);
+}
+.tahdet svg { display: inline-block; vertical-align: top; }
