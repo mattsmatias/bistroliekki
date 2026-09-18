@@ -1408,8 +1408,14 @@
   }
 
   /* Muutos prosentteina. Nollasta kasvamiselle ei ole mielekasta
-     prosenttilukua, joten se merkitaan erikseen. */
-  function muutos(nyt, ennen) {
+     prosenttilukua, joten se merkitaan erikseen.
+
+     HUOM nimi: tata EI saa nimeta muutos():ksi. Samannimisia funktioita on
+     vain yksi per naky, ja myohempi maarittely korvaa aiemman koko
+     tiedostossa. Aiemmin tama peitti tallennustilan muutos()-funktion,
+     jolloin kenttien muokkaus ei enaa merkinnyt tallentamattomia
+     muutoksia eivatka Tallenna- ja Peru-painikkeet aktivoituneet. */
+  function muutosProsentti(nyt, ennen) {
     if (!ennen) return { tila: nyt ? 'uusi' : 'sama', teksti: nyt ? '—' : '—' };
     var p = Math.round((nyt - ennen) / ennen * 100);
     return {
@@ -1508,15 +1514,15 @@
     var ruudukko = tee('div', 'kpit');
     lisaa(ruudukko,
       kpiKortti('Tänään', tanaanS.nayttokerrat,
-                tanaanS.kaynnit + ' käyntiä', muutos(tanaanS.nayttokerrat, eilenS.nayttokerrat)),
+                tanaanS.kaynnit + ' käyntiä', muutosProsentti(tanaanS.nayttokerrat, eilenS.nayttokerrat)),
       kpiKortti('Eilen', eilenS.nayttokerrat,
                 eilenS.kaynnit + ' käyntiä', null),
       kpiKortti('7 päivää', vk.nayttokerrat,
                 'edelliset 7 pv: ' + vkEnnen.nayttokerrat,
-                muutos(vk.nayttokerrat, vkEnnen.nayttokerrat)),
+                muutosProsentti(vk.nayttokerrat, vkEnnen.nayttokerrat)),
       kpiKortti('Tässä kuussa', kk.nayttokerrat,
                 'viime kuun ' + paiviaKuluvassa + ' ensimmäistä päivää: ' + kkEnnen.nayttokerrat,
-                muutos(kk.nayttokerrat, kkEnnen.nayttokerrat)));
+                muutosProsentti(kk.nayttokerrat, kkEnnen.nayttokerrat)));
     lisaa(lb, ruudukko);
     lisaa(lb, tee('p', 'lohko__vihje',
       'Isot luvut ovat näyttökertoja eli avattuja sivuja. Vertailu on ' +
@@ -1746,6 +1752,15 @@
     lisaa(lb, tee('p', 'lohko__vihje',
       'Luku on käyntien määrä eli montako kertaa sivustolle tultiin ' +
       'kyseisen kanavan kautta. Kanava kirjataan kerran selailukertaa kohden.'));
+    /* Nama kaksi rivia jaavat muuten arvailun varaan. Vihjeteksti nakyy
+       myos puhelimessa, toisin kuin title-attribuutti. */
+    if (lista.some(function (x) { return x.lahde === 'suora'; })) {
+      lisaa(lb, tee('p', 'lohko__vihje',
+        'Suoraan osoitteella = kävijä kirjoitti osoitteen, avasi kirjanmerkin ' +
+        'tai tuli sovelluksesta, joka ei kerro lähdettä. Instagramin ja ' +
+        'Facebookin omat selaimet eivät useinkaan kerro — merkitse ' +
+        'mainoslinkit ?utm_source=instagram, niin ne erottuvat tästä.'));
+    }
     return lb;
   }
 

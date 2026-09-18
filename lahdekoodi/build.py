@@ -28,6 +28,34 @@ def versio():
                 h.update(f.read())
     return h.hexdigest()[:8]
 
+
+def versioi_hallinta():
+    """Sama välimuistin ohitus hallintapaneelille kuin sivustolle.
+
+    Hallintasivu kopioidaan sellaisenaan kansiosta staattiset/, joten sen
+    omat tiedostot latautuivat aiemmin ilman ?v=-tunnistetta. Selain saattoi
+    siis näyttää vanhaa hallinta.js:ää korjauksen julkaisun jälkeenkin —
+    ravintolan näkökulmasta se näyttäisi siltä, ettei korjaus tehnyt mitään.
+    Tässä tunniste liitetään paneelin omiin tiedostoihin erikseen, koska ne
+    muuttuvat eri tahtiin kuin sivuston tyylit."""
+    juuri = os.path.dirname(os.path.abspath(__file__))
+    kansio = os.path.join(juuri, "site", "hallinta")
+    sivu = os.path.join(kansio, "index.html")
+    if not os.path.isfile(sivu):
+        return
+    with open(sivu, encoding="utf-8") as f:
+        teksti = f.read()
+    for nimi in ("hallinta.css", "hallinta.js"):
+        tied = os.path.join(kansio, nimi)
+        if not os.path.isfile(tied):
+            continue
+        with open(tied, "rb") as f:
+            tunnus = hashlib.sha1(f.read()).hexdigest()[:8]
+        teksti = teksti.replace('href="%s"' % nimi, 'href="%s?v=%s"' % (nimi, tunnus))
+        teksti = teksti.replace('src="%s"' % nimi, 'src="%s?v=%s"' % (nimi, tunnus))
+    with open(sivu, "w", encoding="utf-8") as f:
+        f.write(teksti)
+
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "sisalto")
 OUT = os.path.join(ROOT, "site")
@@ -459,6 +487,7 @@ def build():
                 shutil.copy2(lahde, os.path.join(OUT, name))
 
     VER = versio()
+    versioi_hallinta()
 
     for page in PAGES:
         slug = page["slug"]
