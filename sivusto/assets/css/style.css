@@ -1354,7 +1354,7 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   display: grid;
   gap: clamp(1.6rem, 3vw, 2.6rem);
   align-items: end;
-  margin-bottom: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: clamp(1.6rem, 3vw, 2.4rem);
 }
 @media (min-width: 900px) { .some-yla { grid-template-columns: 1fr auto; } }
 .some-yla__teksti { max-width: 46ch; }
@@ -1409,13 +1409,27 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 @media (min-width: 1080px) { .some-ruudukko { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 .some-kortti {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: var(--char);
   border: 1px solid var(--line-soft);
   border-radius: 3px;
   overflow: hidden;
+  transition: border-color .45s var(--ease), transform .45s var(--ease-out);
 }
+/* Kapea hiilloksen juova kortin ylareunassa. Se sitoo kortit sivuston
+   muuhun ilmeeseen — ilman sita ne ovat pelkkia tummia laatikoita. */
+.some-kortti::before {
+  content: '';
+  position: absolute; left: 0; right: 0; top: 0; height: 2px; z-index: 3;
+  background: linear-gradient(90deg,
+      rgba(201,85,42,0), var(--ember) 35%, var(--ember-lit) 60%, rgba(201,85,42,0));
+  opacity: .55;
+  transition: opacity .45s var(--ease);
+}
+.some-kortti:hover { border-color: var(--line); transform: translateY(-3px); }
+.some-kortti:hover::before { opacity: 1; }
 .some-kortti__ylä {
   display: flex;
   align-items: center;
@@ -1435,7 +1449,7 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
 .some-kortti__merkki svg { width: 16px; height: 16px; }
 .some-kortti__nimi {
   font-family: var(--sans);
-  font-size: .72rem;
+  font-size: .78rem;
   font-weight: 600;
   letter-spacing: .16em;
   text-transform: uppercase;
@@ -1451,23 +1465,33 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   padding-inline: .35rem;
   margin-right: -.35rem;
   font-family: var(--sans);
-  font-size: .68rem;
+  font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--bone-4);
+  color: var(--bone-3);
   transition: color .3s var(--ease);
 }
 .some-kortti__linkki:hover { color: var(--ember-lit); }
 .some-kortti__linkki svg { transition: transform .3s var(--ease-out); }
 .some-kortti__linkki:hover svg { transform: translateX(3px); }
 .some-kortti__sisus {
-  padding: 1rem;
+  padding: .85rem;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  background: var(--char-3);
 }
+/* Facebookin ja Instagramin upotukset piirtyvät niiden omassa vaaleassa
+   ulkoasussa, eikä sitä voi tyylitellä iframen sisältä. Himmennetään ne
+   aavistuksen, jotta valkoinen laatikko ei revi silmiä muuten tummalla
+   sivulla — osoitettaessa upotus palaa täyteen kirkkauteen. */
+.some-kortti__sisus iframe {
+  filter: brightness(.88) saturate(.94) contrast(1.02);
+  transition: filter .45s var(--ease);
+}
+.some-kortti:hover .some-kortti__sisus iframe { filter: none; }
 .some-kortti__sisus > *:not([hidden]) { flex: 1 1 auto; min-height: 0; }
 
 /* TikTok-kortin pystyvideot ovat luonnostaan muita korkeampia — rajataan
