@@ -1815,7 +1815,16 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
    JÄLKEEN, jotta se voittaa kaskadissa. */
 @media (min-width: 720px) {
   .some-kortti__sisus {
-    height: clamp(360px, 33vw, 470px);
+    /* Yhteinen korkeus kaikille kolmelle kortille. Mitoitettu TikTokin
+       oman profiiliupotuksen mukaan: siinä on tunnus, luvut, esittely,
+       videorivi ja alapalkki, eikä se mahtunut entiseen 470 px:iin
+       vaan jäi leikatuksi. Facebook pyytää korkeutensa tästä samasta
+       mitasta (site.js), joten kortit pysyvät keskenään samoina. */
+    /* TikTokin upotuksen sisalto on kutakuinkin vakiokorkuinen leveydesta
+       riippumatta (videorivi vierii sivusuunnassa), joten korkeus ei saa
+       kutistua kapeammalla ruudulla — muuten juuri se kortti jaa
+       leikatuksi. Siksi alaraja on korkea. */
+    height: clamp(505px, 38vw, 550px);
     flex: 0 0 auto;
     overflow: hidden;
   }
@@ -1842,6 +1851,35 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   }
   /* Kortin ylätunnisteen "Avaa" kertoo saman — turha rivi pois. */
   .some-kortti[data-some-kortti="tiktok"] .tiktok-vara-teksti { display: none; }
+
+  /* TikTokin oma profiiliupotus. Se on se, joka oikeasti renderöityy,
+     kun content.js:ssä ei ole erikseen valittuja videoita. TikTok antaa
+     iframelle oman leveyden ja korkeuden rivityyleinä, joten ne on
+     ohitettava !importantilla — muuten kortti jää eri kokoiseksi kuin
+     Facebook- ja Instagram-kortit. */
+  .some-kortti[data-some-kortti="tiktok"] .tiktok-syote {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  .some-kortti[data-some-kortti="tiktok"] .tiktok-syote > * {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+  }
+  .some-kortti[data-some-kortti="tiktok"] .tiktok-syote blockquote.tiktok-embed {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  .some-kortti[data-some-kortti="tiktok"] .tiktok-syote iframe {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
 
   /* Instagram: neljä kuvaa täyttää alueen kahtena rivinä */
   .some-ig:not(.some-ig--upotus) { grid-template-rows: 1fr 1fr; height: 100%; }
