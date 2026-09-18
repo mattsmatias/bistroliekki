@@ -1742,6 +1742,7 @@
     // Vasta sisällön rakentamisen jälkeen: sivun lopullinen korkeus ratkaisee,
     // näytetäänkö etenemäpalkki lainkaan.
     setTimeout(etenemapalkki, 400);
+    tunnusmerkki();
     setInterval(function () { aukiolotila(); lounastila(); }, 60000);   // tila pysyy ajan tasalla
   }
 
@@ -1831,6 +1832,64 @@
       aloita();
     }).catch(aloita);
     setTimeout(aloita, ODOTUS_MS);
+  }
+
+  /* ------------------------------------------ 25a. TUNNUSTUSMERKKI */
+  /* Restaurant Gurun merkki alatunnisteessa. Kaksi asiaa hoidetaan tässä:
+
+     1) Merkin oma tyylitiedosto ladataan vasta kun alatunniste lähestyy
+        ruutua. Muuten jokainen sivulataus odottaisi ulkopuoliselta
+        palvelimelta tulevaa CSS-tiedostoa ennen kuin mitään näkyy —
+        pelkän koristemerkin takia. Ilman tiedostoa merkki piirtyy
+        Helveticalla, eli se on luettava jo ennen latausta.
+
+     2) Merkin alkuperäisessä koodissa koko laatikko avasi linkin
+        inline-onclickillä ilman noopeneria, jolloin avattu sivu pääsisi
+        käsiksi window.openeriin. Sama toiminta toteutetaan tässä
+        turvallisesti, ja merkki toimii myös näppäimistöltä sisällä
+        olevan linkin kautta. */
+  var MERKKI_CSS = 'https://awards.infcdn.net/2026/circle_v2.css';
+
+  function tunnusmerkki() {
+    var kehys = $('[data-tunnusmerkki]');
+    if (!kehys) return;
+
+    var merkki = $('#circle-r-ribbon', kehys);
+    if (merkki) {
+      merkki.addEventListener('click', function (e) {
+        if (e.target.closest('a')) return;          // linkki hoitaa itsensä
+        var linkki = $('.r-ribbon_title', merkki);
+        if (linkki) window.open(linkki.href, '_blank', 'noopener');
+      });
+    }
+
+    /* Merkin luettavuus nojaa siihen, etta awards.infcdn.net tarjoilee
+       nauhagrafiikan taustakuvaksi: osa merkin tekstista on mustaa, ja
+       ilman sita se jaa nakymattomiin tummaa alatunnistetta vasten.
+       Mainosestot ja verkkokatkot voivat estaa juuri tuon palvelimen,
+       joten varmistetaan: jos kuva ei lataudu, merkin taakse piirretaan
+       vaalea levy, jolloin teksti pysyy luettavana. */
+    var tausta = new Image();
+    tausta.onerror = function () { kehys.classList.add('tunnusmerkki--varalla'); };
+    tausta.src = 'https://awards.infcdn.net/img/bg.svg';
+
+    var ladattu = false;
+    function lataaTyylit() {
+      if (ladattu) return;
+      ladattu = true;
+      var l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = MERKKI_CSS;
+      document.head.appendChild(l);
+    }
+
+    if (!('IntersectionObserver' in window)) { lataaTyylit(); return; }
+    var io = new IntersectionObserver(function (merkit) {
+      merkit.forEach(function (m) {
+        if (m.isIntersecting) { lataaTyylit(); io.disconnect(); }
+      });
+    }, { rootMargin: '600px 0px' });
+    io.observe(kehys);
   }
 
   /* --------------------------------------------- 25b. LUKUETENEMÄPALKKI */

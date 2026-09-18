@@ -3236,3 +3236,28 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   .galleria__kohde:hover img,
   .lounaspaiva:hover { transform: none; }
 }
+
+/* --------------------------------------------- 25.5 TUNNUSTUSMERKKI */
+/* Restaurant Gurun merkki alatunnisteessa. Merkilla on omat kiinteat
+   mitat (174x135) ja oma taustagrafiikka, joten sita ei tyylitella —
+   kaaritaan vain niin, ettei se voi missaan tilanteessa tyontaa
+   alatunnistetta leveammaksi kuin ruutu. */
+.tunnusmerkki {
+  margin-top: clamp(1.4rem, 3vw, 1.9rem);
+  max-width: 100%;
+  overflow: hidden;
+}
+.tunnusmerkki #circle-r-ribbon {
+  /* Merkin oma min-width on 174px. Hyvin kapealla ruudulla annetaan sen
+     kutistua mieluummin kuin rikkoa sivun leveys. */
+  min-width: 0 !important;
+}
+/* Varalla: jos merkin oma nauhagrafiikka ei lataudu, musta teksti jaisi
+   nakymattomiin. Piirretaan sen taakse vaalea levy. */
+.tunnusmerkki--varalla #circle-r-ribbon {
+  background-image: radial-gradient(circle at 50% 48%,
+                    var(--bone-2) 0 45%, transparent 46%) !important;
+}
+/* Ravintolan nimi on merkissa valkoinen, koska se on normaalisti tumman
+   nauhan paalla. Vaalealla varalevylla se pitaa kaantaa tummaksi. */
+.tunnusmerkki--varalla .r-ribbon_title { color: var(--ink) !important; }
