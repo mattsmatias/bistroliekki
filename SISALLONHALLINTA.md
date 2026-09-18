@@ -26,7 +26,36 @@ aina kun joku lopettaa työt.
 
 ## Mitä voi muokata
 
-Yläreunan välilehdet jakavat sisällön neljään osaan.
+Vasemman reunan valikko (kapealla ruudulla yläreunan välilehdet) jakaa
+sisällön osiin.
+
+### Yleiskatsaus
+
+Tämä avautuu ensimmäisenä kirjautumisen jälkeen. Siinä on kaksi asiaa:
+
+**Kävijäluvut vertailuineen.** Neljä lukua: tänään, eilen, 7 päivää ja tässä
+kuussa. Iso luku on näyttökertoja eli avattuja sivuja, pienempi teksti kertoo
+käyntien määrän. Vihreä ▲ tai punainen ▼ kertoo, miten luku on kehittynyt
+edelliseen yhtä pitkään jaksoon verrattuna.
+
+> Kuukausivertailussa kuluvaa kuukautta verrataan **edellisen kuukauden yhtä
+> moneen ensimmäiseen päivään**, ei koko edelliseen kuukauteen. Muuten
+> kuukauden alussa vertailu näyttäisi aina rajulta romahdukselta.
+
+Alla on pylväskaavio viimeiseltä 30 päivältä. Tarkemmat luvut ja
+suosituimmat sivut löytyvät Kävijät-välilehdeltä.
+
+**Tilanne.** Lista siitä, mikä vaatii huomiota juuri nyt:
+
+- Onko lounaslista kuluvalta viikolta
+- Montako ilmoitusta on näkyvissä, ja onko joukossa vanhentuneita
+- Onko "Työn alla" -ilmoitus vielä päällä
+- Onko äänestyslaatikko vielä päällä
+- Onko Google-arvosana täytetty
+
+Vihreä merkki tarkoittaa että asia on kunnossa, oranssi että se kannattaa
+tarkistaa ja punainen että se vaatii toimia. Jokaisen rivin **Avaa**-napista
+pääsee suoraan oikeaan kohtaan.
 
 ### Lounaslista
 

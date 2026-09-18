@@ -1368,6 +1368,266 @@
     return k;
   }
 
+  /* ================================================ OSIO: YLEISKATSAUS */
+  /* Hallinnan etusivu. Kaksi kysymysta, joihin ravintolan pitaa saada
+     vastaus heti kirjautumisen jalkeen:
+       1) Kavikö sivustolla eilen enemman vai vahemman ihmisia kuin tanaan,
+          ja miten kuukausi on menossa edelliseen verrattuna.
+       2) Onko jokin sisalto vanhentunut tai unohtunut paalle.
+
+     Vertailuissa kaytetaan aina yhta pitkia jaksoja: kuluva kuukausi
+     verrataan edellisen kuukauden SAMAAN pituuteen (esim. 1.–18. vs
+     1.–18.), ei koko edelliseen kuukauteen. Muuten kuukauden alussa
+     vertailu nayttaisi aina rajulta laskulta. */
+
+  function lisaaPaivia(avain, n) {
+    var o = avain.split('-');
+    var d = new Date(Date.UTC(+o[0], +o[1] - 1, +o[2]));
+    d.setUTCDate(d.getUTCDate() + n);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function viikonNumero(d) {
+    // ISO-viikkonumero. Sama laskenta kuin sivustolla.
+    var p = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    var pv = p.getUTCDay() || 7;
+    p.setUTCDate(p.getUTCDate() + 4 - pv);
+    var alku = new Date(Date.UTC(p.getUTCFullYear(), 0, 1));
+    return Math.ceil((((p - alku) / 86400000) + 1) / 7);
+  }
+
+  function summaValilla(paivat, alku, loppu) {
+    var s = { kaynnit: 0, nayttokerrat: 0 };
+    Object.keys(paivat).forEach(function (pvm) {
+      if (pvm >= alku && pvm <= loppu) {
+        s.kaynnit += paivat[pvm].kaynnit;
+        s.nayttokerrat += paivat[pvm].nayttokerrat;
+      }
+    });
+    return s;
+  }
+
+  /* Muutos prosentteina. Nollasta kasvamiselle ei ole mielekasta
+     prosenttilukua, joten se merkitaan erikseen. */
+  function muutos(nyt, ennen) {
+    if (!ennen) return { tila: nyt ? 'uusi' : 'sama', teksti: nyt ? '—' : '—' };
+    var p = Math.round((nyt - ennen) / ennen * 100);
+    return {
+      tila: p > 0 ? 'ylos' : (p < 0 ? 'alas' : 'sama'),
+      teksti: (p > 0 ? '+' : '') + p + ' %'
+    };
+  }
+
+  function kpiKortti(nimi, arvo, alaTeksti, vertailu) {
+    var k = tee('div', 'kpi');
+    lisaa(k, tee('p', 'kpi__nimi', nimi));
+    var rivi = tee('div', 'kpi__rivi');
+    lisaa(rivi, tee('span', 'kpi__arvo', String(arvo)));
+    if (vertailu) {
+      var merkki = vertailu.tila === 'ylos' ? '▲' : (vertailu.tila === 'alas' ? '▼' : '–');
+      var v = tee('span', 'kpi__muutos kpi__muutos--' + vertailu.tila,
+                  merkki + ' ' + vertailu.teksti);
+      lisaa(rivi, v);
+    }
+    lisaa(k, rivi);
+    if (alaTeksti) lisaa(k, tee('p', 'kpi__ala', alaTeksti));
+    return k;
+  }
+
+  function paneeliYleis() {
+    var k = tee('div');
+
+    var tila = tee('p', 'lataus', 'Haetaan kävijätietoja…');
+    lisaa(k, tila);
+    var kavijat = tee('div');
+    kavijat.hidden = true;
+    lisaa(k, kavijat);
+
+    pyynto('/rest/v1/julkinen_kavijat?select=pvm,polku,nayttokerrat,kaynnit' +
+           '&pvm=gte.' + paivaaSitten(400) + '&order=pvm.desc')
+      .then(function (rivit) {
+        if (tila.parentNode) tila.parentNode.removeChild(tila);
+        kavijat.hidden = false;
+        piirraYleisKavijat(kavijat, rivit || []);
+      })
+      .catch(function (e) {
+        tila.className = 'viesti viesti--virhe';
+        tila.style.minHeight = '0';
+        tila.textContent = 'Kävijätietojen haku ei onnistunut: ' + e.message;
+      });
+
+    lisaa(k, tilannekatsaus());
+    return k;
+  }
+
+  function piirraYleisKavijat(kehys, rivit) {
+    var paivat = {};
+    rivit.forEach(function (r) {
+      var p = paivat[r.pvm] || (paivat[r.pvm] = { kaynnit: 0, nayttokerrat: 0 });
+      p.kaynnit += r.kaynnit;
+      p.nayttokerrat += r.nayttokerrat;
+    });
+
+    var tanaan = paivaAvain(new Date());
+    var eilen = paivaaSitten(1);
+    var tanaanS = paivat[tanaan] || { kaynnit: 0, nayttokerrat: 0 };
+    var eilenS = paivat[eilen] || { kaynnit: 0, nayttokerrat: 0 };
+
+    // 7 päivää vs. sitä edeltävät 7 päivää
+    var vk = summaValilla(paivat, paivaaSitten(6), tanaan);
+    var vkEnnen = summaValilla(paivat, paivaaSitten(13), paivaaSitten(7));
+
+    // Kuluva kuukausi vs. edellisen kuukauden sama pituus
+    var nyt = new Date();
+    var kkAlku = paivaAvain(new Date(nyt.getFullYear(), nyt.getMonth(), 1));
+    var paiviaKuluvassa = Math.round(
+      (new Date(tanaan) - new Date(kkAlku)) / 86400000) + 1;
+    var edKkAlku = paivaAvain(new Date(nyt.getFullYear(), nyt.getMonth() - 1, 1));
+    var edKkLoppu = lisaaPaivia(edKkAlku, paiviaKuluvassa - 1);
+    var kk = summaValilla(paivat, kkAlku, tanaan);
+    var kkEnnen = summaValilla(paivat, edKkAlku, edKkLoppu);
+
+    var onHistoriaa = Object.keys(paivat).length > 0;
+
+    var lb = lohko('Kävijät', onHistoriaa ? 'Päivä vaihtuu Suomen aikaa keskiyöllä' : '');
+    if (!onHistoriaa) {
+      lisaa(lb, tee('div', 'lista__tyhja',
+        'Kävijätietoja ei ole vielä kertynyt. Luvut alkavat karttua heti, ' +
+        'kun sivustolla käydään.'));
+      lisaa(kehys, lb);
+      return;
+    }
+
+    var ruudukko = tee('div', 'kpit');
+    lisaa(ruudukko,
+      kpiKortti('Tänään', tanaanS.nayttokerrat,
+                tanaanS.kaynnit + ' käyntiä', muutos(tanaanS.nayttokerrat, eilenS.nayttokerrat)),
+      kpiKortti('Eilen', eilenS.nayttokerrat,
+                eilenS.kaynnit + ' käyntiä', null),
+      kpiKortti('7 päivää', vk.nayttokerrat,
+                'edelliset 7 pv: ' + vkEnnen.nayttokerrat,
+                muutos(vk.nayttokerrat, vkEnnen.nayttokerrat)),
+      kpiKortti('Tässä kuussa', kk.nayttokerrat,
+                'viime kuun ' + paiviaKuluvassa + ' ensimmäistä päivää: ' + kkEnnen.nayttokerrat,
+                muutos(kk.nayttokerrat, kkEnnen.nayttokerrat)));
+    lisaa(lb, ruudukko);
+    lisaa(lb, tee('p', 'lohko__vihje',
+      'Isot luvut ovat näyttökertoja eli avattuja sivuja. Vertailu on ' +
+      'edelliseen yhtä pitkään jaksoon.'));
+    lisaa(kehys, lb);
+
+    // Kaavio: 30 päivää
+    var pb = lohko('Näyttökerrat päivittäin', 'Viimeiset 30 päivää');
+    var jarjestys = [];
+    for (var i = 29; i >= 0; i--) jarjestys.push(paivaaSitten(i));
+    var huippu = 1;
+    jarjestys.forEach(function (pvm) {
+      if (paivat[pvm] && paivat[pvm].nayttokerrat > huippu) huippu = paivat[pvm].nayttokerrat;
+    });
+    var kaavio = tee('div', 'kaavio');
+    jarjestys.forEach(function (pvm, i) {
+      var arvo = paivat[pvm] ? paivat[pvm].nayttokerrat : 0;
+      var sarake = tee('div', 'kaavio__sarake');
+      sarake.title = lyhytPvm(pvm) + ' — ' + arvo + ' näyttökertaa';
+      var pylvas = tee('div', 'kaavio__pylvas');
+      pylvas.style.height = Math.max(2, Math.round(arvo / huippu * 100)) + '%';
+      if (!arvo) pylvas.classList.add('kaavio__pylvas--tyhja');
+      // Pylvaan korkeus on prosentti omasta radastaan, jotta luku ja
+      // paivays saavat oman tilansa eivatka jaa pylvaan alle.
+      var rata = tee('div', 'kaavio__rata');
+      lisaa(rata, pylvas);
+      lisaa(sarake, tee('span', 'kaavio__arvo', arvo ? String(arvo) : ''), rata,
+                    tee('span', 'kaavio__pvm', (i % 5 === 0 || i === 29) ? lyhytPvm(pvm) : ''));
+      lisaa(kaavio, sarake);
+    });
+    lisaa(pb, kaavio);
+    lisaa(pb, tee('p', 'lohko__vihje', 'Tarkemmat luvut ja suosituimmat sivut ovat Kävijät-välilehdellä.'));
+    lisaa(kehys, pb);
+  }
+
+  /* Tilannekatsaus: mika vaatii huomiota juuri nyt. Jokainen huomio on
+     joko kunnossa, huomautus tai varoitus, ja vie yhdella napautuksella
+     oikeaan kohtaan. */
+  function tilannekatsaus() {
+    var b = lohko('Tilanne', 'Mitä kannattaa tarkistaa');
+    var lista = tee('div', 'tilanne');
+
+    function rivi(taso, otsikko, teksti, valilehti) {
+      var r = tee('div', 'tilanne__rivi tilanne__rivi--' + taso);
+      var sisus = tee('div');
+      lisaa(sisus, tee('p', 'tilanne__otsikko', otsikko));
+      if (teksti) lisaa(sisus, tee('p', 'tilanne__teksti', teksti));
+      lisaa(r, tee('span', 'tilanne__merkki', taso === 'ok' ? '✓' : '!'), sisus);
+      if (valilehti) {
+        var n = tee('button', 'nappi nappi--hiljainen nappi--pieni', 'Avaa');
+        n.type = 'button';
+        n.addEventListener('click', function () {
+          valittu = valilehti;
+          piirraValilehdet();
+          piirraPaneelit();
+          window.scrollTo(0, 0);
+        });
+        lisaa(r, n);
+      }
+      lisaa(lista, r);
+    }
+
+    // 1. Lounaslistan viikko
+    var nytViikko = viikonNumero(new Date());
+    var listanViikko = parseInt((T.lounaslista || {}).viikko, 10);
+    if (!listanViikko) {
+      rivi('varoitus', 'Lounaslistan viikko puuttuu',
+           'Lisää viikon numero, niin kävijä tietää listan olevan ajan tasalla.', 'lounas');
+    } else if (listanViikko !== nytViikko) {
+      rivi('varoitus', 'Lounaslista on viikolta ' + listanViikko,
+           'Nyt on viikko ' + nytViikko + '. Päivitä listan viikko ja annokset.', 'lounas');
+    } else {
+      rivi('ok', 'Lounaslista on kuluvalta viikolta', 'Viikko ' + nytViikko + '.', 'lounas');
+    }
+
+    // 2. Ilmoitukset
+    var tanaanPvm = paivaAvain(new Date());
+    var kaikki = T.ajankohtaista || [];
+    var vanhentuneet = kaikki.filter(function (i) {
+      return i.paattyy && i.paattyy < tanaanPvm;
+    });
+    var nakyvat = kaikki.filter(function (i) {
+      return (!i.paattyy || i.paattyy >= tanaanPvm) && (!i.alkaa || i.alkaa <= tanaanPvm);
+    });
+    if (vanhentuneet.length) {
+      rivi('huomio', vanhentuneet.length + ' vanhentunutta ilmoitusta',
+           'Ne eivät näy sivustolla, mutta listan saa siistiksi poistamalla ne.', 'aukiolo');
+    } else if (nakyvat.length) {
+      rivi('ok', nakyvat.length + ' ilmoitusta näkyvissä', '', 'aukiolo');
+    } else {
+      rivi('ok', 'Ei ajankohtaisia ilmoituksia', 'Ajankohtaista-osio on piilossa etusivulla.', 'aukiolo');
+    }
+
+    // 3. Työn alla -ilmoitus
+    if ((T.tyonAlla || {}).naytetaan) {
+      rivi('huomio', 'Työn alla -ilmoitus on päällä',
+           'Se näkyy kävijöille joka sivulla. Ota pois, kun sivusto on valmis.', 'aukiolo');
+    }
+
+    // 4. Äänestyslaatikko
+    if ((T.aanestys || {}).naytetaan) {
+      rivi('huomio', 'Äänestyslaatikko on päällä',
+           'Muista ottaa se pois, kun äänestys päättyy.', 'aukiolo');
+    }
+
+    // 5. Google-arvosana
+    var g = T.google || {};
+    if (!String(g.arvosana || '').trim()) {
+      rivi('huomio', 'Google-arvosana puuttuu',
+           'Ilman sitä osiossa näkyvät vain linkit, ei tähtiä.', 'tiedot');
+    } else {
+      rivi('ok', 'Google-arvosana ' + g.arvosana, (g.maara ? g.maara + ' arvostelua' : ''), 'tiedot');
+    }
+
+    lisaa(b, lista);
+    return b;
+  }
+
   /* ==================================================== OSIO: KÄVIJÄT */
   /* Luvut tulevat taulusta julkinen_kavijat, jossa on vain päiväkohtaisia
      summia sivua kohden. Tämä paneeli on pelkkä lukunäkymä: se ei kosketa
@@ -1513,7 +1773,9 @@
       var pylvas = tee('div', 'kaavio__pylvas');
       pylvas.style.height = Math.max(2, Math.round(arvo / huippu * 100)) + '%';
       if (!arvo) pylvas.classList.add('kaavio__pylvas--tyhja');
-      lisaa(sarake, tee('span', 'kaavio__arvo', arvo ? String(arvo) : ''), pylvas);
+      var rata = tee('div', 'kaavio__rata');
+      lisaa(rata, pylvas);
+      lisaa(sarake, tee('span', 'kaavio__arvo', arvo ? String(arvo) : ''), rata);
       // Joka viides päivämäärä riittää, muuten tekstit menevät päällekkäin.
       lisaa(sarake, tee('span', 'kaavio__pvm', (i % 5 === 0 || i === 29) ? lyhytPvm(pvm) : ''));
       lisaa(kaavio, sarake);
@@ -1667,6 +1929,9 @@
   };
 
   var PANEELIT = [
+    { avain: 'yleis',   nimi: 'Yleiskatsaus',  otsikko: 'Yleiskatsaus',
+      ohje: 'Kävijämäärät ja tilanne yhdellä silmäyksellä.',
+      rakenna: paneeliYleis },
     { avain: 'lounas',  nimi: 'Lounaslista',   otsikko: 'Viikon lounaslista',
       ohje: 'Tämä lista näkyy Lounas-sivulla ja etusivulla. Kuluva päivä nousee automaattisesti ensimmäiseksi.',
       rakenna: paneeliLounas },
@@ -1687,7 +1952,7 @@
       rakenna: paneeliTili }
   ];
 
-  var valittu = 'lounas';
+  var valittu = 'yleis';
 
   function piirraValilehdet() {
     var n = $('#valilehdet');

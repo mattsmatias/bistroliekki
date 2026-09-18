@@ -608,7 +608,7 @@ details.ohje li { margin-bottom: .3rem; }
 .kaavio {
   display: flex;
   align-items: flex-end;
-  gap: 2px;
+  gap: 3px;
   min-height: 170px;
   overflow-x: auto;
   padding-bottom: .2rem;
@@ -622,8 +622,19 @@ details.ohje li { margin-bottom: .3rem; }
   height: 170px;
   text-align: center;
 }
+/* Pylvaan oma rata: luku ja paivays eivat kilpaile pylvaan korkeudesta. */
+.kaavio__rata {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: flex-end;
+}
+.kaavio__rata > .kaavio__pylvas { width: 100%; }
 .kaavio__arvo {
-  font-size: 10px;
+  flex: none;
+  min-height: 1.2em;
+  font-size: 11.5px;
   line-height: 1.2;
   color: var(--bone-4);
   margin-bottom: 2px;
@@ -634,9 +645,14 @@ details.ohje li { margin-bottom: .3rem; }
   min-height: 2px;
 }
 .kaavio__pylvas--tyhja { background: var(--viiva); }
+/* Paivays naytetaan vain joka viidennessa sarakkeessa, mutta rivin korkeus
+   varataan aina — muuten pylvas venyisi tyhjan paivayksen paalle. */
 .kaavio__pvm {
+  flex: none;
   margin-top: .35rem;
-  font-size: 10px;
+  line-height: 1.2;
+  min-height: 1.2em;
+  font-size: 11.5px;
   color: var(--bone-4);
   white-space: nowrap;
 }
@@ -677,4 +693,149 @@ details.ohje li { margin-bottom: .3rem; }
 @media (max-width: 480px) {
   .kaavio__sarake { min-width: 10px; }
   .kaavio__arvo { display: none; }
+}
+
+/* ======================================================= YLEISKATSAUS */
+/* Isot tunnusluvut vertailuineen. Ravintolan pitaa nahda yhdella
+   silmayksella, meneeko kavijamaara ylos vai alas. */
+.kpit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: .7rem;
+}
+.kpi {
+  padding: 1rem 1.1rem 1.05rem;
+  background: var(--char-3);
+  border: 1px solid var(--viiva);
+  border-radius: var(--pyoristys);
+}
+.kpi__nimi {
+  margin: 0 0 .5rem;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--bone-4);
+}
+.kpi__rivi { display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
+.kpi__arvo {
+  font-family: var(--display);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--bone);
+  font-variant-numeric: tabular-nums;
+}
+.kpi__muutos {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+.kpi__muutos--ylos { color: var(--onnistui); }
+.kpi__muutos--alas { color: var(--virhe); }
+.kpi__muutos--sama,
+.kpi__muutos--uusi { color: var(--bone-4); }
+.kpi__ala { margin: .45rem 0 0; font-size: 11.5px; line-height: 1.4; color: var(--bone-4); }
+
+/* Tilannekatsaus: rivi kertoo mika on kunnossa ja mika vaatii huomiota */
+.tilanne { display: grid; gap: .5rem; }
+.tilanne__rivi {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: .8rem;
+  padding: .75rem .9rem;
+  background: var(--char-3);
+  border: 1px solid var(--viiva);
+  border-left-width: 3px;
+  border-radius: var(--pyoristys);
+}
+.tilanne__rivi--ok       { border-left-color: var(--onnistui); }
+.tilanne__rivi--huomio   { border-left-color: var(--ember); }
+.tilanne__rivi--varoitus { border-left-color: var(--virhe); }
+.tilanne__merkki {
+  width: 22px; height: 22px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.tilanne__rivi--ok       .tilanne__merkki { background: var(--onnistui); }
+.tilanne__rivi--huomio   .tilanne__merkki { background: var(--ember); }
+.tilanne__rivi--varoitus .tilanne__merkki { background: var(--virhe); }
+.tilanne__otsikko { margin: 0; font-size: 14px; font-weight: 600; color: var(--bone); }
+.tilanne__teksti  { margin: .15rem 0 0; font-size: 12.5px; line-height: 1.45; color: var(--bone-4); }
+
+@media (max-width: 480px) {
+  .tilanne__rivi { grid-template-columns: auto 1fr; }
+  .tilanne__rivi .nappi { grid-column: 2; justify-self: start; margin-top: .4rem; }
+}
+
+/* ================================================ LEVEA NAYTTO: SIVUPALKKI */
+/* Leveilla naytoilla valilehtirivi muuttuu vasemmaksi sivupalkiksi. DOM
+   pysyy tasmalleen samana — vain asettelu vaihtuu — joten kapeiden ruutujen
+   testattu toiminta sailyy koskemattomana.
+
+   Kehys on talla leveydella ruudukko: ylapalkki koko leveydelta, sen alla
+   sivupalkki ja sisalto rinnakkain, alatunniste sisallon alla. */
+@media (min-width: 1040px) {
+  .kehys.on-auki {
+    display: grid;
+    /* Sivupalkin tausta piirretaan kehykseen asti, koska itse navigaatio on
+       tarttuva eika siksi taytä saraketta koko korkeudelta. Viimeinen 1 px
+       on sarakkeiden valinen viiva. */
+    background:
+      linear-gradient(to right,
+        var(--char) 0 231px,
+        var(--viiva-vahva) 231px 232px,
+        transparent 232px);
+    grid-template-columns: 232px minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'ylapalkki ylapalkki'
+      'navi      sisus'
+      'navi      alatunniste';
+    align-content: start;
+  }
+  .ylapalkki   { grid-area: ylapalkki; }
+  .valilehdet  { grid-area: navi; }
+  .sisus       { grid-area: sisus; }
+  .alatunniste { grid-area: alatunniste; }
+  .tallennuspalkki { grid-column: 1 / -1; }
+
+  .valilehdet {
+    position: sticky;
+    top: var(--ylapalkki-h, 0px);
+    align-self: start;
+    max-height: calc(100vh - var(--ylapalkki-h, 0px));
+    flex-direction: column;
+    gap: .15rem;
+    overflow-x: visible;
+    overflow-y: auto;
+    padding: 1.1rem .75rem;
+    border-bottom: 0;
+  }
+  .valilehti {
+    width: 100%;
+    min-height: 44px;
+    padding: .7rem .85rem;
+    margin-bottom: 0;
+    border-bottom: 0;
+    border-left: 2px solid transparent;
+    border-radius: var(--pyoristys);
+    text-align: left;
+    letter-spacing: .08em;
+    transition: color .2s ease, background-color .2s ease, border-color .2s ease;
+  }
+  .valilehti:hover { background: var(--char-2); }
+  .valilehti[aria-selected='true'] {
+    background: var(--char-3);
+    border-left-color: var(--ember);
+    border-bottom-color: transparent;
+  }
+
+  /* Sisalto ei enaa keskity koko ikkunaan vaan omaan palstaansa. */
+  .sisus { max-width: 1000px; margin-inline: 0; }
+  .alatunniste { text-align: left; }
 }
