@@ -3246,15 +3246,25 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
    mitat (174x135) ja oma taustagrafiikka, joten sita ei tyylitella —
    kaaritaan vain niin, ettei se voi missaan tilanteessa tyontaa
    alatunnistetta leveammaksi kuin ruutu. */
+/* Merkin sisalto on aseteltu absoluuttisesti 174x135 pikselin ruudukkoon
+   (kaarevat SVG-tekstit, kierretyt kappaleet). Siksi sita ei pienenneta
+   muuttamalla leveytta ja korkeutta — se hajottaisi asettelun — vaan
+   skaalaamalla koko merkki kerralla. Kaari saa taalta tasmalleen skaalatun
+   koon, jottei alle jaa tyhjaa. */
 .tunnusmerkki {
+  --merkki-skaala: .72;
+  width: calc(174px * var(--merkki-skaala));
+  height: calc(135px * var(--merkki-skaala));
   margin-top: clamp(1.4rem, 3vw, 1.9rem);
   max-width: 100%;
   overflow: hidden;
 }
+/* Merkki sailyttaa oman 174 px:n leveytensa asettelussa — sen sisus on
+   aseteltu sen mukaan. Kaari on skaalatun kokoinen ja leikkaa yli menevan,
+   joten kapeallakaan ruudulla mikaan ei tyonna sivua leveammaksi. */
 .tunnusmerkki #circle-r-ribbon {
-  /* Merkin oma min-width on 174px. Hyvin kapealla ruudulla annetaan sen
-     kutistua mieluummin kuin rikkoa sivun leveys. */
-  min-width: 0 !important;
+  transform: scale(var(--merkki-skaala));
+  transform-origin: 0 0;
 }
 /* Varalla: jos merkin oma nauhagrafiikka ei lataudu, musta teksti jaisi
    nakymattomiin. Piirretaan sen taakse vaalea levy. */
@@ -3320,6 +3330,9 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   color: var(--ember-lit);
 }
 .tahdet svg { display: inline-block; vertical-align: top; }
+/* Ilman arvosanaa osio on pelkka linkkipari — silloin se saa olla
+   tiiviimpi, jottei tyhja tila korostu. */
+.google-arvio--linkit .napit { margin-top: .9rem; }
 
 .sivu[hidden]{display:none!important}
 .esikatselu-huomio{position:fixed;left:0;right:0;bottom:0;z-index:9600;background:rgba(12,10,9,.94);
@@ -7234,8 +7247,18 @@ window.LIEKKI = {
     var g = D.google || {};
     var arvosana = String(g.arvosana || '').trim();
     var luku = parseFloat(arvosana.replace(',', '.'));
+    var onArvosana = !!arvosana && isFinite(luku) && luku > 0 && luku <= 5;
 
-    if (!arvosana || !isFinite(luku)) {
+    var maara = String(g.maara || '').trim();
+    var linkki = (g.linkki || '').trim();
+    var arvostelu = (g.arvostelulinkki || '').trim();
+
+    // Ilman linkkejä osiolla ei ole mitään annettavaa — se poistetaan.
+    // Pelkillä linkeillä se on jo hyödyllinen: kävijä pääsee lukemaan
+    // arvostelut ja jättämään omansa. Arvosana ilmestyy siihen sitten,
+    // kun ravintola täyttää sen hallinnasta. Näin sivulla ei missään
+    // vaiheessa näy keksittyä tai paikkaa pitävää lukua.
+    if (!linkki && !arvostelu && !onArvosana) {
       kehykset.forEach(function (k) {
         var osio = k.closest('.osio') || k;
         if (osio.parentNode) osio.parentNode.removeChild(osio);
@@ -7243,25 +7266,26 @@ window.LIEKKI = {
       return;
     }
 
-    var maara = String(g.maara || '').trim();
-    var linkki = (g.linkki || '').trim();
-    var arvostelu = (g.arvostelulinkki || '').trim();
+    var napit =
+      '<div class="napit">' +
+        (linkki ? '<a class="nappi nappi--hiljainen" href="' + turva(linkki) +
+                  '" target="_blank" rel="noopener"><span>Lue arvostelut</span></a>' : '') +
+        (arvostelu ? '<a class="nappi" href="' + turva(arvostelu) +
+                  '" target="_blank" rel="noopener"><span>Arvostele meidät</span></a>' : '') +
+      '</div>';
 
     kehykset.forEach(function (k) {
       k.innerHTML =
-        '<div class="google-arvio">' +
-          '<p class="google-arvio__luku"><strong>' + merkit(arvosana) + '</strong>' +
-            '<span class="google-arvio__max">/ 5</span></p>' +
-          tahdet(luku) +
-          '<p class="google-arvio__maara">' +
-            (maara ? merkit(maara) + ' arvostelua Googlessa' : 'Arvostelut Googlessa') +
-          '</p>' +
-          '<div class="napit">' +
-            (linkki ? '<a class="nappi nappi--hiljainen" href="' + turva(linkki) +
-                      '" target="_blank" rel="noopener"><span>Lue arvostelut</span></a>' : '') +
-            (arvostelu ? '<a class="nappi" href="' + turva(arvostelu) +
-                      '" target="_blank" rel="noopener"><span>Arvostele meidät</span></a>' : '') +
-          '</div>' +
+        '<div class="google-arvio' + (onArvosana ? '' : ' google-arvio--linkit') + '">' +
+          (onArvosana
+            ? '<p class="google-arvio__luku"><strong>' + merkit(arvosana) + '</strong>' +
+                '<span class="google-arvio__max">/ 5</span></p>' +
+              tahdet(luku) +
+              '<p class="google-arvio__maara">' +
+                (maara ? merkit(maara) + ' arvostelua Googlessa' : 'Arvostelut Googlessa') +
+              '</p>'
+            : '') +   // otsikko kertoo jo, etta kyse on Googlesta
+          napit +
         '</div>';
     });
   }

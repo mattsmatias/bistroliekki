@@ -3242,15 +3242,25 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
    mitat (174x135) ja oma taustagrafiikka, joten sita ei tyylitella —
    kaaritaan vain niin, ettei se voi missaan tilanteessa tyontaa
    alatunnistetta leveammaksi kuin ruutu. */
+/* Merkin sisalto on aseteltu absoluuttisesti 174x135 pikselin ruudukkoon
+   (kaarevat SVG-tekstit, kierretyt kappaleet). Siksi sita ei pienenneta
+   muuttamalla leveytta ja korkeutta — se hajottaisi asettelun — vaan
+   skaalaamalla koko merkki kerralla. Kaari saa taalta tasmalleen skaalatun
+   koon, jottei alle jaa tyhjaa. */
 .tunnusmerkki {
+  --merkki-skaala: .72;
+  width: calc(174px * var(--merkki-skaala));
+  height: calc(135px * var(--merkki-skaala));
   margin-top: clamp(1.4rem, 3vw, 1.9rem);
   max-width: 100%;
   overflow: hidden;
 }
+/* Merkki sailyttaa oman 174 px:n leveytensa asettelussa — sen sisus on
+   aseteltu sen mukaan. Kaari on skaalatun kokoinen ja leikkaa yli menevan,
+   joten kapeallakaan ruudulla mikaan ei tyonna sivua leveammaksi. */
 .tunnusmerkki #circle-r-ribbon {
-  /* Merkin oma min-width on 174px. Hyvin kapealla ruudulla annetaan sen
-     kutistua mieluummin kuin rikkoa sivun leveys. */
-  min-width: 0 !important;
+  transform: scale(var(--merkki-skaala));
+  transform-origin: 0 0;
 }
 /* Varalla: jos merkin oma nauhagrafiikka ei lataudu, musta teksti jaisi
    nakymattomiin. Piirretaan sen taakse vaalea levy. */
@@ -3316,3 +3326,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
   color: var(--ember-lit);
 }
 .tahdet svg { display: inline-block; vertical-align: top; }
+/* Ilman arvosanaa osio on pelkka linkkipari — silloin se saa olla
+   tiiviimpi, jottei tyhja tila korostu. */
+.google-arvio--linkit .napit { margin-top: .9rem; }

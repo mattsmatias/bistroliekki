@@ -151,9 +151,11 @@ Yhteystiedot, linkit, some-osoitteet, saavutukset ja sivujen tekstit.
 - **Google-arvostelut.** Arvosana ja arvostelujen määrä kirjoitetaan käsin.
   Katso ne Google Mapsista ja kirjoita samassa muodossa kuin Google näyttää
   ne, esimerkiksi `4,6` ja `312`. Osio näkyy etusivulla ja Yhteys-sivulla.
-  **Tyhjä arvosana piilottaa koko osion**, joten sivulla ei voi näkyä
-  keksittyä lukua. Luku ei päivity itsestään — käy päivittämässä se
-  esimerkiksi kerran kuussa.
+  Osio näkyy myös ilman arvosanaa — silloin siinä on vain napit
+  "Lue arvostelut" ja "Arvostele meidät". **Arvosana ja tähdet ilmestyvät
+  siihen vasta kun luku on täytetty**, joten sivulla ei voi missään
+  vaiheessa näkyä keksittyä tai paikkaa pitävää arvosanaa. Luku ei päivity
+  itsestään — käy päivittämässä se esimerkiksi kerran kuussa.
 
   > Miksei arvosana päivity automaattisesti? Googlen käyttöehdot kieltävät
   > arvostelujen tallentamisen, joten ne pitäisi hakea Googlelta uudelleen
