@@ -242,14 +242,6 @@ MAIN = '''<main id="sisalto">
   </div>
 </section>
 
-<!-- ================================================================ NAUHA -->
-<div class="nauha" aria-hidden="true">
-  <div class="nauha__rata">
-    <span>Puuhiiligrilli <b>&bull;</b> Tikkurila <b>&bull;</b> Vuodesta 2016 <b>&bull;</b> À la carte <b>&bull;</b> Lounas arkisin <b>&bull;</b> Catering <b>&bull;</b></span>
-    <span>Puuhiiligrilli <b>&bull;</b> Tikkurila <b>&bull;</b> Vuodesta 2016 <b>&bull;</b> À la carte <b>&bull;</b> Lounas arkisin <b>&bull;</b> Catering <b>&bull;</b></span>
-  </div>
-</div>
-
 <!-- ============================================================= TARJONTA -->
 <!-- Kolme korttia: kaksi ruokalistan ryhmaa ja lounas. Kortit
      rakennetaan testi.js:ssa content.js:n todellisesta ruokalistasta,

@@ -44,19 +44,21 @@
   /* Pieni leipateksti (korttien tekstit, listat, kuvaukset) oli aiemmin
      samassa koossa kuin versaalietiketit, eli 12.6–13.6 px. Se on juoksevalle
      tekstille liian pieni, joten sille on nyt oma, isompi porras. */
-  --step--1: clamp(.85rem, .82rem + .14vw, .93rem);     /* 13.6 – 14.9 px */
-  --step-0:  clamp(1rem,   .97rem + .14vw, 1.06rem);  /*   16 – 17   px */
-  --step-1:  clamp(1.1rem, 1.05rem + .24vw, 1.24rem); /* 17.6 – 19.8 px */
-  --step-2:  clamp(1.3rem, 1.19rem + .5vw,  1.62rem); /* 20.8 – 26   px */
-  --step-3:  clamp(1.58rem, 1.38rem + .9vw, 2.15rem); /* 25.3 – 34.4 px */
-  --step-4:  clamp(1.92rem, 1.6rem + 1.5vw, 2.9rem);  /* 30.7 – 46.4 px */
-  --step-5:  clamp(2.25rem, 1.8rem + 2.2vw, 3.85rem); /*   36 – 61.6 px */
+  --step--1: clamp(.88rem, .85rem + .15vw, .96rem);     /* 14.1 – 15.4 px */
+  --step-0:  clamp(1.03rem, 1rem + .15vw, 1.1rem);   /* 16.5 – 17.6 px */
+  --step-1:  clamp(1.15rem, 1.09rem + .28vw, 1.31rem);/* 18.4 – 21   px */
+  --step-2:  clamp(1.35rem, 1.22rem + .56vw, 1.7rem); /* 21.6 – 27.2 px */
+  --step-3:  clamp(1.64rem, 1.42rem + .98vw, 2.26rem);/* 26.2 – 36.2 px */
+  --step-4:  clamp(2rem,   1.64rem + 1.62vw, 3.06rem);/*   32 – 49   px */
+  --step-5:  clamp(2.35rem, 1.85rem + 2.4vw, 4.1rem); /* 37.6 – 65.6 px */
 
   /* Rytmi */
   --gutter: clamp(1.25rem, 4vw, 3rem);
   --shell: 1320px;
   --shell-narrow: 780px;
   --section-y: clamp(4.5rem, 9vw, 9.5rem);
+  /* Kuinka pitkalla matkalla osion tausta sulaa seuraavaan. */
+  --haivytys: clamp(3rem, 7vw, 8.5rem);
 
   --header-h: 92px;
   --header-h-min: 64px;
@@ -159,10 +161,39 @@ a { color: inherit; }
 
 .osio { position: relative; padding-block: var(--section-y); }
 .osio--tiivis { padding-block: clamp(3rem, 6vw, 6rem); }
-.osio--char { background: var(--char); }
-.osio--char2 { background: var(--char-2); }
 
-.viiva-ylä { border-top: 1px solid var(--line-soft); }
+/* Osion tausta ei ala eikä lopu terävään reunaan vaan sulaa sivun omaan
+   pohjaväriin. Väri on omalla kerroksellaan sisällön takana, joten
+   häivytys koskee vain taustaa — teksti ja kuvat pysyvät täysin
+   näkyvinä reunaan asti. */
+.osio--char,
+.osio--char2 {
+  background: transparent;
+  isolation: isolate;
+}
+.osio--char::after,
+.osio--char2::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0,
+      #000 var(--haivytys), #000 calc(100% - var(--haivytys)), transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0,
+      #000 var(--haivytys), #000 calc(100% - var(--haivytys)), transparent 100%);
+}
+.osio--char::after  { background: var(--char); }
+.osio--char2::after { background: var(--char-2); }
+
+/* Erotinviiva haipyy molemmista päistään, jottei osioiden väliin jää
+   piirrettyä rajaa. border-image hoitaa tämän ilman lisäelementtiä —
+   pseudoelementit ovat jo taustan ja hiilikuvion käytössä. */
+.viiva-ylä {
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(90deg,
+      transparent 0, var(--line) 18%, var(--line) 82%, transparent 100%) 1;
+}
 
 /* -------------------------------------------------------- 04 TYPOGRAFIA UI */
 .etiketti {
@@ -187,19 +218,36 @@ a { color: inherit; }
 .etiketti--keskellä { justify-content: center; }
 .etiketti--vaalea { color: var(--copper); }
 
-.otsikko-xl { font-size: var(--step-5); line-height: 1.04; }
-.otsikko-l  { font-size: var(--step-4); line-height: 1.08; }
-.otsikko-m  { font-size: var(--step-3); }
-.otsikko-s  { font-size: var(--step-2); }
+/* Mitä isompi koko, sitä tiukempi rivi- ja kirjainväli. Sama väljyys
+   isossa ja pienessä koossa saa ison otsikon näyttämään hajoavalta ja
+   pienen ahtaalta. */
+.otsikko-xl { font-size: var(--step-5); line-height: 1.0;  letter-spacing: -.022em; }
+.otsikko-l  { font-size: var(--step-4); line-height: 1.04; letter-spacing: -.018em; }
+.otsikko-m  { font-size: var(--step-3); line-height: 1.12; letter-spacing: -.012em; }
+.otsikko-s  { font-size: var(--step-2); line-height: 1.22; letter-spacing: -.006em; }
+
+/* Otsikon rivit tasapainotetaan: selain jakaa sanat riveille niin,
+   ettei viimeiselle jää yhtä orpoa sanaa. */
+h1, h2, h3, .otsikko-xl, .otsikko-l, .otsikko-m, .otsikko-s {
+  text-wrap: balance;
+}
+
+/* Fraunces on muuttuva kirjasin, jossa on optisen koon akseli. Kun se on
+   päällä, iso otsikko piirtyy hienopiirteisempänä ja pieni teksti
+   tukevampana — sama kirjasin, kaksi eri leikkausta. */
+body, h1, h2, h3, .otsikko-xl, .otsikko-l, .otsikko-m, .otsikko-s {
+  font-optical-sizing: auto;
+}
 
 .ingressi {
   font-size: var(--step-1);
-  line-height: 1.6;
+  line-height: 1.58;
   color: var(--bone-2);
-  max-width: 46ch;
+  max-width: 44ch;
+  text-wrap: pretty;
 }
 
-.leipa { color: var(--bone-3); max-width: 56ch; }
+.leipa { color: var(--bone-3); max-width: 58ch; line-height: 1.7; text-wrap: pretty; }
 .leipa--leveä { max-width: 68ch; }
 
 .korostus { color: var(--bone); }
@@ -2662,8 +2710,10 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   position: absolute; inset: 0; z-index: -1;
   background: url('../img/band-embers.webp') center/cover no-repeat;
   opacity: .16;
-  mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
-  -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+  mask-image: linear-gradient(180deg, transparent 0,
+      #000 var(--haivytys), #000 calc(100% - var(--haivytys)), transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0,
+      #000 var(--haivytys), #000 calc(100% - var(--haivytys)), transparent 100%);
 }
 
 @media print {
@@ -2963,39 +3013,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 .media[data-verho] img { transition: transform 1.5s var(--ease-out); }
 .media[data-verho].on-nakyvissa:hover { --kuva-zoom: 1.045; }
 
-/* ------------------------------------------------------ 24.6 HIILINAUHA */
-/* Hitaasti liukuva typografinen nauha — editorial-lehden henkeä. */
-.nauha {
-  position: relative;
-  overflow: hidden;
-  border-block: 1px solid var(--line-soft);
-  background: var(--char);
-  padding-block: clamp(.9rem, 2vw, 1.4rem);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-}
-.nauha__rata {
-  display: flex;
-  width: max-content;
-  gap: clamp(1.6rem, 4vw, 3.2rem);
-  animation: nauha-liuku 46s linear infinite;
-}
-.nauha__rata > span {
-  display: inline-flex;
-  align-items: center;
-  gap: clamp(1.6rem, 4vw, 3.2rem);
-  font-family: var(--display);
-  font-size: clamp(.92rem, 1.5vw, 1.28rem);
-  font-weight: 500;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--bone-3);
-  white-space: nowrap;
-}
-.nauha__rata b { color: var(--ember-lit); font-weight: 500; }
-.nauha:hover .nauha__rata { animation-play-state: paused; }
-@keyframes nauha-liuku { to { transform: translateX(-50%); } }
-
 /* -------------------------------------------------- 24.7 KURSORIN HEHKU */
 /* Painikkeen ja kortin pinnalle syttyy lämmin hehku sinne, missä osoitin on. */
 @media (hover: hover) and (pointer: fine) {
@@ -3044,7 +3061,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
 /* ------------------------------------------------- 24.11 LIIKKEEN ESTO */
 @media (prefers-reduced-motion: reduce) {
   .esirippu { display: none !important; }
-  .nauha__rata { animation: none; }
   .sana > i { transform: none !important; }
   .media[data-verho]::before { display: none; }
   .media[data-verho] { --kuva-zoom: 1; }
