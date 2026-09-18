@@ -56,9 +56,13 @@
   --gutter: clamp(1.25rem, 4vw, 3rem);
   --shell: 1320px;
   --shell-narrow: 780px;
-  --section-y: clamp(4.5rem, 9vw, 9.5rem);
+  /* Osion pystytila. Oli 4.5–9.5 rem, jolloin lyhyen osion ympärillä oli
+     enemmän tyhjää kuin sisältöä: esim. catering-kortit veivät 240 px ja
+     niiden ympärillä oli 259 px ilmaa. Nyt väljyys on yhä selvä muttei
+     hallitse sivua. */
+  --section-y: clamp(3.4rem, 6.2vw, 6.8rem);
   /* Kuinka pitkalla matkalla osion tausta sulaa seuraavaan. */
-  --haivytys: clamp(3rem, 7vw, 8.5rem);
+  --haivytys: clamp(2.6rem, 5.5vw, 6.5rem);
 
   --header-h: 92px;
   --header-h-min: 64px;
@@ -160,7 +164,7 @@ a { color: inherit; }
 .kuori--kapea { max-width: 920px; }
 
 .osio { position: relative; padding-block: var(--section-y); }
-.osio--tiivis { padding-block: clamp(3rem, 6vw, 6rem); }
+.osio--tiivis { padding-block: clamp(2.4rem, 4.4vw, 4.6rem); }
 
 /* Osion tausta ei ala eikä lopu terävään reunaan vaan sulaa sivun omaan
    pohjaväriin. Väri on omalla kerroksellaan sisällön takana, joten
@@ -1188,7 +1192,9 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding-block: clamp(6rem, 14vw, 13rem);
+  /* Oli 6–13 rem. Kaistassa on otsikko, yksi virke ja painikkeet — se ei
+     tarvitse 13 rem:n ilmaa ylle ja alle ollakseen vaikuttava. */
+  padding-block: clamp(4.5rem, 9.5vw, 9rem);
 }
 .band__media { position: absolute; inset: 0; z-index: -2; }
 .band__media img { width: 100%; height: 100%; object-fit: cover; }
