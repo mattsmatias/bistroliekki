@@ -1204,16 +1204,8 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
     linear-gradient(90deg, rgba(8,7,7,.90) 0%, rgba(8,7,7,.52) 46%, rgba(8,7,7,.04) 100%),
     linear-gradient(180deg, var(--ink) 0%, rgba(8,7,7,.10) 20%, rgba(8,7,7,.18) 70%, var(--ink) 100%);
 }
-.band--keskellä .band__peite {
-  background:
-    radial-gradient(75% 90% at 50% 50%, rgba(8,7,7,.88), rgba(8,7,7,.5) 70%),
-    linear-gradient(180deg, var(--ink) 0%, rgba(8,7,7,.2) 24%, rgba(8,7,7,.3) 70%, var(--ink) 100%);
-}
 .band__media img { transform: scale(1.02); object-position: center 68%; }
 .band__sisus { position: relative; max-width: 700px; }
-.band--keskellä .band__sisus { max-width: 760px; margin-inline: auto; text-align: center; }
-.band--keskellä .ingressi, .band--keskellä .leipa { margin-inline: auto; }
-.band--keskellä .napit { justify-content: center; }
 
 /* --------------------------------------------------------------- 13 LOUNAS */
 .lounas-kortti {

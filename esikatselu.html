@@ -1208,16 +1208,8 @@ a.media:hover img, .media--zoom:hover img { transform: scale(1.045); }
     linear-gradient(90deg, rgba(8,7,7,.90) 0%, rgba(8,7,7,.52) 46%, rgba(8,7,7,.04) 100%),
     linear-gradient(180deg, var(--ink) 0%, rgba(8,7,7,.10) 20%, rgba(8,7,7,.18) 70%, var(--ink) 100%);
 }
-.band--keskellä .band__peite {
-  background:
-    radial-gradient(75% 90% at 50% 50%, rgba(8,7,7,.88), rgba(8,7,7,.5) 70%),
-    linear-gradient(180deg, var(--ink) 0%, rgba(8,7,7,.2) 24%, rgba(8,7,7,.3) 70%, var(--ink) 100%);
-}
 .band__media img { transform: scale(1.02); object-position: center 68%; }
 .band__sisus { position: relative; max-width: 700px; }
-.band--keskellä .band__sisus { max-width: 760px; margin-inline: auto; text-align: center; }
-.band--keskellä .ingressi, .band--keskellä .leipa { margin-inline: auto; }
-.band--keskellä .napit { justify-content: center; }
 
 /* --------------------------------------------------------------- 13 LOUNAS */
 .lounas-kortti {
@@ -3571,28 +3563,6 @@ html.esirippu-paalla, html.esirippu-paalla body { overflow: hidden; }
         <li><span class="avain">Päivät</span><span class="arvo" data-teksti="lounas-paivat"></span></li>
         <li><span class="avain">Hinta</span><span class="arvo"><strong data-teksti="lounas-hinta" data-piilota-tyhjana></strong></span></li>
       </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ========================================================= VARAA PÖYTÄ -->
-<section class="band band--keskellä" data-parallaksi aria-labelledby="varaus">
-  <div class="band__media">
-    <img data-img="band-embers.webp" alt="" aria-hidden="true"
-         loading="lazy" decoding="async" width="1800" height="900">
-  </div>
-  <div class="band__peite"></div>
-
-  <div class="kuori">
-    <div class="band__sisus" data-esiin>
-      <h2 class="otsikko-l" id="varaus" data-sanat>Varaa pöytä</h2>
-      <p class="ingressi" style="margin-top:1.4rem">Varaukset onnistuvat verkossa tai puhelimitse.</p>
-      <div class="napit" style="margin-top:2rem">
-        <a class="nappi" data-linkki="varaus" data-tyhjana="Varaa puhelimitse"
-           data-vara-href="varaus-puhelin" href="#"><span>Varaa verkossa</span></a>
-        <a class="nappi nappi--ääriviiva" data-href="varaus-puhelin" href="#">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 16.4v2.6a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 011 3.2 2 2 0 013 1h2.6a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L6.7 8.9a16 16 0 006 6l1.3-1.1a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-teksti="varaus-puhelin"></span></a>
-      </div>
     </div>
   </div>
 </section>
