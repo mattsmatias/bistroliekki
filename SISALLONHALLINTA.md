@@ -207,7 +207,39 @@ ei tarvitse itse kirjata.
 - Yhteenvedossa näkyy tänään, eilen, 7 päivää ja 30 päivää sekä keskiarvo
   päivässä.
 - Pylväskaavio näyttää käynnit päivittäin viimeiseltä 30 päivältä.
+- **Mistä kävijät tulevat** kertoo, minkä kanavan kautta sivustolle tultiin:
+  Instagram, Facebook, TikTok, YouTube, Google-haku, Google Maps, sähköposti
+  ja niin edelleen. Tämän avulla näkee, mikä kanava tuo asiakkaita ja mihin
+  mainontaa kannattaa laittaa.
 - Alimpana on lista siitä, mitkä sivut keräävät eniten katseluita.
+
+#### Mistä kävijät tulevat — mitä rivit tarkoittavat
+
+Kanava tunnistetaan siitä, miltä sivulta kävijä klikkasi linkkiä. Kirjaus
+tehdään kerran selailukertaa kohden, ensimmäisellä avatulla sivulla.
+
+- **Suoraan osoitteella** = kävijä kirjoitti osoitteen itse, avasi
+  kirjanmerkin tai tuli linkistä, joka ei kerro mistä se tuli. Sovellusten
+  omat selaimet (etenkin Instagram ja Facebook) jättävät tämän tiedon usein
+  pois, joten osa somesta päätyy tälle riville.
+- **Muu sivusto** = tunnistettu linkki, mutta ei mikään seuratuista
+  kanavista.
+
+**Merkitse mainoslinkit.** Koska sovellusten selaimet piilottavat lähteen,
+maksetut mainokset ja somepostaukset kannattaa linkittää merkinnällä
+`?utm_source=` — silloin kanava luetaan suoraan osoitteesta eikä sitä
+tarvitse arvata:
+
+```
+https://bistroliekki.fi/?utm_source=instagram
+https://bistroliekki.fi/lounas/?utm_source=facebook
+https://bistroliekki.fi/?utm_source=tiktok
+https://bistroliekki.fi/?utm_source=google
+```
+
+Lyhenteet `ig`, `fb`, `yt` ja `tt` toimivat myös. Merkintä näkyy kävijälle
+vain osoiterivillä eikä vaikuta sivun toimintaan. Osoitteesta tallennetaan
+vain kanavan nimi, ei koko linkkiä.
 
 Päivä vaihtuu Suomen ajan mukaan keskiyöllä. Luvut alkavat kertyä siitä
 hetkestä, kun laskuri otettiin käyttöön — aiempaa historiaa ei ole.
@@ -216,8 +248,10 @@ hetkestä, kun laskuri otettiin käyttöön — aiempaa historiaa ei ole.
 työ ei sotke lukuja. Sivuston selaaminen omalla puhelimella näkyy kyllä
 käyntinä.
 
-> **Tietosuoja.** Laskuri kirjaa vain kolme asiaa: päivän, sivun ja
-> lukumäärän. Se ei kerää evästeitä, IP-osoitteita, sijaintia eikä mitään
+> **Tietosuoja.** Laskuri kirjaa vain päivän, sivun ja lukumäärän — sekä
+> kanavan nimen valmiilta listalta (`instagram`, `google`, `suora`…).
+> Viittaavaa osoitetta ei tallenneta sellaisenaan missään vaiheessa.
+> Se ei kerää evästeitä, IP-osoitteita, sijaintia eikä mitään
 > muutakaan, mistä yksittäisen kävijän voisi tunnistaa. Tiedot ovat teidän
 > omassa tietokannassanne, eivät kenenkään ulkopuolisen palvelimella. Tästä
 > syystä sivusto ei tarvitse evästebanneria. (Tämä ei ole juridinen
@@ -270,6 +304,7 @@ olisi hetken pois käytöstä** — silloin näkyy vain hieman vanhempi sisält�
 | Canva-listan luku | Edge Function `lue-lounaslista` |
 | Tekoälyavain | Supabase → Edge Functions → Secrets → `ANTHROPIC_API_KEY` |
 | Kävijälaskuri | Taulu `julkinen_kavijat` + funktio `kirjaa_kaynti`, koodi `tietokanta/kavijalaskuri.sql` |
+| Kävijälähteet | Taulu `julkinen_lahteet` + funktio `kirjaa_lahde`, koodi `tietokanta/kavijalahteet.sql` |
 | Varasisältö | `sivusto/assets/js/content.js` |
 
 **Tärkeä huomio:** kun osio on kerran tallennettu hallintapaneelista,

@@ -1449,6 +1449,13 @@
         if (tila.parentNode) tila.parentNode.removeChild(tila);
         kavijat.hidden = false;
         piirraYleisKavijat(kavijat, rivit || []);
+        pyynto('/rest/v1/julkinen_lahteet?select=pvm,lahde,kaynnit' +
+               '&pvm=gte.' + paivaaSitten(29) + '&order=pvm.desc')
+          .catch(function () { return []; })
+          .then(function (lahteet) {
+            lisaa(kavijat, lahdelohko(lahteet, null,
+              'Mistä kävijät tulevat', 'Viimeiset 30 päivää'));
+          });
       })
       .catch(function (e) {
         tila.className = 'viesti viesti--virhe';
@@ -1633,6 +1640,34 @@
      summia sivua kohden. Tämä paneeli on pelkkä lukunäkymä: se ei kosketa
      työkopiota T eikä siten koskaan merkitse tallentamattomia muutoksia. */
 
+  /* Kanavien nimet sellaisina kuin ravintola ne tuntee. Tietokannassa on
+     vain lyhyt tunniste; nama ovat sen kaannos. */
+  var LAHDENIMET = {
+    google:         'Google-haku',
+    kartat:         'Google Maps',
+    bing:           'Bing-haku',
+    instagram:      'Instagram',
+    facebook:       'Facebook',
+    tiktok:         'TikTok',
+    youtube:        'YouTube',
+    snapchat:       'Snapchat',
+    whatsapp:       'WhatsApp',
+    linkedin:       'LinkedIn',
+    sahkoposti:     'Sähköposti',
+    restaurantguru: 'Restaurant Guru',
+    suora:          'Suoraan osoitteella',
+    muu:            'Muu sivusto'
+  };
+
+  /* Selite sille, mita kanava kaytannossa tarkoittaa. Ilman tata
+     "Suoraan osoitteella" ja "Muu sivusto" jaavat arvailun varaan. */
+  var LAHDESELITE = {
+    suora: 'Kirjoitti osoitteen, avasi kirjanmerkin tai tuli sovelluksesta, joka ei kerro lähdettä',
+    muu:   'Jokin muu sivusto kuin yllä luetellut',
+    kartat: 'Karttahaku tai reittiohje',
+    google: 'Hakutulos tai Google-mainos'
+  };
+
   var SIVUNIMET = {
     '/': 'Etusivu',
     '/meista/': 'Tarina',
@@ -1667,6 +1702,62 @@
     return parseInt(o[2], 10) + '.' + parseInt(o[1], 10) + '.';
   }
 
+  /* ---------------------------------------------------- MISTA TULLAAN */
+  /* Yksi lohko, jota kaytetaan seka Yleiskatsauksessa etta Kavijat-
+     valilehdella. Rivit ovat paivakohtaisia summia kanavittain, joten
+     tassa vain lasketaan ne yhteen valitulta jaksolta ja jarjestetaan. */
+  function lahdelohko(rivit, alkaen, otsikko, lisaotsikko) {
+    var summat = {};
+    (rivit || []).forEach(function (r) {
+      if (!r || !r.lahde) return;
+      if (alkaen && r.pvm < alkaen) return;
+      summat[r.lahde] = (summat[r.lahde] || 0) + (r.kaynnit || 0);
+    });
+
+    var lista = Object.keys(summat).map(function (lahde) {
+      return { lahde: lahde, n: summat[lahde] };
+    }).sort(function (a, b) { return b.n - a.n; });
+
+    var lb = lohko(otsikko, lisaotsikko);
+
+    if (!lista.length) {
+      lisaa(lb, tee('div', 'lista__tyhja',
+        'Kanavatietoa ei ole vielä kertynyt. Luvut alkavat karttua heti, ' +
+        'kun sivustolle tullaan jostain muualta.'));
+      return lb;
+    }
+
+    var yhteensa = lista.reduce(function (s2, x) { return s2 + x.n; }, 0) || 1;
+    var taulu = tee('div', 'sivulista');
+    lista.forEach(function (x) {
+      var rivi = tee('div', 'sivulista__rivi');
+      var osuus = Math.round(x.n / yhteensa * 100);
+      var nimi = tee('span', 'sivulista__nimi', LAHDENIMET[x.lahde] || x.lahde);
+      if (LAHDESELITE[x.lahde]) nimi.title = LAHDESELITE[x.lahde];
+      lisaa(rivi, nimi,
+        tee('span', 'sivulista__luku', String(x.n)),
+        tee('span', 'sivulista__osuus', osuus + ' %'));
+      var palkki = tee('div', 'sivulista__palkki');
+      palkki.style.width = Math.max(1, osuus) + '%';
+      lisaa(rivi, palkki);
+      lisaa(taulu, rivi);
+    });
+    lisaa(lb, taulu);
+    lisaa(lb, tee('p', 'lohko__vihje',
+      'Luku on käyntien määrä eli montako kertaa sivustolle tultiin ' +
+      'kyseisen kanavan kautta. Kanava kirjataan kerran selailukertaa kohden.'));
+    /* Nama kaksi rivia jaavat muuten arvailun varaan. Vihjeteksti nakyy
+       myos puhelimessa, toisin kuin title-attribuutti. */
+    if (lista.some(function (x) { return x.lahde === 'suora'; })) {
+      lisaa(lb, tee('p', 'lohko__vihje',
+        'Suoraan osoitteella = kävijä kirjoitti osoitteen, avasi kirjanmerkin ' +
+        'tai tuli sovelluksesta, joka ei kerro lähdettä. Instagramin ja ' +
+        'Facebookin omat selaimet eivät useinkaan kerro — merkitse ' +
+        'mainoslinkit ?utm_source=instagram, niin ne erottuvat tästä.'));
+    }
+    return lb;
+  }
+
   function paneeliKavijat() {
     var k = tee('div');
 
@@ -1675,7 +1766,9 @@
       'Näyttökerrat = montako sivua kaikkiaan avattiin. Tämä on aina käyntejä suurempi tai yhtä suuri.',
       'Päivä vaihtuu Suomen ajan mukaan keskiyöllä.',
       'Laskuri ei kerää evästeitä, IP-osoitteita eikä mitään henkilötietoja — vain päivän, sivun ja lukumäärän.',
-      'Hallintapaneelin omat käynnit eivät näy tilastossa.'
+      'Hallintapaneelin omat käynnit eivät näy tilastossa.',
+      'Kanava tunnistetaan siitä, miltä sivustolta kävijä tuli. Osoitetta ei tallenneta — vain kanavan nimi, esimerkiksi "instagram".',
+      'Mainoslinkkeihin kannattaa lisätä ?utm_source=instagram (tai facebook, tiktok, google). Sovellusten omat selaimet eivät aina kerro lähdettä, ja silloin merkintä on ainoa varma tieto.'
     ]));
 
     var tila = tee('p', 'lataus', 'Haetaan kävijätietoja…');
@@ -1685,13 +1778,20 @@
     sisus.hidden = true;
     lisaa(k, sisus);
 
-    pyynto('/rest/v1/julkinen_kavijat?select=pvm,polku,nayttokerrat,kaynnit' +
-           '&pvm=gte.' + paivaaSitten(89) + '&order=pvm.desc')
-      .then(function (rivit) {
+    Promise.all([
+      pyynto('/rest/v1/julkinen_kavijat?select=pvm,polku,nayttokerrat,kaynnit' +
+             '&pvm=gte.' + paivaaSitten(89) + '&order=pvm.desc'),
+      /* Lahteet ovat oma taulunsa. Jos sita ei viela ole (vanha
+         tietokanta), jatketaan ilman — kavijaluvut nakyvat silti. */
+      pyynto('/rest/v1/julkinen_lahteet?select=pvm,lahde,kaynnit' +
+             '&pvm=gte.' + paivaaSitten(89) + '&order=pvm.desc')
+        .catch(function () { return []; })
+    ])
+      .then(function (vastaukset) {
         // .lataus on display:grid, joten pelkka hidden ei riita — poistetaan.
         if (tila.parentNode) tila.parentNode.removeChild(tila);
         sisus.hidden = false;
-        piirraKavijat(sisus, rivit || []);
+        piirraKavijat(sisus, vastaukset[0] || [], vastaukset[1] || []);
       })
       .catch(function (e) {
         tila.className = 'viesti viesti--virhe';
@@ -1702,7 +1802,7 @@
     return k;
   }
 
-  function piirraKavijat(kehys, rivit) {
+  function piirraKavijat(kehys, rivit, lahteet) {
     if (!rivit.length) {
       lisaa(kehys, tee('div', 'lista__tyhja',
         'Kävijätietoja ei ole vielä kertynyt. Luvut alkavat karttua heti, ' +
@@ -1794,6 +1894,9 @@
     var lista = Object.keys(sivut).map(function (polku) {
       return { polku: polku, n: sivut[polku].nayttokerrat, k: sivut[polku].kaynnit };
     }).sort(function (a, b) { return b.n - a.n; });
+
+    lisaa(kehys, lahdelohko(lahteet, paivaaSitten(29),
+      'Mistä kävijät tulevat', 'Viimeiset 30 päivää'));
 
     var sb = lohko('Suosituimmat sivut', 'Viimeiset 30 päivää');
     var yhteensa = lista.reduce(function (s, x) { return s + x.n; }, 0) || 1;

@@ -7415,6 +7415,77 @@ window.LIEKKI = {
   ];
   var ISTUNTOAVAIN = 'liekki-istunto';
 
+  /* ------------------------------------------------ MISTÄ KÄVIJÄ TULI */
+  /* Ravintola näkee hallintapaneelista, minkä kanavan kautta sivustolle
+     tullaan, jotta mainosrahat osaa suunnata oikeaan paikkaan.
+
+     Tallennettava tieto on pelkkä kanavan nimi sallittujen listalta:
+     'instagram', 'google', 'suora'. Viittaavaa osoitetta ei lähetetä
+     eikä tallenneta missään vaiheessa — siitä luetaan vain verkkotunnus
+     ja se muutetaan heti nimeksi. Kanava kirjataan kerran selailukertaa
+     kohden, ensimmäisellä avatulla sivulla.
+
+     Mainoslinkeissä kannattaa käyttää utm_source-merkintää, koska
+     sovellusten sisäiset selaimet eivät läheskään aina kerro mistä
+     käyttäjä tuli. Silloin kanava luetaan osoitteesta eikä arvata. */
+  var LAHTEET = [
+    ['instagram',      /(^|\.)instagram\.com$|(^|\.)ig\.me$|(^|\.)instagr\.am$/],
+    ['facebook',       /(^|\.)facebook\.com$|(^|\.)fb\.(me|com|watch)$/],
+    ['tiktok',         /(^|\.)tiktok\.com$/],
+    ['youtube',        /(^|\.)youtube\.com$|(^|\.)youtu\.be$/],
+    ['snapchat',       /(^|\.)snapchat\.com$/],
+    ['whatsapp',       /(^|\.)whatsapp\.com$|(^|\.)wa\.me$/],
+    ['linkedin',       /(^|\.)linkedin\.com$|(^|\.)lnkd\.in$/],
+    /* Tarkemmat säännöt ennen yleisiä: mail.google.com on sähköposti ja
+       google.com/maps on kartta, vaikka molemmissa lukee google. */
+    ['sahkoposti',     /(^|\.)mail\.google\.com|(^|\.)outlook\.(live|office|com)|(^|\.)mail\.yahoo\./],
+    ['kartat',         /(^|\.)google\.[a-z.]+\/maps|(^|\.)maps\.google\./],
+    ['google',         /(^|\.)google\.[a-z.]{2,7}$|(^|\.)googleadservices\.com$|(^|\.)googlesyndication\.com$/],
+    ['bing',           /(^|\.)bing\.com$/],
+    ['restaurantguru', /(^|\.)restaurantguru\.com$/]
+  ];
+
+  function nimeaLahde(teksti) {
+    var t = String(teksti || '').toLowerCase();
+    for (var i = 0; i < LAHTEET.length; i++) {
+      if (LAHTEET[i][1].test(t)) return LAHTEET[i][0];
+    }
+    return '';
+  }
+
+  function laskuriLahde() {
+    /* 1. Mainoslinkin oma merkintä voittaa aina: se on ainoa tieto, joka
+          ei katoa sovellusten sisäisissä selaimissa. */
+    try {
+      var haku = new URLSearchParams(location.search);
+      var utm = (haku.get('utm_source') || '').toLowerCase().trim();
+      if (utm) {
+        /* Mainostyökaluissa kirjoitetaan yleensä lyhenne. Tunnistetaan
+           tavallisimmat, jottei oma merkintä päädy "muu"-luokkaan. */
+        var LYHENTEET = {
+          ig: 'instagram', insta: 'instagram',
+          fb: 'facebook', meta: 'facebook',
+          yt: 'youtube', tt: 'tiktok', snap: 'snapchat',
+          ads: 'google', adwords: 'google', gads: 'google',
+          maps: 'kartat', email: 'sahkoposti', posti: 'sahkoposti'
+        };
+        if (LYHENTEET[utm]) return LYHENTEET[utm];
+        return nimeaLahde(utm) || nimeaLahde(utm + '.com') || 'muu';
+      }
+    } catch (e) { /* vanha selain: jatketaan viittaajasta */ }
+
+    /* 2. Muuten viittaava verkkotunnus. Oman sivuston sisäinen siirtymä
+          ei ole uusi kanava. */
+    var viittaaja = document.referrer || '';
+    if (!viittaaja) return 'suora';
+    try {
+      var u = new URL(viittaaja);
+      if (u.hostname === location.hostname) return '';
+      /* Karttaosuma tunnistetaan koko osoitteesta, muut verkkotunnuksesta. */
+      return nimeaLahde(u.hostname + u.pathname) || nimeaLahde(u.hostname) || 'muu';
+    } catch (e) { return 'muu'; }
+  }
+
   function laskuriPolku() {
     var p = (location.pathname || '/').toLowerCase();
     if (p.length > 1 && p.charAt(p.length - 1) !== '/') p += '/';
@@ -7450,6 +7521,22 @@ window.LIEKKI = {
         body: JSON.stringify({ p_polku: laskuriPolku(), p_uusi: uusi }),
         keepalive: true
       }).catch(function () { /* tilasto ei saa koskaan rikkoa sivua */ });
+
+      /* Kanava vain kerran selailukertaa kohden. Sivustolla liikkuminen
+         ei tuota lisärivejä, eikä sisäinen siirtymä ole uusi kanava. */
+      var lahde = uusi ? laskuriLahde() : '';
+      if (lahde) {
+        fetch(y.osoite.replace(/\/+$/, '') + '/rest/v1/rpc/kirjaa_lahde', {
+          method: 'POST',
+          headers: {
+            apikey: y.avain,
+            Authorization: 'Bearer ' + y.avain,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ p_lahde: lahde }),
+          keepalive: true
+        }).catch(function () { /* sama */ });
+      }
     } catch (e) { /* sama */ }
   }
 
