@@ -1,0 +1,1238 @@
+/* ==========================================================================
+   BISTRO LIEKKI — ETUSIVUN KOEVERSIO  (/testi.html)
+   --------------------------------------------------------------------------
+   Tämä tiedosto tulee style.css:n päälle eikä korvaa sitä. Kaikki uudet
+   luokat alkavat etuliitteellä t-, joten mikään ei voi mennä päällekkäin
+   nykyisen sivuston kanssa.
+
+   Ulkoasun idea: puuhiiligrilli. Tumma hiili, hehkuva rako, kipinä joka
+   nousee ja sammuu. Oranssia käytetään kuin tulta — vähän kerrallaan ja
+   aina jotain varten, ei koristeeksi.
+
+   Kaikki liike on kytketty pois, jos käyttäjä on valinnut käyttö-
+   järjestelmästä "vähennä liikettä" (osio 12).
+   ========================================================================== */
+
+/* ==========================================================================
+   0. UUSI PERUSTA — väri ja typografia
+   --------------------------------------------------------------------------
+   Tämä lohko kirjoittaa style.css:n muuttujat uusiksi. Kaikki muu sivustolla
+   lukee näitä samoja muuttujia, joten koko sivun ilme vaihtuu tästä — ei
+   sadasta erillisestä säännöstä.
+
+   Idea: savu ja messinki. Hiilenmusta pohja, luunvalkoinen teksti ja yksi
+   metallinen korostus. Oranssi oli ruokakuvien kanssa samaa väriä eikä
+   erottunut; messinki erottuu, ja se lukeutuu kalliimmalta.
+
+   Kulmat ovat teräviä. Pyöristetty kulma on ohjelmistojen kieltä, ei
+   ravintolan.
+   ========================================================================== */
+:root {
+  /* --- pinnat --------------------------------------------------------- */
+  --ink:     #0A0908;
+  --char:    #110F0D;
+  --char-2:  #181513;
+  --char-3:  #211D19;
+
+  /* --- teksti --------------------------------------------------------- */
+  --bone:    #F3EEE4;
+  --bone-2:  #D4CBBC;
+  --bone-3:  #ABA294;
+  --bone-4:  #8F8779;
+
+  /* --- korostus: messinki --------------------------------------------- */
+  /* style.css kutsuu näitä ember-nimillä. Nimet jäävät, sävy vaihtuu —
+     näin mikään muu tiedosto ei tarvitse muutosta. */
+  --ember:      #C9A227;
+  --ember-lit:  #E8C871;
+  --ember-deep: #7E6014;
+  --copper:     #D8BA63;
+
+  /* --- viivat --------------------------------------------------------- */
+  --line:      rgba(232,200,113,.18);
+  --line-soft: rgba(232,200,113,.10);
+
+  /* --- typografia ----------------------------------------------------- */
+  /* Bodoni Moda on didone: ohuet vaakaviivat ja paksut pystyviivat. Se
+     toimii isona, joten sitä käytetään vain otsikoissa. Jost on
+     geometrinen groteski, joka kestää harvan kirjainvälin versaalina. */
+  --serif: 'Bodoni Moda', 'Bodoni 72', Didot, Georgia, serif;
+  --sans:  'Jost', 'Futura', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* --- muoto ---------------------------------------------------------- */
+  --pyoristys: 0px;
+
+  /* --- tämän sivun omat ----------------------------------------------- */
+  --t-hehku:      #E8C871;   /* hehkun kirkkain kohta */
+  --t-hehku-syva: #8A6A1B;   /* syvä messinki */
+  --t-lasi:       rgba(17,15,13,.78);
+  --t-reuna:      rgba(232,200,113,.16);
+  --t-ease:       cubic-bezier(.16,1,.3,1);
+}
+
+/* Otsikot didonella, leipä ja käyttöliittymä groteskilla. */
+h1, h2, h3,
+.otsikko-xl, .otsikko-l, .otsikko-m, .otsikko-s {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -.01em;
+}
+body { font-family: var(--sans); }
+
+/* Didonen ohuet viivat katoavat pienessä koossa tummaa vasten, joten
+   pieni otsikko piirretään groteskilla. */
+h3.t-kortti__otsikko { font-family: var(--serif); }
+.some-kortti__nimi, .footeri__otsikko { font-family: var(--sans); }
+
+/* Terävät kulmat kaikkialle. */
+.nappi, .kortti, .lounas-kortti, .kartta, .media, .galleria__kohde,
+.t-kortti, .t-tarjous, .t-pari__kortti, .t-arviot, .t-laatta,
+.t-split__media, .uutinen, .some-kortti { border-radius: 0 !important; }
+
+/* ==========================================================================
+   0b. YLÄPALKKI — logo keskelle
+   --------------------------------------------------------------------------
+   Valikko vasemmalle, logo keskelle, yhteystiedot ja varauspainike oikealle.
+   Tämä on ravintolan asettelu; vasen logo + oikea valikko on ohjelmiston.
+   Vain leveällä ruudulla — kapeammalla valikko on jo valikkonapin takana.
+   ========================================================================== */
+@media (min-width: 1240px) {
+  .headeri__sisus {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: clamp(1rem, 2vw, 2rem);
+  }
+  .headeri__sisus > .navi { order: 1; justify-self: start; }
+  .headeri__sisus > .logo { order: 2; justify-self: center; }
+  .headeri__sisus > .headeri__oikea { order: 3; justify-self: end; }
+}
+.headeri.on-kiinni {
+  background: rgba(10,9,8,.92);
+  border-bottom-color: var(--line-soft);
+}
+.navi a {
+  font-family: var(--sans);
+  font-size: .76rem;
+  font-weight: 400;
+  letter-spacing: .16em;
+}
+
+/* ==========================================================================
+   0c. PAINIKKEET
+   --------------------------------------------------------------------------
+   Ensisijainen painike on täytetty messinki tummalla tekstillä: se on sivun
+   kirkkain kohta ja siksi se, mihin katse menee. Toissijainen on pelkkä
+   hiusviiva.
+   ========================================================================== */
+.nappi {
+  font-family: var(--sans);
+  font-weight: 500;
+  letter-spacing: .14em;
+  border-radius: 0;
+}
+.nappi:not(.nappi--ääriviiva):not(.nappi--hiljainen) {
+  background: var(--ember);
+  border-color: var(--ember);
+  color: var(--ink);
+}
+.nappi:not(.nappi--ääriviiva):not(.nappi--hiljainen):hover {
+  background: var(--ember-lit);
+  border-color: var(--ember-lit);
+  color: var(--ink);
+}
+.nappi--ääriviiva {
+  border-color: var(--line);
+  color: var(--bone);
+}
+.nappi--ääriviiva:hover { border-color: var(--ember); color: var(--ember-lit); }
+
+/* Etiketit ja pienet versaalit harvemmalla kirjainvälillä. */
+.etiketti, .t-etiketti, .t-fakta__nimi, .t-kortti__lisa, .t-nosto__nimi,
+.linkki, .t-tarjous__hinta span { font-family: var(--sans); }
+
+/* ==========================================================================
+   1. HERO
+   ========================================================================== */
+
+.t-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: min(100svh, 940px);
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+/* Kuva on omassa kerroksessaan, jotta vieritysmoottori voi liikuttaa
+   sitä ilman että teksti liikkuu mukana. */
+.t-hero__media { position: absolute; inset: -6% 0 0; z-index: -3; will-change: transform; }
+.t-hero__media img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 52%;
+  transform: scale(1.04);
+  /* Kuva on kirkas lahikuva. Pieni tummennus ja vaimennus antavat
+     tekstille tilaa ilman etta ruoka muuttuu harmaaksi. */
+  filter: brightness(.86) saturate(.94) contrast(1.04);
+}
+
+/* Päällys kolmessa osassa: pystytummennus tekstin alle, vinjetti
+   vasempaan alakulmaan ja hiilenpunainen hehku alalaitaan. */
+.t-hero__peite {
+  position: absolute; inset: 0; z-index: -2;
+  background:
+    /* 1. tekstipylvaan oma varjo vasemmalta oikealle */
+    linear-gradient(100deg, rgba(8,7,7,.93) 0%, rgba(8,7,7,.76) 26%,
+                            rgba(8,7,7,.34) 56%, rgba(8,7,7,.04) 84%),
+    /* 2. pystytummennus ylapalkin ja alareunan alle */
+    linear-gradient(180deg, rgba(8,7,7,.88) 0%, rgba(8,7,7,.22) 32%,
+                            rgba(8,7,7,.56) 64%, rgba(8,7,7,.97) 100%),
+    /* 3. vinjetti vasempaan alakulmaan */
+    radial-gradient(130% 95% at 6% 88%, rgba(8,7,7,.72) 0%, rgba(8,7,7,0) 62%);
+}
+/* Hiilipedin lämpö. Sykkii hitaasti, ei koskaan täysin sammu. */
+.t-hero__lampo {
+  position: absolute; left: -10%; right: -10%; bottom: -14%; height: 52%;
+  z-index: -2; pointer-events: none;
+  background: radial-gradient(56% 100% at 50% 100%,
+              rgba(232,200,113,.30) 0%, rgba(160,122,32,.12) 42%, rgba(160,122,32,0) 72%);
+  filter: blur(28px);
+  animation: t-lampo 7.5s ease-in-out infinite alternate;
+}
+@keyframes t-lampo {
+  from { opacity: .58; transform: scaleY(.92) translateY(6px); }
+  to   { opacity: 1;   transform: scaleY(1.08) translateY(0); }
+}
+/* Kipinäkangas. */
+.t-hero__hiillos { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+/* Hieno rakeisuus, joka rikkoo liukuvärien pehmeät raidat. */
+.t-hero__rae {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: url('../img/grain.png');
+  background-size: 260px;
+  opacity: .16;
+  mix-blend-mode: overlay;
+}
+
+.t-hero__sisus {
+  position: relative;
+  padding-top: clamp(7rem, 17vh, 12rem);
+  padding-bottom: clamp(1.8rem, 3.4vw, 2.8rem);
+  will-change: transform, opacity;
+}
+
+.t-hero__kicker {
+  display: flex; align-items: center; gap: .85rem;
+  margin: 0;
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--bone-2);
+  text-shadow: 0 1px 14px rgba(8,7,7,.9);
+  opacity: 0;
+  animation: t-nouse .9s var(--t-ease) .15s forwards;
+}
+.t-hero__kicker::before {
+  content: ''; height: 1px; flex: none;
+  width: clamp(1.8rem, 4vw, 3.4rem);
+  background: linear-gradient(90deg, var(--t-hehku), rgba(232,200,113,0));
+  box-shadow: 0 0 10px rgba(232,200,113,.7);
+}
+@keyframes t-nouse {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.t-hero h1 {
+  margin: clamp(.9rem, 2vw, 1.5rem) 0 0;
+  font-size: clamp(3.4rem, 12.5vw, 9.5rem);
+  line-height: .9;
+  letter-spacing: -.025em;
+  font-weight: 300;
+}
+.t-hero h1 .t-sana { display: inline-block; white-space: nowrap; }
+
+/* -------------------------------------------------- syttyvät kirjaimet */
+/* Kirjain leimahtaa oranssina ja jäähtyy luunvalkoiseksi. Ilman
+   .on-syttyy-luokkaa kirjaimet ovat näkyvissä sellaisenaan, joten
+   teksti ei katoa vaikka skripti ei ajautuisi. */
+.t-kirjain { display: inline-block; }
+.on-syttyy .t-kirjain {
+  opacity: 0;
+  animation: t-syty 1.05s var(--t-ease) forwards;
+  animation-delay: calc(var(--i) * .045s + .2s);
+}
+.on-syttynyt .t-kirjain { opacity: 1; }
+@keyframes t-syty {
+  0% {
+    opacity: 0;
+    transform: translateY(.34em) scale(.94);
+    filter: blur(10px);
+    color: var(--t-hehku-syva);
+    text-shadow: 0 0 40px rgba(232,200,113,1), 0 0 14px rgba(255,232,175,.9);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+    color: var(--t-hehku);
+    text-shadow: 0 0 30px rgba(232,200,113,.85), 0 0 10px rgba(255,240,200,.6);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    color: var(--bone);
+    text-shadow: 0 0 0 rgba(232,200,113,0);
+  }
+}
+
+.t-hero__lead {
+  margin: clamp(1.1rem, 2.4vw, 1.8rem) 0 0;
+  max-width: 34ch;
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: var(--bone-2);
+  opacity: 0;
+  animation: t-nouse .9s var(--t-ease) .75s forwards;
+}
+.t-hero__napit {
+  margin-top: clamp(1.7rem, 3vw, 2.4rem);
+  opacity: 0;
+  animation: t-nouse .9s var(--t-ease) .95s forwards;
+}
+
+/* Yksi tunnustus heti otsikon alle. Tämä on sivun ensimmäinen todiste
+   siitä, ettei kyse ole pelkästä lupauksesta. */
+.t-hero__todiste {
+  display: inline-flex; align-items: center; gap: .55rem;
+  margin: clamp(1rem, 2.2vw, 1.5rem) 0 0;
+  padding: .5rem .9rem .5rem .75rem;
+  border: 1px solid rgba(232,200,113,.34);
+  border-radius: 999px;
+  background: rgba(160,122,32,.14);
+  backdrop-filter: blur(6px);
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  letter-spacing: .05em;
+  line-height: 1.3;
+  color: var(--bone);
+  opacity: 0;
+  animation: t-nouse .9s var(--t-ease) .85s forwards;
+}
+.t-hero__todiste svg { flex: none; color: var(--t-hehku); }
+.t-hero__todiste b {
+  font-weight: 600;
+  color: var(--t-hehku);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------- hehkupainike */
+/* Oranssi painike, jonka sisällä lämpö seuraa osoitinta. */
+.t-hehkunappi {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  --hx: 50%; --hy: 50%;
+}
+.t-hehkunappi::after {
+  content: '';
+  position: absolute; inset: 0; z-index: -1;
+  background: radial-gradient(140px circle at var(--hx) var(--hy),
+              rgba(255,236,190,.55), rgba(255,236,190,0) 70%);
+  opacity: 0;
+  transition: opacity .45s var(--t-ease);
+}
+.t-hehkunappi:hover::after,
+.t-hehkunappi:focus-visible::after { opacity: 1; }
+.nappi.t-hehkunappi:hover {
+  box-shadow: 0 0 0 1px rgba(232,200,113,.55), 0 10px 40px -12px rgba(201,162,39,.85);
+}
+
+/* ------------------------------------------------------------ faktarivi */
+.t-hero__fakta {
+  margin-top: clamp(2.2rem, 5vw, 3.8rem);
+  padding-top: clamp(1.1rem, 2vw, 1.6rem);
+  border-top: 1px solid var(--t-reuna);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
+  gap: clamp(.9rem, 2vw, 2rem);
+  opacity: 0;
+  animation: t-nouse .9s var(--t-ease) 1.15s forwards;
+}
+.t-fakta__nimi {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--bone-4);
+}
+.t-fakta__arvo {
+  margin: .35rem 0 0;
+  font-size: var(--step-0);
+  color: var(--bone);
+  line-height: 1.4;
+}
+.t-fakta__arvo a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--t-reuna); }
+.t-fakta__arvo a:hover { border-bottom-color: var(--t-hehku); }
+.t-fakta__piste {
+  display: inline-block; width: .5rem; height: .5rem; border-radius: 50%;
+  margin-right: .5rem; background: var(--bone-4); vertical-align: middle;
+}
+.tila--auki .t-fakta__piste {
+  background: #5FBF7A;
+  box-shadow: 0 0 0 4px rgba(95,191,122,.16);
+  animation: t-syke 2.6s ease-in-out infinite;
+}
+.tila--kohta .t-fakta__piste { background: var(--copper); box-shadow: 0 0 0 4px rgba(201,162,39,.16); }
+.tila--kiinni .t-fakta__piste { background: var(--ember); box-shadow: 0 0 0 4px rgba(160,122,32,.16); }
+@keyframes t-syke {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(95,191,122,.16); }
+  50%      { box-shadow: 0 0 0 8px rgba(95,191,122,.05); }
+}
+
+/* -------------------------------------------------------- vierityskutsu */
+.t-hero__kutsu {
+  position: absolute; right: var(--gutter); bottom: clamp(1.6rem, 3vw, 2.6rem);
+  z-index: 1;
+  display: grid; justify-items: center; gap: .7rem;
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--bone-4);
+  pointer-events: none;
+}
+.t-hero__kutsu span { writing-mode: vertical-rl; }
+.t-hero__kutsu i {
+  display: block; width: 1px; height: clamp(38px, 6vw, 64px);
+  background: linear-gradient(180deg, rgba(232,200,113,0), var(--t-hehku));
+  position: relative; overflow: hidden;
+}
+.t-hero__kutsu i::after {
+  content: ''; position: absolute; left: -1px; width: 3px; height: 10px;
+  border-radius: 2px;
+  background: var(--t-hehku);
+  box-shadow: 0 0 10px 2px rgba(232,200,113,.9);
+  animation: t-pisara 2.4s var(--t-ease) infinite;
+}
+@keyframes t-pisara {
+  0%   { top: -12px; opacity: 0; }
+  25%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@media (max-width: 1000px) { .t-hero__kutsu { display: none; } }
+@media (max-width: 640px) {
+  .t-hero { min-height: min(94svh, 760px); }
+  .t-hero__fakta { grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; }
+  .t-hero__fakta > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+
+/* ==========================================================================
+   2. HEHKUVIIVA — osioiden väliin
+   ========================================================================== */
+/* Ohut hiilirako, joka vetäytyy auki kun se tulee ruudulle. */
+.t-rako {
+  position: relative;
+  height: 1px;
+  background: var(--line-soft);
+  overflow: visible;
+}
+.t-rako::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg,
+    rgba(232,200,113,0) 0%, var(--t-hehku-syva) 18%,
+    var(--t-hehku) 50%, var(--t-hehku-syva) 82%, rgba(232,200,113,0) 100%);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+  transition: transform 1.5s var(--t-ease);
+}
+.t-rako::after {
+  content: '';
+  position: absolute; inset: -4px 0;
+  background: inherit;
+  filter: blur(7px);
+  opacity: 0;
+  transition: opacity 1.5s var(--t-ease);
+}
+.t-rako.on-esiin::before { transform: scaleX(1); }
+.t-rako.on-esiin::after {
+  opacity: .6;
+  background: linear-gradient(90deg,
+    rgba(232,200,113,0) 0%, rgba(179,66,28,.9) 18%,
+    rgba(232,200,113,.95) 50%, rgba(179,66,28,.9) 82%, rgba(232,200,113,0) 100%);
+}
+
+/* ==========================================================================
+   3. PALJASTUS
+   ========================================================================== */
+[data-t-esiin] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .85s var(--t-ease), transform .85s var(--t-ease);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+[data-t-esiin].on-esiin { opacity: 1; transform: none; }
+
+/* Kuva paljastuu verhona: hiilenmusta liuska vetäytyy ylös ja kuva
+   asettuu paikalleen zoomista. */
+.t-verho { position: relative; overflow: hidden; }
+.t-verho::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(180deg, var(--char) 0%, var(--ink) 100%);
+  transform-origin: 50% 100%;
+  transition: transform 1.15s var(--t-ease);
+}
+.t-verho img {
+  transform: scale(1.14);
+  transition: transform 1.5s var(--t-ease);
+}
+.t-verho.on-esiin::after { transform: scaleY(0); }
+.t-verho.on-esiin img { transform: scale(1); }
+
+/* ==========================================================================
+   4. TUNNUSTUKSET
+   ========================================================================== */
+.t-tunnustukset {
+  position: relative;
+  background:
+    radial-gradient(90% 200% at 50% 0%, rgba(160,122,32,.10), rgba(160,122,32,0) 60%),
+    var(--char);
+  border-bottom: 1px solid var(--line-soft);
+  padding-block: clamp(2.4rem, 5vw, 3.8rem);
+}
+.t-tunnustukset__rivi {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+  gap: clamp(1.4rem, 3vw, 2.8rem);
+}
+.t-tunnus {
+  display: grid;
+  gap: .45rem;
+  padding-left: clamp(1.2rem, 3vw, 2.8rem);
+  border-left: 1px solid var(--line-soft);
+  opacity: 0;
+  transform: translateY(18px);
+  animation: t-nouse .8s var(--t-ease) forwards;
+  animation-delay: calc(var(--i) * 110ms + .1s);
+}
+.t-tunnustukset__rivi > .t-tunnus:first-child { padding-left: 0; border-left: 0; }
+/* Vuosi on iso ja hehkuva, tunnustus sen alla. Rivi lukeutuu kuin
+   palkintotaulu, ei kuin alaviite. */
+.t-tunnus__merkki {
+  display: inline-flex;
+  color: var(--t-hehku);
+  filter: drop-shadow(0 0 10px rgba(232,200,113,.6));
+  margin-right: .55rem;
+  transform: translateY(2px);
+}
+.t-tunnus__vuosi {
+  display: flex; align-items: center;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: var(--step-2);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--t-hehku);
+  font-variant-numeric: tabular-nums;
+}
+.t-tunnus__teksti {
+  margin: .15rem 0 0;
+  font-size: var(--step--1);
+  line-height: 1.45;
+  color: var(--bone-2);
+}
+@media (max-width: 760px) {
+  .t-tunnus { padding-left: 0; border-left: 0; }
+}
+
+/* ==========================================================================
+   5. OSION OTSIKKORIVI
+   ========================================================================== */
+.t-otsikkorivi {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 1.6rem;
+  margin-bottom: clamp(1.8rem, 3.4vw, 2.8rem);
+}
+.t-otsikkorivi h2 { margin: .6rem 0 0; }
+.t-otsikkorivi__teksti { max-width: 52ch; }
+.t-otsikkorivi__teksti .leipa { margin-top: .9rem; }
+
+/* Numeroitu etiketti: pieni järjestysluku tuo lehtimäistä ryhtiä. */
+.t-etiketti {
+  display: inline-flex; align-items: center; gap: .8rem;
+  margin: 0;
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--bone-3);
+}
+.t-etiketti::before {
+  content: counter(t-osio, decimal-leading-zero);
+  font-variant-numeric: tabular-nums;
+  color: var(--t-hehku);
+}
+.t-etiketti::after {
+  content: ''; width: clamp(1.4rem, 3vw, 2.6rem); height: 1px;
+  background: linear-gradient(90deg, var(--t-hehku), rgba(232,200,113,0));
+}
+body { counter-reset: t-osio; }
+.t-osio { counter-increment: t-osio; }
+
+/* ==========================================================================
+   6. TÄNÄÄN — lounas ja aukiolo
+   ========================================================================== */
+.t-tanaan {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr);
+  gap: clamp(1.2rem, 2.5vw, 2rem);
+  align-items: start;
+}
+@media (max-width: 900px) { .t-tanaan { grid-template-columns: 1fr; } }
+
+.t-kortti {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  overflow: hidden;
+}
+/* Korostetun kortin yläreunassa hehkuva rako — kuin grillin luukku. */
+.t-kortti--korosta {
+  background:
+    linear-gradient(180deg, rgba(160,122,32,.12) 0%, rgba(160,122,32,0) 42%),
+    var(--char-2);
+  border-color: rgba(160,122,32,.30);
+}
+.t-kortti--korosta::before {
+  content: '';
+  position: absolute; left: 0; right: 0; top: 0; height: 2px;
+  background: linear-gradient(90deg,
+    rgba(232,200,113,0), var(--t-hehku) 35%, var(--t-hehku-syva) 65%, rgba(232,200,113,0));
+  box-shadow: 0 0 16px rgba(232,200,113,.65);
+}
+.t-kortti__ylä {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  justify-content: space-between; gap: .6rem 1rem;
+  padding-bottom: clamp(.9rem, 2vw, 1.2rem);
+  border-bottom: 1px solid var(--line-soft);
+}
+.t-kortti__otsikko { margin: 0; font-size: var(--step-2); line-height: 1.15; }
+.t-kortti__lisa {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--t-hehku);
+}
+
+.t-annokset { list-style: none; margin: 0; padding: 0; }
+.t-annokset li {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem;
+  padding: .55rem 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: var(--step-0);
+  color: var(--bone-2);
+  opacity: 0;
+  animation: t-nouse .6s var(--t-ease) forwards;
+  animation-delay: calc(var(--i, 0) * 55ms);
+}
+.t-annokset li:last-child { border-bottom: 0; }
+.t-annokset .t-merkit {
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  letter-spacing: .1em;
+  color: var(--bone-4);
+}
+.t-kortti__ala { margin-top: auto; padding-top: clamp(1.1rem, 2.4vw, 1.6rem); }
+
+.t-hinnat { list-style: none; margin: 0; padding: 0; }
+.t-hinnat li {
+  display: flex; flex-wrap: wrap; justify-content: space-between;
+  align-items: baseline; gap: .2rem 1rem;
+  padding: .6rem 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.t-hinnat li:last-child { border-bottom: 0; }
+.t-hinnat .t-avain {
+  font-family: var(--sans); font-size: var(--step-label);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--bone-4);
+}
+.t-hinnat .t-arvo {
+  color: var(--bone); font-size: var(--step-0); text-align: right;
+  min-width: 0; overflow-wrap: anywhere;
+}
+
+.t-aukiolo { list-style: none; margin: 0; padding: 0; }
+.t-aukiolo li {
+  display: flex; justify-content: space-between; gap: 1rem;
+  padding: .44rem 0;
+  font-size: var(--step--1);
+  color: var(--bone-3);
+}
+.t-aukiolo li.on-tanaan { color: var(--bone); }
+.t-aukiolo li.on-tanaan .paiva::after {
+  content: 'tänään';
+  margin-left: .55rem;
+  font-family: var(--sans); font-size: 11.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--t-hehku);
+}
+
+/* ==========================================================================
+   7. HIILLOS-KAISTA — sivun keskipiste
+   ========================================================================== */
+.t-kaista {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(5.5rem, 13vw, 11rem);
+  text-align: center;
+  background: var(--ink);
+}
+.t-kaista__media { position: absolute; inset: 0; z-index: -3; }
+.t-kaista__media img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 60%;
+}
+.t-kaista__peite {
+  position: absolute; inset: 0; z-index: -2;
+  background:
+    radial-gradient(70% 90% at 50% 50%, rgba(8,7,7,.88) 0%, rgba(8,7,7,.34) 76%),
+    linear-gradient(180deg, var(--ink) 0%, rgba(8,7,7,.14) 22%,
+                            rgba(8,7,7,.22) 76%, var(--ink) 100%);
+}
+/* Hiiliraot: kolme vaakaviivaa, jotka hehkuvat eri tahtiin taustalla. */
+.t-kaista__raot {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  opacity: .55;
+}
+.t-kaista__raot i {
+  position: absolute; left: 12%; right: 12%; height: 2px;
+  background: linear-gradient(90deg,
+    rgba(232,200,113,0), var(--t-hehku-syva) 25%, var(--t-hehku) 50%,
+    var(--t-hehku-syva) 75%, rgba(232,200,113,0));
+  filter: blur(1.5px);
+  animation: t-rakoHehku 5.5s ease-in-out infinite alternate;
+}
+.t-kaista__raot i:nth-child(1) { top: 26%; animation-delay: 0s; }
+.t-kaista__raot i:nth-child(2) { top: 50%; left: 22%; right: 22%; animation-delay: -1.9s; }
+.t-kaista__raot i:nth-child(3) { top: 74%; animation-delay: -3.6s; }
+@keyframes t-rakoHehku {
+  from { opacity: .18; transform: scaleX(.86); }
+  to   { opacity: .75; transform: scaleX(1); }
+}
+
+/* Jättisana taustalla — hiileen poltettu leima. */
+.t-kaista__leima {
+  position: absolute; left: 50%; top: 50%; z-index: -1;
+  transform: translate(-50%, -50%);
+  font-family: var(--serif);
+  font-size: clamp(6rem, 22vw, 20rem);
+  line-height: 1;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(244,239,230,.055);
+  pointer-events: none;
+  user-select: none;
+}
+
+.t-kaista h2 { margin: 1rem 0 0; }
+.t-kaista__lead {
+  margin: clamp(1.1rem, 2.4vw, 1.7rem) auto 0;
+  max-width: 48ch;
+  font-size: var(--step-1);
+  line-height: 1.6;
+  color: var(--bone-2);
+}
+.t-kaista__faktat {
+  margin: clamp(2.4rem, 5vw, 3.8rem) auto 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
+  gap: clamp(1.2rem, 3vw, 2.4rem);
+  max-width: 860px;
+}
+.t-kaista__fakta { position: relative; }
+.t-kaista__fakta + .t-kaista__fakta::before {
+  content: '';
+  position: absolute; left: calc(-1 * clamp(.6rem, 1.5vw, 1.2rem)); top: 12%; bottom: 12%;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(244,239,230,0), var(--line), rgba(244,239,230,0));
+}
+.t-kaista__fakta p { margin: 0; }
+.t-kaista__luku {
+  font-family: var(--serif);
+  font-size: var(--step-3);
+  line-height: 1;
+  color: var(--bone);
+  font-variant-numeric: tabular-nums;
+}
+.t-kaista__selite {
+  margin-top: .55rem !important;
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--bone-4);
+}
+@media (max-width: 560px) {
+  .t-kaista__fakta + .t-kaista__fakta::before { display: none; }
+}
+
+/* ==========================================================================
+   8. TARJONTA — kolme korttia, joissa kuva myy ja hinta vakuuttaa
+   --------------------------------------------------------------------------
+   Kortti on sivun tärkein myyntipinta: iso valokuva, selkeä hinta,
+   kolme todellista annosta ja yksi linkki eteenpäin. Kuvateksti kertoo
+   vain sen, mitä kuvassa oikeasti näkyy — kuvaa ei liitetä yksittäiseen
+   annokseen.
+   ========================================================================== */
+.t-tarjonta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(1rem, 2.2vw, 1.8rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+.t-tarjonta > * { min-width: 0; }
+
+.t-tarjous {
+  --sx: 0px; --sy: 0px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  transition: border-color .5s var(--t-ease), transform .5s var(--t-ease),
+              box-shadow .5s var(--t-ease);
+}
+.t-tarjous:hover {
+  border-color: rgba(160,122,32,.38);
+  transform: translateY(-5px);
+  box-shadow: 0 26px 60px -34px rgba(0,0,0,.95), 0 0 60px -30px rgba(201,162,39,.55);
+}
+
+.t-tarjous__kuva {
+  position: relative;
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  background: var(--char-3);
+}
+.t-tarjous__kuva::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8,7,7,.10) 0%, rgba(8,7,7,0) 45%,
+                                      rgba(23,20,15,.85) 100%);
+}
+.t-tarjous__kuva img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scale(1.07) translate(var(--sx), var(--sy));
+  transition: transform .7s var(--t-ease), filter .6s var(--t-ease);
+  filter: brightness(.94);
+}
+.t-tarjous:hover .t-tarjous__kuva img { filter: brightness(1.06) saturate(1.05); }
+
+.t-tarjous__sisus {
+  display: flex; flex-direction: column;
+  flex: 1;
+  padding: clamp(1.3rem, 2.6vw, 1.9rem);
+}
+.t-tarjous__yla {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  justify-content: space-between; gap: .4rem 1rem;
+}
+.t-tarjous__otsikko {
+  margin: 0;
+  font-size: var(--step-2);
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+/* Hinta on oma pieni lippunsa: se saa erottua, muttei huutaa. */
+.t-tarjous__hinta {
+  margin: 0;
+  display: inline-flex; align-items: baseline; gap: .45rem;
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--t-hehku);
+  white-space: nowrap;
+}
+.t-tarjous__hinta span {
+  font-size: var(--step-label);
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--bone-4);
+}
+.t-tarjous__teksti {
+  margin: .85rem 0 0;
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--bone-3);
+}
+
+.t-tarjous__lista {
+  list-style: none;
+  margin: clamp(1.1rem, 2.4vw, 1.5rem) 0 0;
+  padding: clamp(.9rem, 2vw, 1.2rem) 0 0;
+  border-top: 1px solid var(--line-soft);
+}
+.t-tarjous__lista li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: .3rem .9rem;
+  padding: .42rem 0;
+  font-size: var(--step--1);
+  color: var(--bone-2);
+}
+.t-tarjous__lista li span { min-width: 0; overflow-wrap: anywhere; }
+.t-tarjous__lista li b {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--bone-3);
+  white-space: nowrap;
+}
+
+/* Lounaskortin tunnustus: tämä on se lause, joka myy lounaan. */
+.t-tarjous__tunnustus {
+  display: flex; align-items: center; gap: .5rem;
+  margin: clamp(1rem, 2vw, 1.3rem) 0 0;
+  padding: .6rem .8rem;
+  border: 1px solid rgba(232,200,113,.28);
+  border-radius: 3px;
+  background: rgba(160,122,32,.10);
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  letter-spacing: .04em;
+  line-height: 1.4;
+  color: var(--bone);
+}
+.t-tarjous__tunnustus svg { flex: none; color: var(--t-hehku); }
+
+.t-tarjous__linkki { margin-top: auto; padding-top: clamp(1.2rem, 2.6vw, 1.7rem); align-self: flex-start; }
+
+/* ==========================================================================
+   9. SPLIT — kuva ja teksti
+   ========================================================================== */
+.t-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  gap: clamp(1.8rem, 5vw, 4.5rem);
+  align-items: center;
+}
+.t-split--kaanteinen .t-split__media { order: 2; }
+@media (max-width: 900px) {
+  .t-split { grid-template-columns: 1fr; }
+  .t-split--kaanteinen .t-split__media { order: 0; }
+}
+.t-split__media {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  aspect-ratio: 3 / 2;
+  background: var(--char-3);
+}
+.t-split__media img { width: 100%; height: 100%; object-fit: cover; }
+.t-split__merkinta {
+  position: absolute; left: 0; bottom: 0; z-index: 3;
+  padding: .55rem .95rem;
+  background: var(--t-lasi);
+  backdrop-filter: blur(8px);
+  font-family: var(--sans);
+  font-size: var(--step-label);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--bone-2);
+}
+
+/* ==========================================================================
+   10. VAAKAGALLERIA
+   --------------------------------------------------------------------------
+   Leveällä ruudulla kuvat liukuvat sivusuunnassa, kun sivua vieritetään:
+   osio on korkea, sisältö tahmea. Kapealla ruudulla sama sisältö on
+   tavallinen sormella vieritettävä rata, koska tahmea temppu ei toimi
+   pienellä näytöllä.
+   ========================================================================== */
+.t-vaaka { position: relative; background: var(--char); }
+.t-vaaka__kehys { height: 260vh; }
+.t-vaaka__tahmea {
+  position: sticky; top: 0;
+  height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  overflow: hidden;
+}
+.t-vaaka__ylä { padding-inline: var(--gutter); margin-bottom: clamp(1.4rem, 3vw, 2.2rem); }
+.t-rata {
+  display: flex;
+  gap: clamp(.7rem, 1.6vw, 1.3rem);
+  padding-inline: var(--gutter);
+  will-change: transform;
+}
+.t-laatta {
+  flex: none;
+  width: clamp(240px, 26vw, 420px);
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--char-3);
+  position: relative;
+}
+.t-laatta::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8,7,7,0) 55%, rgba(8,7,7,.55));
+  opacity: .8;
+  transition: opacity .5s var(--t-ease);
+}
+.t-laatta img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform .9s var(--t-ease), filter .6s var(--t-ease);
+}
+.t-laatta:hover img { transform: scale(1.06); filter: brightness(1.1) saturate(1.05); }
+.t-laatta:hover::after { opacity: .35; }
+/* Joka kolmas laatta on matalampi — rytmi, ei sattuma. */
+.t-laatta:nth-child(3n) { aspect-ratio: 4 / 3; align-self: center; }
+
+@media (max-width: 999px) {
+  .t-vaaka__kehys { height: auto; }
+  .t-vaaka__tahmea { position: static; height: auto; padding-block: var(--section-y); }
+  .t-rata {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: .8rem;
+    transform: none !important;
+  }
+  .t-rata::-webkit-scrollbar { height: 3px; }
+  .t-rata::-webkit-scrollbar-thumb { background: var(--line); border-radius: 2px; }
+  .t-laatta { width: min(72vw, 320px); scroll-snap-align: center; }
+}
+
+/* ==========================================================================
+   11. PARI — catering ja lahjakortti
+   ========================================================================== */
+.t-pari {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: clamp(1rem, 2.4vw, 1.8rem);
+}
+.t-pari > * { min-width: 0; }
+.t-pari__kortti {
+  position: relative;
+  display: flex; flex-direction: column;
+  padding: clamp(1.7rem, 3.6vw, 2.8rem);
+  background: var(--char-2);
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: border-color .5s var(--t-ease), transform .5s var(--t-ease);
+}
+/* Hehku nousee kortin alareunasta kun sitä osoitetaan. */
+.t-pari__kortti::before {
+  content: '';
+  position: absolute; left: -20%; right: -20%; bottom: -60%; height: 100%;
+  background: radial-gradient(50% 100% at 50% 100%,
+              rgba(160,122,32,.28), rgba(160,122,32,0) 70%);
+  opacity: 0;
+  transform: translateY(20%);
+  transition: opacity .6s var(--t-ease), transform .6s var(--t-ease);
+  pointer-events: none;
+}
+.t-pari__kortti:hover { border-color: rgba(160,122,32,.35); transform: translateY(-4px); }
+.t-pari__kortti:hover::before { opacity: 1; transform: none; }
+.t-pari__kortti h3 { margin: 0; font-size: var(--step-2); line-height: 1.15; overflow-wrap: anywhere; }
+.t-pari__kortti p { margin: .9rem 0 0; color: var(--bone-3); }
+.t-pari__kortti .linkki { margin-top: auto; padding-top: clamp(1.4rem, 3vw, 2rem); align-self: flex-start; }
+
+/* ==========================================================================
+   12. LÖYDÄ MEIDÄT
+   ========================================================================== */
+.t-loyda {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  gap: clamp(1.8rem, 4vw, 3.5rem);
+  align-items: start;
+}
+@media (max-width: 900px) { .t-loyda { grid-template-columns: 1fr; } }
+.t-loyda .kartta { min-height: 380px; border-radius: 4px; overflow: hidden; }
+
+/* ==========================================================================
+   13. NAUHA — hehkuvat pisteet
+   ========================================================================== */
+.t-hero ~ .nauha b,
+.nauha b { color: var(--t-hehku); text-shadow: 0 0 12px rgba(232,200,113,.6); }
+
+/* ==========================================================================
+   14. KAPEAT RUUDUT
+   ========================================================================== */
+@media (max-width: 380px) {
+  .t-hero__fakta { grid-template-columns: 1fr; }
+  .t-kortti, .t-pari__kortti { padding-inline: 1.1rem; }
+  .t-hinnat .t-arvo { text-align: left; }
+}
+
+/* ==========================================================================
+   15. VÄHENNETTY LIIKE
+   --------------------------------------------------------------------------
+   Kaikki liike pois, mutta mikään ei katoa: elementit ovat paikallaan ja
+   näkyvissä. Tämä on saavutettavuusvaatimus, ei lisäominaisuus.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .t-hero__kicker, .t-hero__lead, .t-hero__napit, .t-hero__fakta,
+  .t-tunnus, .t-annokset li {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .t-hero__lampo, .t-kaista__raot i, .tila--auki .t-fakta__piste,
+  .t-hero__kutsu i::after { animation: none !important; }
+  .on-syttyy .t-kirjain { opacity: 1; animation: none !important; }
+  [data-t-esiin] { opacity: 1 !important; transform: none !important; }
+  .t-verho::after { display: none; }
+  .t-verho img { transform: none !important; }
+  .t-rako::before { transform: scaleX(1) !important; }
+  .t-hero__media, .t-hero__sisus { transform: none !important; opacity: 1 !important; }
+}
+
+/* ==========================================================================
+   16. ETENEMÄPALKKI
+   --------------------------------------------------------------------------
+   site.js piirtää ohuen palkin sivun ylälaitaan. Tällä sivulla se on
+   hehkuva hiilirako.
+   ========================================================================== */
+.etenema span,
+.vieritys-palkki span {
+  background: linear-gradient(90deg, var(--t-hehku-syva), var(--t-hehku)) !important;
+  box-shadow: 0 0 12px rgba(232,200,113,.75);
+}
+
+/* ==========================================================================
+   17. SOME-KORTIT
+   --------------------------------------------------------------------------
+   Facebookin ja Instagramin upotukset piirtyvät niiden omassa vaaleassa
+   ulkoasussa, eikä sitä voi tyylitellä iframen sisältä. Kehystetään ne
+   tummaksi ja himmennetään aavistuksen, jotta valkoinen laatikko ei
+   revi silmiä muuten tummalla sivulla.
+   ========================================================================== */
+.some-kortti { border-color: var(--t-reuna); }
+.some-kortti__sisus { background: var(--char-3); }
+.some-kortti__sisus iframe {
+  border-radius: 3px;
+  filter: brightness(.86) saturate(.9) contrast(1.03);
+  transition: filter .5s var(--t-ease);
+}
+.some-kortti:hover .some-kortti__sisus iframe { filter: none; }
+.some-kortti__merkki { color: var(--t-hehku); }
+
+/* ==========================================================================
+   18. ARVIOT
+   --------------------------------------------------------------------------
+   Arviot ovat markkinoinnin kannalta sivun arvokkain kohta, joten ne
+   saavat oman kehyksensä eivätkä jää irralliseksi nappiriviksi.
+   ========================================================================== */
+.t-arviot {
+  max-width: 760px;
+  margin-inline: auto;
+  padding: clamp(2rem, 4.5vw, 3.2rem) clamp(1.4rem, 3vw, 2.6rem);
+  border: 1px solid var(--line-soft);
+  border-radius: 5px;
+  background:
+    radial-gradient(120% 140% at 50% 0%, rgba(160,122,32,.12), rgba(160,122,32,0) 58%),
+    var(--char-2);
+  text-align: center;
+}
+.t-arviot .otsikko-m { margin-top: .6rem; }
+.t-arviot .napit { justify-content: center; }
+
+/* ==========================================================================
+   19. YLÄPALKIN KUTSU
+   --------------------------------------------------------------------------
+   Kun hero on vieritetty ohi, yläpalkin Varaa pöytä saa hehkun. Sama
+   nappi, vain vahvempi — ei uutta elementtiä ruudulle.
+   ========================================================================== */
+.headeri.on-kiinni .headeri__cta {
+  box-shadow: 0 0 0 1px rgba(232,200,113,.45), 0 8px 30px -10px rgba(201,162,39,.7);
+}
+
+/* Liekkitekstuuri ei ole valokuva annoksesta, joten se rajataan ja
+   kirkastetaan eri tavalla kuin ruokakuvat. */
+.t-tarjous--tekstuuri .t-tarjous__kuva img {
+  object-position: center 58%;
+  filter: brightness(1.28) saturate(1.22) contrast(1.12);
+  transform: scale(1.18) translate(var(--sx), var(--sy));
+}
+.t-tarjous--tekstuuri:hover .t-tarjous__kuva img {
+  filter: brightness(1.42) saturate(1.3) contrast(1.14);
+}
+
+.t-arviot__lead {
+  max-width: 44ch;
+  margin: 1rem auto 0;
+  color: var(--bone-3);
+}
+/* Restaurant Gurun merkki keskelle arviolohkoa. Merkin omat mitat tulevat
+   sen omasta tyylitiedostosta, joten sita vain sijoitetaan. */
+.t-arviot .tunnusmerkki {
+  margin: clamp(1.6rem, 3vw, 2.2rem) auto 0;
+}
+
+/* ==========================================================================
+   20. UUDEN PERUSTAN VIIMEISTELY
+   ========================================================================== */
+
+/* Keskitetty logo saa olla isompi: se on nyt ylapalkin painopiste eika
+   pelkka kulmamerkki. */
+@media (min-width: 1240px) {
+  .logo__kuva { height: 96px; }
+  .headeri.on-kiinni .logo__kuva { height: 54px; }
+}
+
+/* Liekkitekstuuri oli ainoa oranssi pinta messinkisella sivulla. Savya
+   siirretaan kullan suuntaan, jotta kortti istuu muiden joukkoon.
+   Valokuviin ei kosketa — vain tahan brandigrafiikkaan. */
+.t-tarjous--tekstuuri .t-tarjous__kuva img {
+  filter: brightness(1.22) saturate(.72) sepia(.34) hue-rotate(-6deg) contrast(1.14);
+}
+.t-tarjous--tekstuuri:hover .t-tarjous__kuva img {
+  filter: brightness(1.36) saturate(.8) sepia(.34) hue-rotate(-6deg) contrast(1.16);
+}
+.t-kaista__media img { filter: saturate(.78) sepia(.26) hue-rotate(-6deg) brightness(1.04); }
+
+/* Alatunniste samaan ilmeeseen. */
+.footeri { border-top: 1px solid var(--line-soft); }
+.footeri__otsikko { letter-spacing: .18em; }
+.some a { border-radius: 0; }
+
+/* Vierityspalkin hehku messingiksi. */
+.vieritys-palkki span, .etenema span {
+  background: linear-gradient(90deg, var(--ember-deep), var(--ember-lit)) !important;
+  box-shadow: 0 0 12px rgba(232,200,113,.7);
+}
+
+/* Nauha: messinkipisteet, ei oranssia. */
+.nauha b { color: var(--ember-lit); text-shadow: 0 0 12px rgba(232,200,113,.5); }

@@ -1744,6 +1744,9 @@
     setTimeout(etenemapalkki, 400);
     tunnusmerkki();
     googleArvostelut();
+    // Sivukohtaiset lisaosat voivat piirtaa omansa vasta kun sisalto on
+    // sulautettu tietokannasta. Tapahtuma laukeaa kerran, tassa kohdassa.
+    try { document.dispatchEvent(new CustomEvent('liekki:valmis')); } catch (e) {}
     setInterval(function () { aukiolotila(); lounastila(); }, 60000);   // tila pysyy ajan tasalla
   }
 

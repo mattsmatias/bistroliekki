@@ -1,1 +1,1 @@
-Hallintapaneeliin Yleiskatsaus-etusivu: kavijaluvut vertailuineen ja tilannekatsaus
+Etusivun koeversio: uusi vari- ja typografiaperusta (savu ja messinki)
